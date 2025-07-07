@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Features - Crypto Order Block Scanner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1a202c;
+            color: #e2e8f0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            max-width: 1200px;
+            width: 95%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #2d3748;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+        }
+        .glowing-text {
+            background-image: linear-gradient(to right, #6366F1, #8B5CF6, #EC4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        @keyframes glow {
+            from { text-shadow: 0 0 5px rgba(139, 92, 246, 0.5), 0 0 10px rgba(139, 92, 246, 0.3); }
+            to { text-shadow: 0 0 10px rgba(139, 92, 246, 0.8), 0 0 20px rgba(139, 92, 246, 0.6); }
+        }
+        .cta-button {
+            background-image: linear-gradient(to right, #6366F1 0%, #8B5CF6 51%, #6366F1 100%);
+            transition: 0.5s;
+            background-size: 200% auto;
+            color: white;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+            border-radius: 9999px;
+            padding: 12px 30px;
+            font-weight: 700;
+            font-size: 1.25rem;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+        .cta-button:hover {
+            background-position: right center;
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.8);
+        }
+        .feature-card-detailed {
+            background-color: #2D3748;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .feature-card-detailed .icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #8B5CF6; /* Purple accent */
+        }
+        .feature-card-detailed h3 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #4299E1; /* Blue accent */
+            margin-bottom: 1rem;
+        }
+        .feature-card-detailed p {
+            font-size: 1.125rem;
+            color: #cbd5e0; /* Gray-300 */
+        }
+        /* Navbar styles */
+        .navbar {
+            background-color: #2d3748;
+            padding: 1rem 0;
+            width: 100%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .navbar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .nav-link {
+            color: #e2e8f0;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+        }
+        .nav-link:hover {
+            background-color: #4A5568;
+        }
+        .nav-link.active {
+            color: #4299E1; /* Blue-500 */
+        }
+        @media (max-width: 768px) {
+            .navbar-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .nav-links {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+            .feature-card-detailed {
+                padding: 1.5rem;
+            }
+            .feature-card-detailed .icon {
+                font-size: 3rem;
+            }
+            .feature-card-detailed h3 {
+                font-size: 1.75rem;
+            }
+            .feature-card-detailed p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200">
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="text-2xl font-bold glowing-text">OB Scanner</div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="features.html" class="nav-link active">Features</a>
+                <a href="pricing.html" class="nav-link">Pricing</a>
+                <a href="blog.html" class="nav-link">Blog</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Header Section -->
+        <section class="text-center py-16">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4">
+                <span class="glowing-text">
+                    Unlock Advanced Trading Insights
+                </span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-400 mb-8">
+                Discover the powerful features that make our Crypto Order Block Scanner an essential tool for every trader.
+            </p>
+        </section>
+
+        <!-- Features List Section (Interactive Feature Grid - detailed descriptions) -->
+        <section class="py-16">
+            <div class="grid grid-cols-1 gap-8">
+                <div class="feature-card-detailed">
+                    <div class="icon"><i class="fas fa-cogs"></i></div>
+                    <h3>AI-Powered Order Block Detection</h3>
+                    <p>Our sophisticated backend leverages advanced algorithms to identify high-probability order blocks across various cryptocurrencies. We go beyond basic patterns, incorporating Smart Money Concepts like Fair Value Gaps, Break of Structures, and unmitigated zones for superior accuracy.</p>
+                </div>
+
+                <div class="feature-card-detailed">
+                    <div class="icon"><i class="fas fa-tachometer-alt"></i></div>
+                    <h3>Dynamic Sensitivity Control</h3>
+                    <p>Tailor the scanner's precision to your needs with intuitive sensitivity presets: "Lowest Condition" for broad detection, "Mid" for balanced signals, and "Extreme Detection" for the highest conviction setups. No need to fine-tune complex parameters – we've optimized them for you.</p>
+                </div>
+
+                <div class="feature-card-detailed">
+                    <div class="icon"><i class="fas fa-chart-area"></i></div>
+                    <h3>Multi-Timeframe Analysis</h3>
+                    <p>Gain a comprehensive market perspective by scanning for order blocks on 1-hour, 4-hour, and Daily timeframes. This flexibility allows you to align detections with your preferred trading strategy, from swing trading to long-term investing.</p>
+                </div>
+
+                <div class="feature-card-detailed">
+                    <div class="icon"><i class="fas fa-filter"></i></div>
+                    <h3>Intelligent Result Filtering</h3>
+                    <p>Effortlessly navigate through scan results. Filter to display all detected order blocks, or focus specifically on "Buying (Bullish)" or "Selling (Bearish)" opportunities. Customize your view to quickly pinpoint relevant setups.</p>
+                </div>
+
+                <div class="feature-card-detailed" id="chart-modal-feature">
+                    <div class="icon"><i class="fas fa-chart-bar"></i></div>
+                    <h3>Integrated TradingView Chart Viewer</h3>
+                    <p>Click any coin card to open a seamless, full-width TradingView chart directly within the app. Visualize the detected order block, analyze price action, and confirm your trade ideas. We provide the exact OB price level and zone for precise manual charting on TradingView.com.</p>
+                </div>
+
+                <div class="feature-card-detailed">
+                    <div class="icon"><i class="fas fa-ruler-horizontal"></i></div>
+                    <h3>Max Price Deviation Filter</h3>
+                    <p>Refine your results by setting a maximum percentage deviation between the current price and the detected order block price. Focus only on the most relevant opportunities that are close to the order block zone.</p>
+                </div>
+
+                <div class="feature-card-detailed">
+                    <div class="icon"><i class="fas fa-bolt"></i></div>
+                    <h3>Blazing Fast Backend</h3>
+                    <p>Our Java Spring Boot backend is engineered for speed and efficiency, allowing for rapid scanning of hundreds of crypto pairs. Get real-time insights without delay, ensuring you're always ahead of the market.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="text-center py-16">
+            <h2 class="text-4xl font-bold text-center text-white mb-6">Ready to Experience the Difference?</h2>
+            <p class="text-xl text-gray-400 mb-8">
+                Explore our flexible pricing plans and start your journey to smarter crypto trading today.
+            </p>
+            <a href="pricing.html" class="cta-button">
+                <i class="fas fa-tag mr-3"></i> View Pricing Plans
+            </a>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-400 text-center py-8 mt-auto w-full">
+        <div class="max-w-1200 mx-auto px-4">
+            <p>&copy; 2024 Crypto Order Block Scanner. All rights reserved.</p>
+            <p class="mt-2">
+                <a href="#" class="text-blue-400 hover:underline mx-2">Privacy Policy</a> |
+                <a href="#" class="text-blue-400 hover:underline mx-2">Terms of Service</a>
+            </p>
+            <div class="flex justify-center space-x-4 mt-4">
+                <a href="#" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-telegram"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-discord"></i></a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Crypto Order Block Scanner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1a202c;
+            color: #e2e8f0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            max-width: 600px;
+            width: 95%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #2d3748;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+        }
+        .glowing-text {
+            background-image: linear-gradient(to right, #6366F1, #8B5CF6, #EC4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        @keyframes glow {
+            from { text-shadow: 0 0 5px rgba(139, 92, 246, 0.5), 0 0 10px rgba(139, 92, 246, 0.3); }
+            to { text-shadow: 0 0 10px rgba(139, 92, 246, 0.8), 0 0 20px rgba(139, 92, 246, 0.6); }
+        }
+        .cta-button {
+            background-image: linear-gradient(to right, #6366F1 0%, #8B5CF6 51%, #6366F1 100%);
+            transition: 0.5s;
+            background-size: 200% auto;
+            color: white;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+            border-radius: 9999px;
+            padding: 12px 30px;
+            font-weight: 700;
+            font-size: 1.25rem;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+        .cta-button:hover {
+            background-position: right center;
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.8);
+        }
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0.375rem;
+            border: 1px solid #4A5568;
+            background-color: #2D3748;
+            color: #E2E8F0;
+            outline: none;
+            transition: border-color 0.2s ease-in-out;
+        }
+        .form-input:focus {
+            border-color: #6366F1;
+        }
+        .error-message {
+            color: #EF4444; /* Red-500 */
+            font-size: 0.875rem;
+            margin-top: -0.5rem;
+            margin-bottom: 1rem;
+        }
+        /* Navbar styles */
+        .navbar {
+            background-color: #2d3748;
+            padding: 1rem 0;
+            width: 100%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .navbar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .nav-link {
+            color: #e2e8f0;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+        }
+        .nav-link:hover {
+            background-color: #4A5568;
+        }
+        .nav-link.active {
+            color: #4299E1; /* Blue-500 */
+        }
+        @media (max-width: 768px) {
+            .navbar-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .nav-links {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200">
+
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="text-2xl font-bold glowing-text">OB Scanner</div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="features.html" class="nav-link">Features</a>
+                <a href="pricing.html" class="nav-link">Pricing</a>
+                <a href="blog.html" class="nav-link">Blog</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-8">
+        <h1 class="text-4xl font-extrabold text-center mb-6">
+            <span class="glowing-text">Create Your Account</span>
+        </h1>
+        <p id="plan-message" class="text-center text-xl text-gray-400 mb-8">
+            Register to start your journey with the Crypto Order Block Scanner.
+        </p>
+
+        <form id="signup-form" class="max-w-md mx-auto">
+            <div class="mb-4">
+                <label for="username" class="block text-gray-300 text-sm font-bold mb-2">Username:</label>
+                <input type="text" id="username" name="username" class="form-input" placeholder="Choose a username" required>
+            </div>
+            <div class="mb-4">
+                <label for="email" class="block text-gray-300 text-sm font-bold mb-2">Email:</label>
+                <input type="email" id="email" name="email" class="form-input" placeholder="your@example.com" required>
+            </div>
+            <div class="mb-4">
+                <label for="password" class="block text-gray-300 text-sm font-bold mb-2">Password:</label>
+                <input type="password" id="password" name="password" class="form-input" placeholder="Enter your password" required>
+            </div>
+            <div class="mb-6">
+                <label for="confirm-password" class="block text-gray-300 text-sm font-bold mb-2">Confirm Password:</label>
+                <input type="password" id="confirm-password" name="confirm-password" class="form-input" placeholder="Confirm your password" required>
+                <p id="password-match-error" class="error-message hidden">Passwords do not match.</p>
+            </div>
+            
+            <button type="submit" class="cta-button w-full">Register Account</button>
+            <p id="form-error" class="error-message text-center mt-4 hidden">An error occurred during registration. Please try again.</p>
+            <p class="text-center text-gray-400 mt-4">
+                Already have an account? <a href="login.html" class="text-blue-400 hover:underline">Login here</a>
+            </p>
+        </form>
+    </div>
+
+    <footer class="bg-gray-800 text-gray-400 text-center py-8 mt-auto w-full">
+        <div class="max-w-1200 mx-auto px-4">
+            <p>&copy; 2024 Crypto Order Block Scanner. All rights reserved.</p>
+            <p class="mt-2">
+                <a href="#" class="text-blue-400 hover:underline mx-2">Privacy Policy</a> |
+                <a href="#" class="text-blue-400 hover:underline mx-2">Terms of Service</a>
+            </p>
+            <div class="flex justify-center space-x-4 mt-4">
+                <a href="#" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-telegram"></i></a>
+                <a href="#" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-discord"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const signupForm = document.getElementById('signup-form');
+        const usernameInput = document.getElementById('username');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirm-password');
+        const passwordMatchError = document.getElementById('password-match-error');
+        const formError = document.getElementById('form-error');
+        const planMessage = document.getElementById('plan-message');
+
+        // Determine plan from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedPlan = urlParams.get('plan');
+
+        if (selectedPlan === 'trial') {
+            planMessage.textContent = 'Register to start your 3-day free trial!';
+        } else if (selectedPlan === 'premium') {
+            planMessage.textContent = 'Register to proceed with Lifetime Premium Access ($20 USDT BEP20).';
+        }
+
+        // --- Frontend Validation (Client-Side) ---
+        confirmPasswordInput.addEventListener('keyup', () => {
+            if (passwordInput.value !== confirmPasswordInput.value) {
+                passwordMatchError.classList.remove('hidden');
+            } else {
+                passwordMatchError.classList.add('hidden');
+            }
+        });
+
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            formError.classList.add('hidden'); // Hide previous errors
+
+            if (passwordInput.value !== confirmPasswordInput.value) {
+                passwordMatchError.classList.remove('hidden');
+                return; // Stop form submission
+            }
+
+            // In a real application, you'd send this data to your backend API.
+            // For now, we'll simulate success and redirect.
+
+            const username = usernameInput.value;
+            const email = emailInput.value;
+            const password = passwordInput.value;
+
+            console.log("Attempting to register user:", { username, email, password });
+
+            // --- IMPORTANT: Backend API Integration Placeholder ---
+            // You will replace this with an actual fetch() call to your Java Spring Boot backend.
+            // Example:
+            // try {
+            //     const response = await fetch('YOUR_BACKEND_API_URL/api/auth/register', {
+            //         method: 'POST',
+            //         headers: {
+            //             'Content-Type': 'application/json',
+            //         },
+            //         body: JSON.stringify({ username, email, password })
+            //     });
+            //
+            //     if (response.ok) {
+            //         const data = await response.json();
+            //         console.log('Registration successful:', data);
+            //         // Determine redirection based on the selected plan
+            //         if (selectedPlan === 'trial') {
+            //             // In a real app, backend would grant trial & return a token for login
+            //             window.location.href = 'scanner-app-placeholder.html?status=trial-started';
+            //         } else if (selectedPlan === 'premium') {
+            //             window.location.href = 'payment.html?plan=premium&user=' + encodeURIComponent(username); // Pass username to payment page
+            //         } else {
+            //             // Default to trial start if no plan specified or unknown
+            //             window.location.href = 'scanner-app-placeholder.html?status=registered';
+            //         }
+            //     } else {
+            //         const errorData = await response.json();
+            //         formError.textContent = errorData.message || 'Registration failed. Please try a different username/email.';
+            //         formError.classList.remove('hidden');
+            //     }
+            // } catch (error) {
+            //     console.error('Network error during registration:', error);
+            //     formError.textContent = 'Network error. Please check your connection.';
+            //     formError.classList.remove('hidden');
+            // }
+
+            // --- Simulation for now ---
+            // Simulating a successful registration and then redirecting based on plan
+            alert(`User ${username} registered successfully!`);
+            if (selectedPlan === 'trial') {
+                window.location.href = 'scanner-app-placeholder.html?status=trial-started';
+            } else if (selectedPlan === 'premium') {
+                window.location.href = 'payment.html?plan=premium&user=' + encodeURIComponent(username); // Redirect to payment page
+            } else {
+                // Default to trial start if no plan specified or unknown
+                window.location.href = 'scanner-app-placeholder.html?status=registered';
+            }
+        });
+    </script>
+</body>
+</html>

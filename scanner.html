@@ -238,9 +238,9 @@
         </h1>
 
         <p class="text-center text-gray-400 mb-8">
-            This fetches 4-hour order block data.
+            This frontend fetches 4-hour order block data from your Java Spring Boot backend.
             <br />
-            <strong class="text-red-400">Important: Ensure your network is working.</strong>
+            <strong class="text-red-400">Important: Ensure your Java backend is running and accessible at the configured API URL.</strong>
         </p>
     </div>
 
@@ -281,7 +281,7 @@
             <div class="flex flex-col md:flex-row justify-center items-center gap-4">
                 <button id="scanButton" class="scan-button">
                     <span id="spinner" class="spinner hidden"></span>
-                    <span id="buttonText">Scan Coins</span>
+                    <span id="buttonText">Scan Coins via Backend</span>
                 </button>
                 <button id="clearButton" class="filter-button">Clear Results</button>
             </div>
@@ -350,7 +350,8 @@
 <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.umd.js"></script>
 <script>
     // --- Configuration ---
-    const API_BASE_URL = "http://192.168.100.72:8080/api"; // Your laptop's local IP for backend
+    // IMPORTANT: Replace with your laptop's current local IP address
+    const API_BASE_URL = "http://YOUR_LAPTOP_CURRENT_IP:8080/api";
 
     // --- DOM Elements (Authentication) ---
     const authSection = document.getElementById('authSection');
@@ -402,7 +403,7 @@
 
     // Predefined parameter presets for different sensitivities
     const sensitivityPresets = {
-      'lowest': { minBodyRatio: 0.001, minPriceChange: 0.000001, volumeFactor: 0.01, requireBOS: false, requireC3ClosePastC2: false, requireFVG: false, requireUnmitigated: true, minFvgDepthRatio: 0.001 },
+      'lowest': { minBodyRatio: 0.001, minPriceChange: 0.000001, volumeFactor: 0.01, requireBOS: false, requireC3ClosePastC2: false, requireFVG: false, requireUnmitigated: false, minFvgDepthRatio: 0.001 }, // Relaxed for lowest
       'low-mid': { minBodyRatio: 0.10, minPriceChange: 0.0003, volumeFactor: 0.4, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, requireUnmitigated: true, minFvgDepthRatio: 0.02 },
       'mid': { minBodyRatio: 0.15, minPriceChange: 0.0005, volumeFactor: 0.6, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, requireUnmitigated: true, minFvgDepthRatio: 0.05 },
       'mid-high': { minBodyRatio: 0.20, minPriceChange: 0.001, volumeFactor: 0.8, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, requireUnmitigated: true, minFvgDepthRatio: 0.08 },
@@ -423,6 +424,7 @@
         localStorage.removeItem('jwtToken');
         localStorage.removeItem('username');
         localStorage.removeItem('roles');
+        localStorage.removeItem('userId'); // Clear user ID too
     }
 
     function showScannerSection() {
@@ -485,7 +487,7 @@
 
         } catch (error) {
             console.error("Error fetching user status:", error);
-            authMessage.textContent = "Error connecting for user status. Please try again.";
+            authMessage.textContent = "Error connecting to backend for user status. Please try again.";
         }
     }
 
@@ -500,7 +502,7 @@
         const email = emailInput.value;
         const plan = planSelect.value;
 
-        let endpoint = isRegisterMode ? `${API_BASE_URL}/auth/register` : `${API_BASE_URL}/auth/login`;
+        let endpoint = isRegisterMode ? `${API_BASE_URL}/auth/register` : `${API_BASE_URL}/auth/login`; // Corrected /auth/login
         let body = { username, password };
 
         if (isRegisterMode) {
@@ -544,7 +546,7 @@
             }
         } catch (error) {
             authMessage.style.color = '#EF4444'; // Red for error
-            authMessage.textContent = `Network error: ${error.message}. Please try again later.`;
+            authMessage.textContent = `Network error: ${error.message}. Please ensure backend is running.`;
             console.error("Auth fetch error:", error);
         } finally {
             authSubmitButton.disabled = false;
@@ -612,7 +614,9 @@
                      data-ob-open="${coin.obCandleOpen || ''}"
                      data-ob-high="${coin.obCandleHigh || ''}"
                      data-ob-low="${coin.obCandleLow || ''}"
-                     data-ob-close="${coin.obCandleClose || ''}">
+                     data-ob-close="${coin.obCandleClose || ''}"
+                     data-ob-zone-start="${coin.obZoneStart || ''}"
+                     data-ob-zone-end="${coin.obZoneEnd || ''}">
                     <div class="flex justify-between items-center mb-3">
                         <h2 class="text-2xl font-bold text-blue-300">${coin.name || 'N/A'} (${coin.id || 'N/A'})</h2>
                         <span class="text-lg font-semibold text-gray-300">Vol: ${coin.volume || 'N/A'}</span>
@@ -723,7 +727,7 @@
 
         spinner.classList.remove('hidden');
         buttonText.textContent = 'Scanning...';
-        statusMessage.textContent = `Fetching real-time data and scanning for ${currentTimeframe.toUpperCase()} order blocks...`;
+        statusMessage.textContent = `Fetching real-time data and scanning for ${currentTimeframe.toUpperCase()} order blocks via backend...`;
         errorMessage.textContent = '';
         resultsContainer.innerHTML = ''; // Clear previous results before new fetch
 
@@ -736,7 +740,7 @@
             document.querySelectorAll('.filter-button, .timeframe-button, .sensitivity-button').forEach(btn => btn.disabled = false);
             priceDeviationInput.disabled = false;
             spinner.classList.add('hidden');
-            buttonText.textContent = 'Scan Coins';
+            buttonText.textContent = 'Scan Coins via Backend';
             return;
         }
 
@@ -769,7 +773,7 @@
 
         } catch (err) {
             statusMessage.textContent = '';
-            errorMessage.textContent = `Connection/Data Error: ${err.message}. Please ensure your network is working.`;
+            errorMessage.textContent = `Connection/Data Error: ${err.message}. Please ensure your Java backend is running and accessible at "${API_BASE_URL}".`;
             console.error("Frontend fetch error:", err);
             allScanResults = []; // Clear results on error
         } finally {
@@ -779,7 +783,7 @@
             document.querySelectorAll('.filter-button, .timeframe-button, .sensitivity-button').forEach(btn => btn.disabled = false);
             priceDeviationInput.disabled = false;
             spinner.classList.add('hidden');
-            buttonText.textContent = 'Scan Coins';
+            buttonText.textContent = 'Scan Coins via Backend';
         }
     }
 
@@ -795,15 +799,16 @@
       const obHigh = card.dataset.obHigh;
       const obLow = card.dataset.obLow;
       const obClose = card.dataset.obClose;
+      const obZoneStart = card.dataset.obZoneStart;
+      const obZoneEnd = card.dataset.obZoneEnd;
+
 
       // Set modal title and OB info
       modalTitle.textContent = `${coinName} (${symbol}) Chart - ${timeframe.toUpperCase()}`;
 
       let obZoneInfo = '';
-      if (obType !== 'None' && obOpen && obHigh && obLow && obClose) {
-          const obZoneStart = parseFloat(obType === 'Buying (Bullish)' ? obOpen : obOpen).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 });
-          const obZoneEnd = parseFloat(obType === 'Buying (Bullish)' ? obLow : obHigh).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 });
-          obZoneInfo = ` | OB Zone: $${obZoneStart} - $${obZoneEnd}`;
+      if (obType !== 'None' && obZoneStart && obZoneEnd) {
+          obZoneInfo = ` | OB Zone: $${parseFloat(obZoneStart).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })} - $${parseFloat(obZoneEnd).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })}`;
       }
 
       modalOBInfo.innerHTML = `Order Block Status: <span class="${

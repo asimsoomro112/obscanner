@@ -238,9 +238,9 @@
         </h1>
 
         <p class="text-center text-gray-400 mb-8">
-            This frontend fetches 4-hour order block data from your Java Spring Boot backend.
+            This fetches 4-hour order block data.
             <br />
-            <strong class="text-red-400">Important: Ensure your Java backend is running and accessible at the configured API URL.</strong>
+            <strong class="text-red-400">Important: Ensure your network is working.</strong>
         </p>
     </div>
 
@@ -281,7 +281,7 @@
             <div class="flex flex-col md:flex-row justify-center items-center gap-4">
                 <button id="scanButton" class="scan-button">
                     <span id="spinner" class="spinner hidden"></span>
-                    <span id="buttonText">Scan Coins via Backend</span>
+                    <span id="buttonText">Scan Coins</span>
                 </button>
                 <button id="clearButton" class="filter-button">Clear Results</button>
             </div>
@@ -485,7 +485,7 @@
 
         } catch (error) {
             console.error("Error fetching user status:", error);
-            authMessage.textContent = "Error connecting to backend for user status. Please try again.";
+            authMessage.textContent = "Error connecting for user status. Please try again.";
         }
     }
 
@@ -544,7 +544,7 @@
             }
         } catch (error) {
             authMessage.style.color = '#EF4444'; // Red for error
-            authMessage.textContent = `Network error: ${error.message}. Please ensure backend is running.`;
+            authMessage.textContent = `Network error: ${error.message}. Please try again later.`;
             console.error("Auth fetch error:", error);
         } finally {
             authSubmitButton.disabled = false;
@@ -723,7 +723,7 @@
 
         spinner.classList.remove('hidden');
         buttonText.textContent = 'Scanning...';
-        statusMessage.textContent = `Fetching real-time data and scanning for ${currentTimeframe.toUpperCase()} order blocks via backend...`;
+        statusMessage.textContent = `Fetching real-time data and scanning for ${currentTimeframe.toUpperCase()} order blocks...`;
         errorMessage.textContent = '';
         resultsContainer.innerHTML = ''; // Clear previous results before new fetch
 
@@ -736,7 +736,7 @@
             document.querySelectorAll('.filter-button, .timeframe-button, .sensitivity-button').forEach(btn => btn.disabled = false);
             priceDeviationInput.disabled = false;
             spinner.classList.add('hidden');
-            buttonText.textContent = 'Scan Coins via Backend';
+            buttonText.textContent = 'Scan Coins';
             return;
         }
 
@@ -769,7 +769,7 @@
 
         } catch (err) {
             statusMessage.textContent = '';
-            errorMessage.textContent = `Connection/Data Error: ${err.message}. Please ensure your Java backend is running and accessible at "${API_BASE_URL}".`;
+            errorMessage.textContent = `Connection/Data Error: ${err.message}. Please ensure your network is working.`;
             console.error("Frontend fetch error:", err);
             allScanResults = []; // Clear results on error
         } finally {
@@ -779,7 +779,7 @@
             document.querySelectorAll('.filter-button, .timeframe-button, .sensitivity-button').forEach(btn => btn.disabled = false);
             priceDeviationInput.disabled = false;
             spinner.classList.add('hidden');
-            buttonText.textContent = 'Scan Coins via Backend';
+            buttonText.textContent = 'Scan Coins';
         }
     }
 

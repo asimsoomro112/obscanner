@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Order Block Scanner (HTML/JS)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1a202c; /* Tailwind gray-900 */
+            color: #e2e8f0; /* Tailwind gray-200 */
+            min-height: 100vh; /* Ensure body takes full height */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start; /* Align to top, not center */
+            align-items: center;
+        }
+        .container {
+            max-width: 1200px;
+            width: 95%; /* Make it slightly more fluid */
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #2d3748; /* Tailwind gray-800 */
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+        }
+        .header-area {
+            background-color: #2d3748; /* Same as container, ensures no gaps */
+            padding-bottom: 1rem; /* Add some padding below title */
+        }
+        .scan-button {
+            background-image: linear-gradient(to right, #6366F1 0%, #8B5CF6 51%, #6366F1 100%);
+            transition: 0.5s;
+            background-size: 200% auto;
+            color: white;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.5); /* Purple shadow */
+            border-radius: 9999px; /* Full rounded */
+            padding: 10px 25px;
+            font-weight: 600;
+            font-size: 1.125rem; /* text-lg */
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .scan-button:hover {
+            background-position: right center;
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.8);
+        }
+        .scan-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .filter-button, .timeframe-button, .sensitivity-button, .chart-button, .auth-button { /* Combined styles */
+            background-color: #4A5568; /* Gray-700 */
+            color: white;
+            padding: 8px 15px;
+            border-radius: 0.5rem; /* rounded-lg */
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid #6B7280; /* Gray-500 */
+            transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+        }
+        .filter-button:hover:not(:disabled), .timeframe-button:hover:not(:disabled), .sensitivity-button:hover:not(:disabled), .chart-button:hover:not(:disabled), .auth-button:hover:not(:disabled) {
+            background-color: #6B7280; /* Gray-500 */
+            border-color: #9CA3AF; /* Gray-400 */
+        }
+        .filter-button.active, .timeframe-button.active, .sensitivity-button.active, .auth-button.active {
+            background-color: #4299E1; /* Blue-500 */
+            border-color: #2B6CB0; /* Blue-700 */
+            font-weight: 700;
+        }
+        .filter-button:disabled, .timeframe-button:disabled, .sensitivity-button:disabled, .chart-button:disabled, .auth-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .coin-card {
+            background-color: #2D3748; /* Darker slate */
+            border-left: 4px solid;
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem; /* p-6 */
+            transition: transform 0.2s ease-in-out;
+            cursor: pointer; /* Indicate clickable */
+        }
+        .coin-card:hover {
+            transform: translateY(-5px);
+        }
+        .buying-ob-border {
+            border-left-color: #10B981; /* Green */
+        }
+        .selling-ob-border {
+            border-left-color: #EF4444; /* Red */
+        }
+        .no-ob-border {
+            border-left-color: #6B7280; /* Gray */
+        }
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid #fff;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Styles for the parameter sections */
+        .parameters-section {
+            background-color: #2D3748; /* Darker slate */
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+        }
+        .parameters-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+        .param-input-group { /* Keep this style for priceDeviation, but removed for others */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .param-input-group label {
+            font-weight: 600;
+            color: #9CA3AF; /* gray-400 */
+        }
+        .param-input-group input[type="number"],
+        .param-input-group input[type="text"],
+        .param-input-group input[type="email"],
+        .param-input-group input[type="password"] {
+            width: 100%; /* Make text inputs full width within their group */
+            max-width: 250px; /* Limit max width for forms */
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem; /* rounded-md */
+            background-color: #4A5568; /* gray-700 */
+            color: #E2E8F0; /* gray-200 */
+            border: 1px solid #6B7280; /* gray-600 */
+            text-align: left; /* Align text left for forms */
+            font-size: 0.875rem; /* text-sm */
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .param-input-group input[type="number"]:focus,
+        .param-input-group input[type="text"]:focus,
+        .param-input-group input[type="email"]:focus,
+        .param-input-group input[type="password"]:focus {
+            outline: none;
+            border-color: #4299E1; /* blue-500 */
+            box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.5); /* blue-500 with opacity */
+        }
+
+
+        /* Modal Styles */
+        .modal {
+          position: fixed;
+          z-index: 100; /* High z-index to be on top */
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          overflow: auto; /* Enable scroll if content is too tall */
+          background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 20px; /* Add some padding around the modal content */
+        }
+        .modal-content {
+          background-color: #2d3748; /* Tailwind gray-800 */
+          margin: auto;
+          padding: 20px;
+          border-radius: 0.75rem;
+          box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+          width: 90%; /* Responsive width */
+          max-width: 1000px; /* Max width for larger screens */
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          gap: 15px;
+        }
+        .close-button {
+          color: #aaa;
+          position: absolute;
+          top: 10px;
+          right: 20px;
+          font-size: 28px;
+          font-weight: bold;
+          cursor: pointer;
+        }
+        .close-button:hover,
+        .close-button:focus {
+          color: white;
+          text-decoration: none;
+          cursor: pointer;
+        }
+        .tradingview-widget-container {
+            height: 80vh; /* Use viewport height for responsiveness */
+            max-height: 700px; /* Max height to prevent it from getting too large */
+            width: 100%;
+            border-radius: 0.5rem;
+            overflow: hidden; /* Ensure rounded corners on widget */
+        }
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 95%;
+                padding: 15px;
+            }
+            .tradingview-widget-container {
+                height: 60vh; /* Smaller height on mobile */
+                max-height: 400px; /* Adjust max height for mobile */
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200">
+<div class="container">
+    <div class="header-area">
+        <h1 class="text-4xl font-bold text-center text-blue-400 mb-6">
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+                    Crypto Order Block Scanner
+                </span>
+        </h1>
+
+        <p class="text-center text-gray-400 mb-8">
+            This frontend fetches 4-hour order block data from your Java Spring Boot backend.
+            <br />
+            <strong class="text-red-400">Important: Ensure your Java backend is running and accessible at the configured API URL.</strong>
+        </p>
+    </div>
+
+    <!-- Authentication Section (Initially visible) -->
+    <div id="authSection" class="bg-gray-800 p-6 rounded-xl shadow-lg mb-8 max-w-md mx-auto">
+        <h2 id="authFormTitle" class="text-2xl font-bold text-blue-300 text-center mb-4">Login</h2>
+        <form id="authForm" class="flex flex-col gap-4">
+            <div class="param-input-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required class="w-full">
+            </div>
+            <div class="param-input-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required class="w-full">
+            </div>
+            <div id="emailGroup" class="param-input-group hidden">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" class="w-full">
+            </div>
+            <div id="planGroup" class="param-input-group hidden">
+                <label for="plan">Plan:</label>
+                <select id="plan" name="plan" class="w-full px-3 py-2 rounded-md bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="trial">3-Day Trial</option>
+                    <!-- <option value="premium">Premium (Requires Payment)</option> -->
+                </select>
+            </div>
+            <button type="submit" id="authSubmitButton" class="scan-button w-full">Login</button>
+        </form>
+        <p class="text-center mt-4">
+            <button id="toggleAuthMode" class="text-blue-400 hover:underline">Don't have an account? Register here.</button>
+        </p>
+        <p id="authMessage" class="text-center text-red-400 mt-4"></p>
+    </div>
+
+    <!-- Scanner Section (Initially hidden) -->
+    <div id="scannerSection" class="hidden">
+        <div class="flex justify-between items-center mb-4">
+            <div class="flex flex-col md:flex-row justify-center items-center gap-4">
+                <button id="scanButton" class="scan-button">
+                    <span id="spinner" class="spinner hidden"></span>
+                    <span id="buttonText">Scan Coins via Backend</span>
+                </button>
+                <button id="clearButton" class="filter-button">Clear Results</button>
+            </div>
+            <button id="logoutButton" class="auth-button bg-red-600 hover:bg-red-700">Logout</button>
+        </div>
+
+
+        <div class="flex justify-center gap-3 mb-6 flex-wrap">
+            <span class="text-gray-300 font-semibold self-center">Timeframe:</span>
+            <button id="timeframe1hButton" class="timeframe-button" data-timeframe="1h">1H</button>
+            <button id="timeframe4hButton" class="timeframe-button active" data-timeframe="4h">4H</button>
+            <button id="timeframe1dButton" class="timeframe-button" data-timeframe="1d">1D</button>
+        </div>
+
+        <div class="flex justify-center gap-3 mb-6 flex-wrap">
+            <span class="text-gray-300 font-semibold self-center">Filter:</span>
+            <button id="showAllButton" class="filter-button active" data-filter="All">Show All</button>
+            <button id="showBuyingButton" class="filter-button" data-filter="Buying (Bullish)">Show Buying OB</button>
+            <button id="showSellingButton" class="filter-button" data-filter="Selling (Bearish)">Show Selling OB</button>
+        </div>
+
+        <!-- New section for Order Block Detection Parameters and Price Deviation -->
+        <div class="parameters-section">
+            <h2 class="text-2xl font-bold text-blue-300 text-center mb-4">Detection Sensitivity</h2>
+            <div class="parameters-grid mb-4">
+                <button class="sensitivity-button" data-sensitivity="lowest">Lowest Condition</button>
+                <button class="sensitivity-button" data-sensitivity="low-mid">Low Mid</button>
+                <button class="sensitivity-button active" data-sensitivity="mid">Mid</button>
+                <button class="sensitivity-button" data-sensitivity="mid-high">Mid High</button>
+                <button class="sensitivity-button" data-sensitivity="high">High</button>
+                <button class="sensitivity-button" data-sensitivity="extreme">Extreme Detection</button>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3 mt-4">
+                <label for="priceDeviation" class="text-gray-300 font-semibold">Max Price Deviation (%):</label>
+                <input type="number" id="priceDeviation" value="20" min="0" max="100" class="w-24 px-3 py-2 rounded-md bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+        </div>
+
+
+        <p id="statusMessage" class="text-center text-gray-300 italic mb-6">Click "Scan Coins" to initiate a scan.</p>
+        <p id="errorMessage" class="text-center text-red-500 font-bold mb-6"></p>
+
+        <div id="resultsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Scan results will be injected here -->
+        </div>
+    </div>
+</div>
+
+<!-- Chart Modal Structure -->
+<div id="chartModal" class="modal hidden">
+    <div class="modal-content">
+        <span class="close-button" id="closeModal">&times;</span>
+        <h3 id="modalTitle" class="text-2xl font-bold text-blue-300 text-center mb-4"></h3>
+        <p id="modalOBInfo" class="text-center text-gray-300 mb-4"></p>
+        <div class="tradingview-widget-container">
+            <div id="tradingview_chart"></div>
+        </div>
+        <a id="tradingViewLink" href="#" target="_blank" class="chart-button inline-block text-center px-4 py-2 rounded-lg font-semibold text-sm self-center">
+            View on TradingView.com for Drawing
+        </a>
+    </div>
+</div>
+
+
+<script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.umd.js"></script>
+<script>
+    // --- Configuration ---
+    const API_BASE_URL = "http://192.168.100.72:8080/api"; // Your laptop's local IP for backend
+
+    // --- DOM Elements (Authentication) ---
+    const authSection = document.getElementById('authSection');
+    const scannerSection = document.getElementById('scannerSection');
+    const authForm = document.getElementById('authForm');
+    const authFormTitle = document.getElementById('authFormTitle');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    const emailGroup = document.getElementById('emailGroup');
+    const emailInput = document.getElementById('email');
+    const planGroup = document.getElementById('planGroup');
+    const planSelect = document.getElementById('plan');
+    const authSubmitButton = document.getElementById('authSubmitButton');
+    const toggleAuthModeButton = document.getElementById('toggleAuthMode');
+    const authMessage = document.getElementById('authMessage');
+    const logoutButton = document.getElementById('logoutButton');
+
+    // --- DOM Elements (Scanner - existing) ---
+    const scanButton = document.getElementById('scanButton');
+    const clearButton = document.getElementById('clearButton');
+    const showAllButton = document.getElementById('showAllButton');
+    const showBuyingButton = document.getElementById('showBuyingButton');
+    const showSellingButton = document.getElementById('showSellingButton');
+    const timeframe1hButton = document.getElementById('timeframe1hButton');
+    const timeframe4hButton = document.getElementById('timeframe4hButton');
+    const timeframe1dButton = document.getElementById('timeframe1dButton');
+    const spinner = document.getElementById('spinner');
+    const buttonText = document.getElementById('buttonText');
+    const statusMessage = document.getElementById('statusMessage');
+    const errorMessage = document.getElementById('errorMessage');
+    const resultsContainer = document.getElementById('resultsContainer');
+    const sensitivityButtons = document.querySelectorAll('.sensitivity-button');
+    const priceDeviationInput = document.getElementById('priceDeviation');
+
+    // Modal elements
+    const chartModal = document.getElementById('chartModal');
+    const closeModalButton = document.getElementById('closeModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalOBInfo = document.getElementById('modalOBInfo');
+    const tradingViewLink = document.getElementById('tradingViewLink');
+
+
+    let allScanResults = [];
+    let currentFilter = 'All';
+    let currentTimeframe = '4h';
+    let currentSensitivity = 'mid'; // Default sensitivity
+    let maxPriceDeviationPercent = 20; // Default max price deviation
+    let isRegisterMode = false; // State for auth form
+
+    // Predefined parameter presets for different sensitivities
+    const sensitivityPresets = {
+      'lowest': { minBodyRatio: 0.001, minPriceChange: 0.000001, volumeFactor: 0.01, requireBOS: false, requireC3ClosePastC2: false, requireFVG: false, requireUnmitigated: true, minFvgDepthRatio: 0.001 },
+      'low-mid': { minBodyRatio: 0.10, minPriceChange: 0.0003, volumeFactor: 0.4, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, requireUnmitigated: true, minFvgDepthRatio: 0.02 },
+      'mid': { minBodyRatio: 0.15, minPriceChange: 0.0005, volumeFactor: 0.6, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, requireUnmitigated: true, minFvgDepthRatio: 0.05 },
+      'mid-high': { minBodyRatio: 0.20, minPriceChange: 0.001, volumeFactor: 0.8, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, requireUnmitigated: true, minFvgDepthRatio: 0.08 },
+      'high': { minBodyRatio: 0.25, minPriceChange: 0.002, volumeFactor: 1.0, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, requireUnmitigated: true, minFvgDepthRatio: 0.10 },
+      'extreme': { minBodyRatio: 0.30, minPriceChange: 0.003, volumeFactor: 1.2, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, requireUnmitigated: true, minFvgDepthRatio: 0.15 }
+    };
+
+
+    // --- Authentication Functions ---
+
+    function showAuthSection() {
+        authSection.classList.remove('hidden');
+        scannerSection.classList.add('hidden');
+        authMessage.textContent = '';
+        usernameInput.value = '';
+        passwordInput.value = '';
+        emailInput.value = '';
+        localStorage.removeItem('jwtToken');
+        localStorage.removeItem('username');
+        localStorage.removeItem('roles');
+    }
+
+    function showScannerSection() {
+        authSection.classList.add('hidden');
+        scannerSection.classList.remove('hidden');
+        statusMessage.textContent = `Welcome, ${localStorage.getItem('username')}! Click "Scan Coins" to initiate a scan.`;
+        errorMessage.textContent = '';
+        // Optionally fetch user status here to update UI for premium/trial
+        fetchUserStatus();
+    }
+
+    async function fetchUserStatus() {
+        const token = localStorage.getItem('jwtToken');
+        if (!token) {
+            console.log("No token found, cannot fetch user status.");
+            return;
+        }
+        try {
+            const response = await fetch(`${API_BASE_URL}/user/status`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error("Failed to fetch user status:", errorData.message);
+                // If token is invalid or expired, force logout
+                if (response.status === 401 || response.status === 403) {
+                    showAuthSection();
+                    authMessage.textContent = "Session expired or invalid. Please log in again.";
+                }
+                return;
+            }
+
+            const userData = await response.json();
+            console.log("User status:", userData);
+            // You can use userData (e.g., userData.isPremium, userData.trialActive)
+            // to enable/disable features in the scanner section here.
+            // For example, if not premium and not trial, disable interval buttons other than 4h
+            if (!userData.isPremium && !userData.trialActive) {
+                timeframe1hButton.disabled = true;
+                timeframe1dButton.disabled = true;
+                if (currentTimeframe !== '4h') {
+                    setTimeframe('4h'); // Force 4h for non-premium/non-trial
+                }
+                statusMessage.textContent = `Welcome, ${userData.username}! Your trial has expired or you are not premium. Only 4H scans available.`;
+            } else if (userData.trialActive) {
+                 statusMessage.textContent = `Welcome, ${userData.username}! Your trial expires on ${new Date(userData.trialExpiryDate).toLocaleDateString()}.`;
+                 timeframe1hButton.disabled = false;
+                 timeframe1dButton.disabled = false;
+            } else if (userData.isPremium) {
+                 statusMessage.textContent = `Welcome, ${userData.username}! You have premium access.`;
+                 timeframe1hButton.disabled = false;
+                 timeframe1dButton.disabled = false;
+            }
+
+
+        } catch (error) {
+            console.error("Error fetching user status:", error);
+            authMessage.textContent = "Error connecting to backend for user status. Please try again.";
+        }
+    }
+
+
+    async function handleAuthSubmit(event) {
+        event.preventDefault();
+        authMessage.textContent = ''; // Clear previous messages
+        authSubmitButton.disabled = true;
+
+        const username = usernameInput.value;
+        const password = passwordInput.value;
+        const email = emailInput.value;
+        const plan = planSelect.value;
+
+        let endpoint = isRegisterMode ? `${API_BASE_URL}/auth/register` : `${API_BASE_URL}/auth/login`;
+        let body = { username, password };
+
+        if (isRegisterMode) {
+            body.email = email;
+            body.plan = plan;
+        }
+
+        try {
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                authMessage.style.color = '#48BB78'; // Green for success
+                authMessage.textContent = data.message || (isRegisterMode ? "Registration successful!" : "Login successful!");
+
+                if (!isRegisterMode && data.token) { // If login and token received
+                    localStorage.setItem('jwtToken', data.token);
+                    localStorage.setItem('username', data.username);
+                    localStorage.setItem('userId', data.id); // Store user ID if available
+                    localStorage.setItem('roles', JSON.stringify(data.roles)); // Store roles
+                    showScannerSection();
+                } else if (isRegisterMode) {
+                    // After successful registration, switch to login mode
+                    isRegisterMode = false;
+                    authFormTitle.textContent = 'Login';
+                    authSubmitButton.textContent = 'Login';
+                    emailGroup.classList.add('hidden');
+                    planGroup.classList.add('hidden');
+                    toggleAuthModeButton.textContent = "Don't have an account? Register here.";
+                    authMessage.textContent += " Please log in now.";
+                }
+
+            } else {
+                authMessage.style.color = '#EF4444'; // Red for error
+                authMessage.textContent = data.message || "An error occurred.";
+            }
+        } catch (error) {
+            authMessage.style.color = '#EF4444'; // Red for error
+            authMessage.textContent = `Network error: ${error.message}. Please ensure backend is running.`;
+            console.error("Auth fetch error:", error);
+        } finally {
+            authSubmitButton.disabled = false;
+        }
+    }
+
+    function toggleAuthFormMode() {
+        isRegisterMode = !isRegisterMode;
+        if (isRegisterMode) {
+            authFormTitle.textContent = 'Register';
+            authSubmitButton.textContent = 'Register';
+            emailGroup.classList.remove('hidden');
+            planGroup.classList.remove('hidden');
+            toggleAuthModeButton.textContent = "Already have an account? Login here.";
+        } else {
+            authFormTitle.textContent = 'Login';
+            authSubmitButton.textContent = 'Login';
+            emailGroup.classList.add('hidden');
+            planGroup.classList.add('hidden');
+            toggleAuthModeButton.textContent = "Don't have an account? Register here.";
+        }
+        authMessage.textContent = ''; // Clear messages on mode switch
+    }
+
+    function handleLogout() {
+        showAuthSection();
+        authMessage.textContent = "You have been logged out.";
+    }
+
+
+    // --- Function Definitions (Order matters for dependencies) ---
+
+    function displayResults(resultsToDisplay) {
+        resultsContainer.innerHTML = '';
+
+        let filteredByPriceDeviation = resultsToDisplay.filter(coin => {
+            if (coin.orderBlockType === 'None' || coin.orderBlockPrice === null || coin.orderBlockPrice === undefined) {
+                return true; // Always show 'None' or results without a specific OB price
+            }
+            const priceDiff = Math.abs(coin.orderBlockPrice - coin.currentPrice);
+            const percentageDiff = (priceDiff / coin.currentPrice) * 100;
+            return percentageDiff <= maxPriceDeviationPercent;
+        });
+
+        if (filteredByPriceDeviation.length === 0) {
+            resultsContainer.innerHTML = '<p class="text-center text-gray-400 col-span-full">No order block data available for current filters.</p>';
+            return;
+        }
+
+        filteredByPriceDeviation.forEach(coin => {
+            const orderBlockTypeClass = coin.orderBlockType === 'Buying (Bullish)' ? 'buying-ob-border' :
+                                        coin.orderBlockType === 'Selling (Bearish)' ? 'selling-ob-border' :
+                                        'no-ob-border';
+
+            const obPriceDisplay = coin.orderBlockPrice !== null && coin.orderBlockPrice !== undefined ? `$${parseFloat(coin.orderBlockPrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })}` : 'N/A';
+            const currentPriceDisplay = coin.currentPrice !== null && coin.currentPrice !== undefined ? parseFloat(coin.currentPrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 }) : 'N/A';
+
+            resultsContainer.innerHTML += `
+                <div class="coin-card ${orderBlockTypeClass}"
+                     data-symbol="${coin.id}"
+                     data-timeframe="${coin.timeframe}"
+                     data-ob-type="${coin.orderBlockType}"
+                     data-ob-price="${coin.orderBlockPrice || 'N/A'}"
+                     data-coin-name="${coin.name}"
+                     data-ob-open="${coin.obCandleOpen || ''}"
+                     data-ob-high="${coin.obCandleHigh || ''}"
+                     data-ob-low="${coin.obCandleLow || ''}"
+                     data-ob-close="${coin.obCandleClose || ''}">
+                    <div class="flex justify-between items-center mb-3">
+                        <h2 class="text-2xl font-bold text-blue-300">${coin.name || 'N/A'} (${coin.id || 'N/A'})</h2>
+                        <span class="text-lg font-semibold text-gray-300">Vol: ${coin.volume || 'N/A'}</span>
+                    </div>
+                    <p class="text-gray-400 mb-2">Current Price: <span class="text-white font-medium">$${currentPriceDisplay}</span></p>
+                    <p class="text-gray-400 mb-2">Scan Time: <span class="text-white font-medium">${coin.timestamp || 'N/A'}</span></p>
+                    <p class="text-gray-400 mb-2">Timeframe: <span class="text-white font-medium">${(coin.timeframe || 'N/A').toUpperCase()}</span></p>
+                    <div class="mt-4 pt-4 border-t border-gray-600">
+                        <p class="text-lg font-semibold mb-2">
+                            Order Block Status: <span class="${
+                                coin.orderBlockType === 'Buying (Bullish)' ? 'text-green-400' :
+                                coin.orderBlockType === 'Selling (Bearish)' ? 'text-red-400' :
+                                'text-gray-400'
+                            }">
+                                ${coin.orderBlockType || 'N/A'}
+                            </span>
+                        </p>
+                        <p class="text-gray-300 mb-2">
+                            Order Block Price Level: <span class="text-white font-bold">${obPriceDisplay}</span>
+                        </p>
+                        <p class="text-gray-400 text-sm mb-4">${coin.details || 'No additional details.'}</p>
+                        <!-- Removed individual chart button, now handled by card click -->
+                    </div>
+                </div>
+            `;
+        });
+        // Add event listeners to newly created coin cards
+        document.querySelectorAll('.coin-card').forEach(card => {
+            card.addEventListener('click', openChartModal);
+        });
+    }
+
+    function filterResults() {
+        let filtered = [];
+        if (currentFilter === 'All') {
+            filtered = allScanResults;
+        } else {
+            filtered = allScanResults.filter(coin => coin.orderBlockType === currentFilter);
+        }
+        // Apply price deviation filter always
+        displayResults(filtered);
+        statusMessage.textContent = `Displaying ${filtered.length} results (filtered by: ${currentFilter}, max deviation: ${maxPriceDeviationPercent}%).`;
+        if (currentFilter === 'All') {
+            statusMessage.textContent = `Scan complete! Found ${allScanResults.length} total results for ${currentTimeframe.toUpperCase()} timeframe with "${currentSensitivity}" sensitivity. Displaying ${resultsContainer.children.length} results after price deviation filter.`;
+        }
+    }
+
+    function setFilter(filterType) {
+        currentFilter = filterType;
+        document.querySelectorAll('.filter-button').forEach(btn => {
+            if (btn.dataset.filter === filterType) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+        filterResults();
+    }
+
+    function setTimeframe(timeframe) {
+        currentTimeframe = timeframe;
+        document.querySelectorAll('.timeframe-button').forEach(btn => {
+            if (btn.dataset.timeframe === timeframe) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+        statusMessage.textContent = `Timeframe set to ${currentTimeframe.toUpperCase()}. Click Scan to update results.`;
+    }
+
+    function setSensitivity(sensitivityType) {
+      currentSensitivity = sensitivityType;
+      sensitivityButtons.forEach(btn => {
+        if (btn.dataset.sensitivity === sensitivityType) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+      statusMessage.textContent = `Detection sensitivity set to "${sensitivityType}". Click Scan to update results.`;
+    }
+
+    function clearResults() {
+        allScanResults = [];
+        currentFilter = 'All';
+        setFilter('All'); // Reset filter to 'All'
+        resultsContainer.innerHTML = '<p class="text-center text-gray-400 col-span-full">Results cleared.</p>';
+        statusMessage.textContent = 'Click "Scan Coins" to initiate a scan.';
+        errorMessage.textContent = '';
+    }
+
+    async function fetchOrderBlocks() {
+        // Check for token before fetching
+        const token = localStorage.getItem('jwtToken');
+        if (!token) {
+            errorMessage.textContent = "Please log in to use the scanner.";
+            showAuthSection(); // Redirect to login if no token
+            return;
+        }
+
+        // Disable all interactive elements during scan
+        scanButton.disabled = true;
+        clearButton.disabled = true;
+        document.querySelectorAll('.filter-button, .timeframe-button, .sensitivity-button').forEach(btn => btn.disabled = true);
+        priceDeviationInput.disabled = true;
+
+
+        spinner.classList.remove('hidden');
+        buttonText.textContent = 'Scanning...';
+        statusMessage.textContent = `Fetching real-time data and scanning for ${currentTimeframe.toUpperCase()} order blocks via backend...`;
+        errorMessage.textContent = '';
+        resultsContainer.innerHTML = ''; // Clear previous results before new fetch
+
+        const selectedPreset = sensitivityPresets[currentSensitivity];
+        if (!selectedPreset) {
+            errorMessage.textContent = "Invalid sensitivity preset selected.";
+            // Re-enable elements
+            scanButton.disabled = false;
+            clearButton.disabled = false;
+            document.querySelectorAll('.filter-button, .timeframe-button, .sensitivity-button').forEach(btn => btn.disabled = false);
+            priceDeviationInput.disabled = false;
+            spinner.classList.add('hidden');
+            buttonText.textContent = 'Scan Coins via Backend';
+            return;
+        }
+
+        // All parameters now come directly from the selectedPreset
+        const { minBodyRatio, minPriceChange, volumeFactor, requireBOS, requireC3ClosePastC2, requireFVG, requireUnmitigated, minFvgDepthRatio } = selectedPreset;
+
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/scan-order-blocks?interval=${currentTimeframe}&minBodyRatio=${minBodyRatio}&minPriceChange=${minPriceChange}&volumeFactor=${volumeFactor}&requireBOS=${requireBOS}&requireC3ClosePastC2=${requireC3ClosePastC2}&requireFVG=${requireFVG}&requireUnmitigated=${requireUnmitigated}&minFvgDepthRatio=${minFvgDepthRatio}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}` // Include JWT for authentication
+                }
+            });
+
+            if (!response.ok) {
+                let errorDetail = `Status: ${response.status} ${response.statusText || 'Unknown Error'}`;
+                try {
+                    const errorBody = await response.text();
+                    errorDetail += `. Response Body: ${errorBody.substring(0, Math.min(errorBody.length, 200))}`;
+                } catch (bodyError) {
+                    errorDetail += `. Could not read response body: ${bodyError.message}`;
+                }
+                throw new Error(`HTTP request failed. ${errorDetail}`);
+            }
+
+            const data = await response.json();
+            allScanResults = data;
+            filterResults(); // Apply current filter and new price deviation filter to new results
+            statusMessage.textContent = `Scan complete! Found ${data.length} total results for ${currentTimeframe.toUpperCase()} timeframe with "${currentSensitivity}" sensitivity. Displaying ${resultsContainer.children.length} results after price deviation filter.`;
+
+        } catch (err) {
+            statusMessage.textContent = '';
+            errorMessage.textContent = `Connection/Data Error: ${err.message}. Please ensure your Java backend is running and accessible at "${API_BASE_URL}".`;
+            console.error("Frontend fetch error:", err);
+            allScanResults = []; // Clear results on error
+        } finally {
+            // Re-enable all interactive elements
+            scanButton.disabled = false;
+            clearButton.disabled = false;
+            document.querySelectorAll('.filter-button, .timeframe-button, .sensitivity-button').forEach(btn => btn.disabled = false);
+            priceDeviationInput.disabled = false;
+            spinner.classList.add('hidden');
+            buttonText.textContent = 'Scan Coins via Backend';
+        }
+    }
+
+    // --- Chart Modal Functions ---
+    function openChartModal(event) {
+      const card = event.currentTarget; // The clicked coin-card div
+      const symbol = card.dataset.symbol;
+      const timeframe = card.dataset.timeframe;
+      const obType = card.dataset.obType;
+      const obPrice = card.dataset.obPrice;
+      const coinName = card.dataset.coinName;
+      const obOpen = card.dataset.obOpen;
+      const obHigh = card.dataset.obHigh;
+      const obLow = card.dataset.obLow;
+      const obClose = card.dataset.obClose;
+
+      // Set modal title and OB info
+      modalTitle.textContent = `${coinName} (${symbol}) Chart - ${timeframe.toUpperCase()}`;
+
+      let obZoneInfo = '';
+      if (obType !== 'None' && obOpen && obHigh && obLow && obClose) {
+          const obZoneStart = parseFloat(obType === 'Buying (Bullish)' ? obOpen : obOpen).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 });
+          const obZoneEnd = parseFloat(obType === 'Buying (Bullish)' ? obLow : obHigh).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 });
+          obZoneInfo = ` | OB Zone: $${obZoneStart} - $${obZoneEnd}`;
+      }
+
+      modalOBInfo.innerHTML = `Order Block Status: <span class="${
+          obType === 'Buying (Bullish)' ? 'text-green-400' :
+          obType === 'Selling (Bearish)' ? 'text-red-400' :
+          'text-gray-400'
+      }">${obType}</span> | Price Level: <span class="text-white font-bold">${obPrice !== 'N/A' ? `$${parseFloat(obPrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })}` : 'N/A'}</span>${obZoneInfo}`;
+
+      // Determine TradingView interval string
+      let tvInterval = '240'; // Default for 4h
+      if (timeframe === '1h') {
+          tvInterval = '60';
+      } else if (timeframe === '1d') {
+          tvInterval = 'D';
+      }
+
+      // Clear previous widget content
+      document.getElementById('tradingview_chart').innerHTML = '';
+
+      // Create a new TradingView widget instance
+      new TradingView.widget(
+        {
+          "width": "100%",
+          "height": "100%",
+          "symbol": `BINANCE:${symbol}`, // Binance Futures symbol
+          "interval": tvInterval,
+          "timezone": "Etc/UTC",
+          "theme": "dark",
+          "style": "1",
+          "locale": "en",
+          "toolbar_bg": "#f1f3f6",
+          "enable_publishing": false,
+          "allow_symbol_change": true,
+          "container_id": "tradingview_chart"
+        }
+      );
+
+      // Update the external TradingView link
+      tradingViewLink.href = `https://www.tradingview.com/chart/?symbol=BINANCE:${symbol}.P&interval=${tvInterval}`;
+
+      chartModal.classList.remove('hidden'); // Show the modal
+    }
+
+    function closeChartModal() {
+      chartModal.classList.add('hidden'); // Hide the modal
+      document.getElementById('tradingview_chart').innerHTML = '';
+    }
+
+
+    // --- Initial Setup Calls ---
+    displayResults([]); // Clear results on initial load
+    setTimeframe(currentTimeframe); // Set initial timeframe button active
+    setSensitivity(currentSensitivity); // Set initial sensitivity button active
+
+    // Check if user is already logged in (e.g., from a previous session)
+    if (localStorage.getItem('jwtToken')) {
+        showScannerSection();
+    } else {
+        showAuthSection();
+    }
+
+
+    // --- Event Listeners ---
+    scanButton.addEventListener('click', fetchOrderBlocks);
+    clearButton.addEventListener('click', clearResults);
+    showAllButton.addEventListener('click', () => setFilter('All'));
+    showBuyingButton.addEventListener('click', () => setFilter('Buying (Bullish)'));
+    showSellingButton.addEventListener('click', () => setFilter('Selling (Bearish)'));
+    timeframe1hButton.addEventListener('click', () => setTimeframe('1h'));
+    timeframe4hButton.addEventListener('click', () => setTimeframe('4h'));
+    timeframe1dButton.addEventListener('click', () => setTimeframe('1d'));
+
+    sensitivityButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        setSensitivity(button.dataset.sensitivity);
+      });
+    });
+
+    priceDeviationInput.addEventListener('change', (event) => {
+        const newValue = parseFloat(event.target.value);
+        if (!isNaN(newValue) && newValue >= 0 && newValue <= 100) {
+            maxPriceDeviationPercent = newValue;
+            filterResults(); // Re-apply filters with the new deviation
+        } else {
+            errorMessage.textContent = "Please enter a valid percentage between 0 and 100.";
+            event.target.value = maxPriceDeviationPercent; // Revert to last valid value
+        }
+    });
+
+    closeModalButton.addEventListener('click', closeChartModal);
+    chartModal.addEventListener('click', (event) => {
+      if (event.target === chartModal) {
+        closeChartModal(); // Use closeChartModal for consistency
+      }
+    });
+
+    // Authentication Event Listeners
+    authForm.addEventListener('submit', handleAuthSubmit);
+    toggleAuthModeButton.addEventListener('click', toggleAuthFormMode);
+    logoutButton.addEventListener('click', handleLogout);
+
+    // Load TradingView widget script dynamically
+    const script = document.createElement('script');
+    script.src = 'https://s3.tradingview.com/tv.js';
+    script.async = true;
+    document.head.appendChild(script);
+
+</script>
+</body>
+</html>

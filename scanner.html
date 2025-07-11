@@ -1064,6 +1064,7 @@
     }
 
     async function showScannerSection() {
+        console.log("showScannerSection called."); // DEBUG
         authSection.classList.add('hidden');
         closeModal(paymentModal);
         closeModal(adminPanelModal);
@@ -1082,6 +1083,7 @@
     }
 
     function showPaymentSection(registeredUsername) {
+        console.log("showPaymentSection called."); // DEBUG
         authSection.classList.add('hidden');
         scannerSection.classList.add('hidden');
         closeModal(adminPanelModal);
@@ -1092,6 +1094,7 @@
     }
 
     async function showAdminPanel() {
+        console.log("showAdminPanel called."); // DEBUG
         openModal(adminPanelModal);
         showToast('Loading users...', 'info');
         userTableBody.innerHTML = '';
@@ -1129,6 +1132,7 @@
 
     // Display users in admin panel table
     function displayUsersInAdminPanel(users) {
+        console.log("displayUsersInAdminPanel called."); // DEBUG
         userTableBody.innerHTML = '';
         if (users.length === 0) {
             userTableBody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-gray-400 dark:text-gray-500">No users found.</td></tr>';
@@ -1172,6 +1176,7 @@
 
     // Admin Actions
     async function grantPremium(username) {
+        console.log(`grantPremium called for ${username}.`); // DEBUG
         showToast('Granting premium...', 'info');
         const token = localStorage.getItem('jwtToken');
         try {
@@ -1195,6 +1200,7 @@
     }
 
     async function revokePremium(username) {
+        console.log(`revokePremium called for ${username}.`); // DEBUG
         showToast('Revoking premium...', 'info');
         const token = localStorage.getItem('jwtToken');
         try {
@@ -1218,6 +1224,7 @@
         }
 
     async function activateTrial(username) {
+        console.log(`activateTrial called for ${username}.`); // DEBUG
         showToast('Activating trial...', 'info');
         const token = localStorage.getItem('jwtToken');
         try {
@@ -1242,9 +1249,10 @@
 
 
     async function fetchUserStatus() {
+        console.log("fetchUserStatus called."); // DEBUG
         const token = localStorage.getItem('jwtToken');
         if (!token) {
-            console.log("No token found, cannot fetch user status.");
+            console.log("DEBUG: No token found, cannot fetch user status.");
             return;
         }
         try {
@@ -1258,7 +1266,7 @@
 
             if (!response.ok) {
                 const errorData = await response.json();
-                console.error("Failed to fetch user status:", errorData.message);
+                console.error("DEBUG: Failed to fetch user status:", errorData.message);
                 if (response.status === 401 || response.status === 403) {
                     showAuthSection();
                     showToast("Session expired or invalid. Please log in again.", 'error');
@@ -1267,7 +1275,7 @@
             }
 
             const userData = await response.json();
-            console.log("User status:", userData);
+            console.log("DEBUG: User status:", userData);
 
             // Check for admin role and show/hide admin button
             const userRoles = localStorage.getItem('roles') ? JSON.parse(localStorage.getItem('roles')) : [];
@@ -1298,14 +1306,16 @@
 
 
         } catch (error) {
-            console.error("Error fetching user status:", error);
+            console.error("DEBUG: Error fetching user status:", error);
             showToast("Error connecting to the service. Please try again.", 'error');
         }
     }
 
 
     async function handleAuthSubmit(event) {
-        event.preventDefault();
+        console.log("DEBUG: handleAuthSubmit called."); // DEBUG
+        event.preventDefault(); // Prevent default form submission behavior
+        console.log("DEBUG: event.preventDefault() executed."); // DEBUG
         authSubmitButton.disabled = true;
 
         const username = usernameInput.value;
@@ -1316,27 +1326,27 @@
         let endpoint = `${API_BASE_URL}/auth/login`; // Default to login endpoint
         let body = { username, password };
 
-        if (isAdminRegisterMode) { // If in admin registration mode (logic removed for security)
-            // This block should ideally not be reachable if the button is removed
-            endpoint = `${API_BASE_URL}/auth/register-admin`; // Keeping for robustness, but button removed
+        if (isAdminRegisterMode) {
+            console.log("DEBUG: Admin Register Mode detected."); // DEBUG
+            endpoint = `${API_BASE_URL}/auth/register-admin`;
             body = { username, password, email };
             if (!username || !password || !email) {
                 showToast("Username, password, and email are required for admin registration.", 'error');
                 authSubmitButton.disabled = false;
                 return;
             }
-        } else if (isRegisterMode) { // If in regular user registration mode
+        } else if (isRegisterMode) {
+            console.log("DEBUG: Regular Register Mode detected."); // DEBUG
             endpoint = `${API_BASE_URL}/auth/register`;
             body.email = email;
             body.plan = plan;
-            // Validate inputs for regular registration
             if (!username || !password || !email) {
                 showToast("Username, password, and email are required for registration.", 'error');
                 authSubmitButton.disabled = false;
                 return;
             }
-        } else { // Login mode
-            // Validate inputs for login
+        } else {
+            console.log("DEBUG: Login Mode detected."); // DEBUG
             if (!username || !password) {
                 showToast("Username and password are required for login.", 'error');
                 authSubmitButton.disabled = false;
@@ -1344,6 +1354,7 @@
             }
         }
 
+        console.log(`DEBUG: Sending request to ${endpoint} with body:`, body); // DEBUG
 
         try {
             const response = await fetch(endpoint, {
@@ -1352,44 +1363,55 @@
                 body: JSON.stringify(body)
             });
 
+            console.log("DEBUG: Response received, status:", response.status); // DEBUG
             const data = await response.json();
+            console.log("DEBUG: Response data:", data); // DEBUG
 
             if (response.ok) {
-                if (isAdminRegisterMode) { // Admin registration successful
+                console.log("DEBUG: Response OK."); // DEBUG
+                if (isAdminRegisterMode) {
                     showToast(data.message || "Admin registration successful! Please log in as admin.", 'success');
-                    showAuthSection(); // Reset to login view
-                } else if (isRegisterMode) { // Regular user registration successful
+                    showAuthSection();
+                } else if (isRegisterMode) {
                     showToast(data.message || "Registration successful!", 'success');
                     if (plan === 'premium') {
                         showPaymentSection(username);
-                    } else { // Trial registration
-                        showAuthSection(); // Reset to login view
-                        showToast("Registration successful! Please log in now.", 'success');
+                    } else {
+                        showAuthSection();
+                        showToast("Registration successful! Please log in now.", 'info');
                     }
-                } else { // Login mode successful
+                } else {
                     showToast(data.message || "Login successful!", 'success');
                     if (data.token) {
                         localStorage.setItem('jwtToken', data.token);
                         localStorage.setItem('username', data.username);
                         localStorage.setItem('userId', data.id);
                         localStorage.setItem('roles', JSON.stringify(data.roles));
+                        console.log("DEBUG: Token and user data stored in localStorage."); // DEBUG
                         showScannerSection();
+                    } else {
+                        console.error("DEBUG: Login successful but no token received!"); // DEBUG
+                        showToast("Login successful, but no token received. Please try again.", 'error');
+                        showAuthSection(); // Fallback to auth section
                     }
                 }
 
             } else {
+                console.log("DEBUG: Response not OK, showing error toast."); // DEBUG
                 showToast(data.message || "An error occurred.", 'error');
             }
         } catch (error) {
-            showToast(`Connection error. Please try again.`, 'error');
-            console.error("Auth fetch error:", error);
+            console.error("DEBUG: Auth fetch error in catch block:", error); // DEBUG
+            showToast(`Connection error. Please check your network connection and try again.`, 'error');
         } finally {
+            console.log("DEBUG: handleAuthSubmit finally block executed."); // DEBUG
             authSubmitButton.disabled = false;
         }
     }
 
     function toggleAuthFormMode() {
-        isAdminRegisterMode = false; // Always reset admin register mode when toggling
+        console.log("DEBUG: toggleAuthFormMode called. Current isRegisterMode:", isRegisterMode); // DEBUG
+        isAdminRegisterMode = false;
         isRegisterMode = !isRegisterMode;
         if (isRegisterMode) {
             authFormTitle.textContent = 'Register';
@@ -1404,18 +1426,21 @@
             planGroup.classList.add('hidden');
             toggleAuthModeButton.textContent = "Don't have an account? Register here.";
         }
-        usernameInput.value = ''; // Clear inputs on mode switch
+        usernameInput.value = '';
         passwordInput.value = '';
         emailInput.value = '';
+        console.log("DEBUG: isRegisterMode after toggle:", isRegisterMode); // DEBUG
     }
 
     function handleLogout() {
+        console.log("DEBUG: handleLogout called."); // DEBUG
         showAuthSection();
         showToast("You have been logged out.", 'info');
     }
 
     // --- Payment Functions ---
     async function handleSubmitPaymentProof(event) {
+        console.log("DEBUG: handleSubmitPaymentProof called."); // DEBUG
         event.preventDefault();
         submitPaymentProofButton.disabled = true;
 
@@ -1483,6 +1508,7 @@
     `;
 
     function displayResults(resultsToDisplay) {
+        console.log("DEBUG: displayResults called."); // DEBUG
         resultsContainer.innerHTML = '';
 
         // Filter based on the main filter (All, Buying, Selling)
@@ -1589,6 +1615,7 @@
     }
 
     function filterResults() {
+        console.log("DEBUG: filterResults called."); // DEBUG
         let filtered = [];
         if (currentFilter === 'All') {
             filtered = allScanResults;
@@ -1606,6 +1633,7 @@
     }
 
     function setFilter(filterType) {
+        console.log(`DEBUG: setFilter called with ${filterType}.`); // DEBUG
         currentFilter = filterType;
         localStorage.setItem('currentFilter', filterType); // Persist
         document.querySelectorAll('.filter-button').forEach(btn => {
@@ -1619,6 +1647,7 @@
     }
 
     function setTimeframe(timeframe) {
+        console.log(`DEBUG: setTimeframe called with ${timeframe}.`); // DEBUG
         currentTimeframe = timeframe;
         localStorage.setItem('currentTimeframe', timeframe); // Persist
         document.querySelectorAll('.timeframe-button').forEach(btn => {
@@ -1632,6 +1661,7 @@
     }
 
     function setSensitivity(sensitivityType) {
+      console.log(`DEBUG: setSensitivity called with ${sensitivityType}.`); // DEBUG
       currentSensitivity = sensitivityType;
       localStorage.setItem('currentSensitivity', sensitivityType); // Persist
       sensitivityButtons.forEach(btn => {
@@ -1645,6 +1675,7 @@
     }
 
     function clearResults() {
+        console.log("DEBUG: clearResults called."); // DEBUG
         allScanResults = [];
         currentFilter = 'All';
         localStorage.setItem('currentFilter', 'All'); // Reset persistence
@@ -1654,6 +1685,7 @@
     }
 
     async function fetchOrderBlocks() {
+        console.log("DEBUG: fetchOrderBlocks called."); // DEBUG
         const token = localStorage.getItem('jwtToken');
         if (!token) {
             showToast("Please log in to use the scanner.", 'error');
@@ -1716,7 +1748,7 @@
 
         } catch (err) {
             showToast(`Connection/Data Error: ${err.message}. Please check your network connection and try again.`, 'error');
-            console.error("Frontend fetch error:", err);
+            console.error("DEBUG: Frontend fetch error:", err); // DEBUG
             allScanResults = [];
             resultsContainer.innerHTML = '<p class="text-center text-red-500 dark:text-red-400 col-span-full py-8">Failed to load scan results. Please check your connection or try again later.</p>';
         } finally {
@@ -1733,6 +1765,7 @@
 
     // --- Chart Modal Functions ---
     function openChartModal(event) {
+      console.log("DEBUG: openChartModal called."); // DEBUG
       const card = event.currentTarget;
       const symbol = card.dataset.symbol;
       const timeframe = card.dataset.timeframe;
@@ -1803,6 +1836,7 @@
     }
 
     function closeChartModal() {
+      console.log("DEBUG: closeChartModal called."); // DEBUG
       closeModal(chartModal);
       document.getElementById('tradingview_chart').innerHTML = ''; // Clear chart content on close
     }
@@ -1819,8 +1853,10 @@
     setSensitivity(currentSensitivity); // This also sets active class
 
     if (localStorage.getItem('jwtToken')) {
+        console.log("DEBUG: JWT Token found on initial load, attempting to show scanner section."); // DEBUG
         showScannerSection();
     } else {
+        console.log("DEBUG: No JWT Token found on initial load, showing auth section."); // DEBUG
         showAuthSection();
     }
 

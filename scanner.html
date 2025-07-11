@@ -906,7 +906,6 @@
     const authSubmitButton = document.getElementById('authSubmitButton');
     const toggleAuthModeButton = document.getElementById('toggleAuthMode');
     const logoutButton = document.getElementById('logoutButton');
-    // Removed registerAdminButton from direct HTML, now handled by admin panel logic or initial setup if needed.
 
     // --- DOM Elements (Scanner) ---
     const scanButton = document.getElementById('scanButton');
@@ -1064,7 +1063,6 @@
     }
 
     async function showScannerSection() {
-        console.log("DEBUG: showScannerSection called."); // DEBUG
         authSection.classList.add('hidden');
         closeModal(paymentModal);
         closeModal(adminPanelModal);
@@ -1083,7 +1081,6 @@
     }
 
     function showPaymentSection(registeredUsername) {
-        console.log("DEBUG: showPaymentSection called."); // DEBUG
         authSection.classList.add('hidden');
         scannerSection.classList.add('hidden');
         closeModal(adminPanelModal);
@@ -1094,7 +1091,6 @@
     }
 
     async function showAdminPanel() {
-        console.log("DEBUG: showAdminPanel called."); // DEBUG
         openModal(adminPanelModal);
         showToast('Loading users...', 'info');
         userTableBody.innerHTML = '';
@@ -1132,7 +1128,6 @@
 
     // Display users in admin panel table
     function displayUsersInAdminPanel(users) {
-        console.log("DEBUG: displayUsersInAdminPanel called."); // DEBUG
         userTableBody.innerHTML = '';
         if (users.length === 0) {
             userTableBody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-gray-400 dark:text-gray-500">No users found.</td></tr>';
@@ -1176,7 +1171,6 @@
 
     // Admin Actions
     async function grantPremium(username) {
-        console.log(`DEBUG: grantPremium called for ${username}.`); // DEBUG
         showToast('Granting premium...', 'info');
         const token = localStorage.getItem('jwtToken');
         try {
@@ -1200,7 +1194,6 @@
     }
 
     async function revokePremium(username) {
-        console.log(`DEBUG: revokePremium called for ${username}.`); // DEBUG
         showToast('Revoking premium...', 'info');
         const token = localStorage.getItem('jwtToken');
         try {
@@ -1224,7 +1217,6 @@
         }
 
     async function activateTrial(username) {
-        console.log(`DEBUG: activateTrial called for ${username}.`); // DEBUG
         showToast('Activating trial...', 'info');
         const token = localStorage.getItem('jwtToken');
         try {
@@ -1249,10 +1241,8 @@
 
 
     async function fetchUserStatus() {
-        console.log("DEBUG: fetchUserStatus called."); // DEBUG
         const token = localStorage.getItem('jwtToken');
         if (!token) {
-            console.log("DEBUG: No token found, cannot fetch user status.");
             return;
         }
         try {
@@ -1269,10 +1259,8 @@
                 try {
                     errorData = await response.json();
                 } catch (e) {
-                    console.error("DEBUG: Failed to parse error response as JSON:", e);
                     errorData.message = `Non-JSON error response: ${response.status} ${response.statusText}`;
                 }
-                console.error("DEBUG: Failed to fetch user status:", errorData.message);
                 if (response.status === 401 || response.status === 403) {
                     showAuthSection();
                     showToast("Session expired or invalid. Please log in again.", 'error');
@@ -1281,7 +1269,6 @@
             }
 
             const userData = await response.json();
-            console.log("DEBUG: User status:", userData);
 
             // Check for admin role and show/hide admin button
             const userRoles = localStorage.getItem('roles') ? JSON.parse(localStorage.getItem('roles')) : [];
@@ -1312,16 +1299,13 @@
 
 
         } catch (error) {
-            console.error("DEBUG: Error fetching user status:", error);
             showToast("Error connecting to the service. Please try again.", 'error');
         }
     }
 
 
     async function handleAuthSubmit(event) {
-        console.log("DEBUG: handleAuthSubmit called."); // DEBUG
-        event.preventDefault(); // Prevent default form submission behavior
-        console.log("DEBUG: event.preventDefault() executed."); // DEBUG
+        event.preventDefault();
         authSubmitButton.disabled = true;
 
         const username = usernameInput.value;
@@ -1333,7 +1317,6 @@
         let body = { username, password };
 
         if (isAdminRegisterMode) {
-            console.log("DEBUG: Admin Register Mode detected."); // DEBUG
             endpoint = `${API_BASE_URL}/auth/register-admin`;
             body = { username, password, email };
             if (!username || !password || !email) {
@@ -1342,7 +1325,6 @@
                 return;
             }
         } else if (isRegisterMode) {
-            console.log("DEBUG: Regular Register Mode detected."); // DEBUG
             endpoint = `${API_BASE_URL}/auth/register`;
             body.email = email;
             body.plan = plan;
@@ -1352,15 +1334,12 @@
                 return;
             }
         } else {
-            console.log("DEBUG: Login Mode detected."); // DEBUG
             if (!username || !password) {
                 showToast("Username and password are required for login.", 'error');
                 authSubmitButton.disabled = false;
                 return;
             }
         }
-
-        console.log(`DEBUG: Sending request to ${endpoint} with body:`, body); // DEBUG
 
         try {
             const response = await fetch(endpoint, {
@@ -1369,12 +1348,9 @@
                 body: JSON.stringify(body)
             });
 
-            console.log("DEBUG: Response received, status:", response.status); // DEBUG
             const data = await response.json();
-            console.log("DEBUG: Response data:", data); // DEBUG
 
             if (response.ok) {
-                console.log("DEBUG: Response OK."); // DEBUG
                 if (isAdminRegisterMode) {
                     showToast(data.message || "Admin registration successful! Please log in as admin.", 'success');
                     showAuthSection();
@@ -1393,30 +1369,25 @@
                         localStorage.setItem('username', data.username);
                         localStorage.setItem('userId', data.id);
                         localStorage.setItem('roles', JSON.stringify(data.roles));
-                        console.log("DEBUG: Token and user data stored in localStorage."); // DEBUG
                         showScannerSection();
                     } else {
-                        console.error("DEBUG: Login successful but no token received!"); // DEBUG
                         showToast("Login successful, but no token received. Please try again.", 'error');
                         showAuthSection(); // Fallback to auth section
                     }
                 }
 
             } else {
-                console.log("DEBUG: Response not OK, showing error toast."); // DEBUG
                 showToast(data.message || "An error occurred.", 'error');
             }
         } catch (error) {
-            console.error("DEBUG: Auth fetch error in catch block:", error); // DEBUG
             showToast(`Connection error. Please check your network connection and try again.`, 'error');
+            console.error("Auth fetch error:", error);
         } finally {
-            console.log("DEBUG: handleAuthSubmit finally block executed."); // DEBUG
             authSubmitButton.disabled = false;
         }
     }
 
     function toggleAuthFormMode() {
-        console.log("DEBUG: toggleAuthFormMode called. Current isRegisterMode:", isRegisterMode); // DEBUG
         isAdminRegisterMode = false;
         isRegisterMode = !isRegisterMode;
         if (isRegisterMode) {
@@ -1435,18 +1406,15 @@
         usernameInput.value = '';
         passwordInput.value = '';
         emailInput.value = '';
-        console.log("DEBUG: isRegisterMode after toggle:", isRegisterMode); // DEBUG
     }
 
     function handleLogout() {
-        console.log("DEBUG: handleLogout called."); // DEBUG
         showAuthSection();
         showToast("You have been logged out.", 'info');
     }
 
     // --- Payment Functions ---
     async function handleSubmitPaymentProof(event) {
-        console.log("DEBUG: handleSubmitPaymentProof called."); // DEBUG
         event.preventDefault();
         submitPaymentProofButton.disabled = true;
 
@@ -1514,7 +1482,6 @@
     `;
 
     function displayResults(resultsToDisplay) {
-        console.log("DEBUG: displayResults called."); // DEBUG
         resultsContainer.innerHTML = '';
 
         // Filter based on the main filter (All, Buying, Selling)
@@ -1621,7 +1588,6 @@
     }
 
     function filterResults() {
-        console.log("DEBUG: filterResults called."); // DEBUG
         let filtered = [];
         if (currentFilter === 'All') {
             filtered = allScanResults;
@@ -1639,7 +1605,6 @@
     }
 
     function setFilter(filterType) {
-        console.log(`DEBUG: setFilter called with ${filterType}.`); // DEBUG
         currentFilter = filterType;
         localStorage.setItem('currentFilter', filterType); // Persist
         document.querySelectorAll('.filter-button').forEach(btn => {
@@ -1653,7 +1618,6 @@
     }
 
     function setTimeframe(timeframe) {
-        console.log(`DEBUG: setTimeframe called with ${timeframe}.`); // DEBUG
         currentTimeframe = timeframe;
         localStorage.setItem('currentTimeframe', timeframe); // Persist
         document.querySelectorAll('.timeframe-button').forEach(btn => {
@@ -1667,7 +1631,6 @@
     }
 
     function setSensitivity(sensitivityType) {
-      console.log(`DEBUG: setSensitivity called with ${sensitivityType}.`); // DEBUG
       currentSensitivity = sensitivityType;
       localStorage.setItem('currentSensitivity', sensitivityType); // Persist
       sensitivityButtons.forEach(btn => {
@@ -1681,7 +1644,6 @@
     }
 
     function clearResults() {
-        console.log("DEBUG: clearResults called."); // DEBUG
         allScanResults = [];
         currentFilter = 'All';
         localStorage.setItem('currentFilter', 'All'); // Reset persistence
@@ -1691,7 +1653,6 @@
     }
 
     async function fetchOrderBlocks() {
-        console.log("DEBUG: fetchOrderBlocks called."); // DEBUG
         const token = localStorage.getItem('jwtToken');
         if (!token) {
             showToast("Please log in to use the scanner.", 'error');
@@ -1754,7 +1715,7 @@
 
         } catch (err) {
             showToast(`Connection/Data Error: ${err.message}. Please check your network connection and try again.`, 'error');
-            console.error("DEBUG: Frontend fetch error:", err); // DEBUG
+            console.error("Frontend fetch error:", err);
             allScanResults = [];
             resultsContainer.innerHTML = '<p class="text-center text-red-500 dark:text-red-400 col-span-full py-8">Failed to load scan results. Please check your connection or try again later.</p>';
         } finally {
@@ -1771,7 +1732,6 @@
 
     // --- Chart Modal Functions ---
     function openChartModal(event) {
-      console.log("DEBUG: openChartModal called."); // DEBUG
       const card = event.currentTarget;
       const symbol = card.dataset.symbol;
       const timeframe = card.dataset.timeframe;
@@ -1842,7 +1802,6 @@
     }
 
     function closeChartModal() {
-      console.log("DEBUG: closeChartModal called."); // DEBUG
       closeModal(chartModal);
       document.getElementById('tradingview_chart').innerHTML = ''; // Clear chart content on close
     }
@@ -1859,39 +1818,27 @@
     setSensitivity(currentSensitivity); // This also sets active class
 
     if (localStorage.getItem('jwtToken')) {
-        console.log("DEBUG: JWT Token found on initial load, attempting to show scanner section."); // DEBUG
         showScannerSection();
     } else {
-        console.log("DEBUG: No JWT Token found on initial load, showing auth section."); // DEBUG
         showAuthSection();
     }
 
 
     // --- Event Listeners ---
-    console.log("DEBUG: Attaching event listeners..."); // DEBUG
     scanButton.addEventListener('click', fetchOrderBlocks);
-    console.log("DEBUG: scanButton listener attached."); // DEBUG
     clearButton.addEventListener('click', clearResults);
-    console.log("DEBUG: clearButton listener attached."); // DEBUG
     showAllButton.addEventListener('click', () => setFilter('All'));
-    console.log("DEBUG: showAllButton listener attached."); // DEBUG
     showBuyingButton.addEventListener('click', () => setFilter('Buying (Bullish)'));
-    console.log("DEBUG: showBuyingButton listener attached."); // DEBUG
     showSellingButton.addEventListener('click', () => setFilter('Selling (Bearish)'));
-    console.log("DEBUG: showSellingButton listener attached."); // DEBUG
     timeframe1hButton.addEventListener('click', () => setTimeframe('1h'));
-    console.log("DEBUG: timeframe1hButton listener attached."); // DEBUG
     timeframe4hButton.addEventListener('click', () => setTimeframe('4h'));
-    console.log("DEBUG: timeframe4hButton listener attached."); // DEBUG
     timeframe1dButton.addEventListener('click', () => setTimeframe('1d'));
-    console.log("DEBUG: timeframe1dButton listener attached."); // DEBUG
 
     sensitivityButtons.forEach(button => {
       button.addEventListener('click', () => {
         setSensitivity(button.dataset.sensitivity);
       });
     });
-    console.log("DEBUG: sensitivityButtons listeners attached."); // DEBUG
 
     priceDeviationInput.addEventListener('change', (event) => {
         const newValue = parseFloat(event.target.value);
@@ -1904,26 +1851,19 @@
             event.target.value = maxPriceDeviationPercent; // Revert to last valid
         }
     });
-    console.log("DEBUG: priceDeviationInput listener attached."); // DEBUG
 
     closeModalButton.addEventListener('click', () => closeModal(chartModal));
-    console.log("DEBUG: closeModalButton listener attached."); // DEBUG
     paymentProofForm.addEventListener('submit', handleSubmitPaymentProof);
-    console.log("DEBUG: paymentProofForm listener attached."); // DEBUG
 
     // Admin Panel Event Listeners
     adminPanelButton.addEventListener('click', showAdminPanel);
-    console.log("DEBUG: adminPanelButton listener attached."); // DEBUG
 
     // Premium Welcome Modal Event Listeners
     closePremiumWelcomeModalButton.addEventListener('click', () => closeModal(premiumWelcomeModal));
-    console.log("DEBUG: closePremiumWelcomeModalButton listener attached."); // DEBUG
     closePremiumWelcomeModalX.addEventListener('click', () => closeModal(premiumWelcomeModal));
-    console.log("DEBUG: closePremiumWelcomeModalX listener attached."); // DEBUG
 
     // Theme Toggle Event Listener
     themeToggle.addEventListener('click', toggleTheme);
-    console.log("DEBUG: themeToggle listener attached."); // DEBUG
 
 
     // Load TradingView widget script dynamically
@@ -1931,7 +1871,6 @@
     script.src = 'https://s3.tradingview.com/tv.js';
     script.async = true;
     document.head.appendChild(script);
-    console.log("DEBUG: TradingView script appended."); // DEBUG
 
     // Ripple effect for buttons (already present, ensured it works with new styling)
     document.querySelectorAll('.scan-button, .action-button, .fab-button').forEach(button => {
@@ -1954,73 +1893,56 @@
             });
         });
     });
-    console.log("DEBUG: Ripple effect listeners attached."); // DEBUG
 
     // FAB Toggle for mobile
     fabToggle.addEventListener('click', (e) => {
         e.stopPropagation(); // Prevent click from propagating to document and closing immediately
         fabMenu.classList.toggle('show');
         fabToggle.classList.toggle('rotate-45'); // Rotate FAB toggle icon
-        console.log("DEBUG: FAB toggle clicked."); // DEBUG
     });
-    console.log("DEBUG: fabToggle listener attached."); // DEBUG
 
     // FAB button actions
     fabScanButton.addEventListener('click', () => {
         fetchOrderBlocks();
         fabMenu.classList.remove('show'); // Close FAB menu after action
         fabToggle.classList.remove('rotate-45');
-        console.log("DEBUG: fabScanButton clicked."); // DEBUG
     });
-    console.log("DEBUG: fabScanButton listener attached."); // DEBUG
     fabClearButton.addEventListener('click', () => {
         clearResults();
         fabMenu.classList.remove('show'); // Close FAB menu after action
         fabToggle.classList.remove('rotate-45');
-        console.log("DEBUG: fabClearButton clicked."); // DEBUG
     });
-    console.log("DEBUG: fabClearButton listener attached."); // DEBUG
     fabAdminButton.addEventListener('click', () => {
         showAdminPanel();
         fabMenu.classList.remove('show'); // Close FAB menu after action
         fabToggle.classList.remove('rotate-45');
-        console.log("DEBUG: fabAdminButton clicked."); // DEBUG
     });
-    console.log("DEBUG: fabAdminButton listener attached."); // DEBUG
 
     // Close FAB menu if clicking outside
     document.addEventListener('click', (e) => {
         if (fabMenu.classList.contains('show') && !fabContainer.contains(e.target)) {
             fabMenu.classList.remove('show');
             fabToggle.classList.remove('rotate-45');
-            console.log("DEBUG: Click outside FAB menu detected."); // DEBUG
         }
     });
-    console.log("DEBUG: Document click listener for FAB menu attached."); // DEBUG
     // Prevent FAB menu from closing when clicking its buttons - already handled by e.stopPropagation() on fabToggle, but good to have
     fabMenu.addEventListener('click', (e) => {
         e.stopPropagation();
-        console.log("DEBUG: Click inside FAB menu detected (propagation stopped)."); // DEBUG
     });
-    console.log("DEBUG: fabMenu click listener attached."); // DEBUG
 
     // Initial check for admin button visibility on FAB
     function updateFabAdminButtonVisibility() {
-        console.log("DEBUG: updateFabAdminButtonVisibility called."); // DEBUG
         const userRoles = localStorage.getItem('roles') ? JSON.parse(localStorage.getItem('roles')) : [];
         if (userRoles.includes('ROLE_ADMIN')) {
             adminPanelButton.classList.remove('hidden'); // Ensure main admin button is also updated
             fabAdminButton.classList.remove('hidden');
-            console.log("DEBUG: Admin role detected, admin buttons shown."); // DEBUG
         } else {
             adminPanelButton.classList.add('hidden');
             fabAdminButton.classList.add('hidden');
-            console.log("DEBUG: No admin role, admin buttons hidden."); // DEBUG
         }
     }
     // Call this on initial load and after login/logout
     updateFabAdminButtonVisibility();
-    console.log("DEBUG: Initial updateFabAdminButtonVisibility called."); // DEBUG
 
     // Close modals on Escape key press
     document.addEventListener('keydown', (e) => {
@@ -2034,47 +1956,30 @@
             } else if (premiumWelcomeModal.classList.contains('show')) {
                 closeModal(premiumWelcomeModal);
             }
-            console.log("DEBUG: Escape key pressed."); // DEBUG
         }
     });
-    console.log("DEBUG: Escape keydown listener attached."); // DEBUG
 
     // Close modals on background click
     [chartModal, paymentModal, adminPanelModal, premiumWelcomeModal].forEach(modal => {
         modal.addEventListener('click', (event) => {
             if (event.target === modal) { // Check if the click was directly on the overlay
                 closeModal(modal);
-                console.log(`DEBUG: Modal background clicked for ${modal.id}.`); // DEBUG
             }
         });
     });
-    console.log("DEBUG: Modal background click listeners attached."); // DEBUG
 
     // --- Authentication Event Listeners (Moved here for better visibility of attachment) ---
-    console.log("DEBUG: Attaching AUTHENTICATION event listeners..."); // DEBUG
-
     if (authForm) {
         authForm.addEventListener('submit', handleAuthSubmit);
-        console.log("DEBUG: authForm submit listener attached."); // DEBUG
-    } else {
-        console.error("DEBUG: authForm element not found!"); // ERROR
     }
 
     if (toggleAuthModeButton) {
         toggleAuthModeButton.addEventListener('click', toggleAuthFormMode);
-        console.log("DEBUG: toggleAuthModeButton click listener attached."); // DEBUG
-    } else {
-        console.error("DEBUG: toggleAuthModeButton element not found!"); // ERROR
     }
 
     if (logoutButton) {
         logoutButton.addEventListener('click', handleLogout);
-        console.log("DEBUG: logoutButton click listener attached."); // DEBUG
-    } else {
-        console.error("DEBUG: logoutButton element not found!"); // ERROR
     }
-
-    console.log("DEBUG: All initial setup and listeners attempted."); // DEBUG
 
 </script>
 </body>

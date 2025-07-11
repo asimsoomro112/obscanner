@@ -46,6 +46,18 @@
             font-family: 'Roboto', sans-serif; /* Apply Roboto to headings */
             letter-spacing: 0.025em; /* subtle letter spacing */
         }
+        .logo-icon-wrapper {
+            border-radius: 50%;
+            padding: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .logo-icon-wrapper:hover {
+            transform: rotate(10deg) scale(1.05); /* Subtle rotation and scale on hover */
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.5); /* Matching purple shadow */
+        }
         .scan-button {
             background-image: linear-gradient(to right, #6366F1 0%, #8B5CF6 51%, #6366F1 100%);
             /* Enhanced transition for smoother feel */
@@ -894,6 +906,7 @@
     const authSubmitButton = document.getElementById('authSubmitButton');
     const toggleAuthModeButton = document.getElementById('toggleAuthMode');
     const logoutButton = document.getElementById('logoutButton');
+    // Removed registerAdminButton from direct HTML, now handled by admin panel logic or initial setup if needed.
 
     // --- DOM Elements (Scanner) ---
     const scanButton = document.getElementById('scanButton');
@@ -1586,7 +1599,7 @@
             );
         }
         displayResults(filtered);
-        showToast(`Displaying ${filtered.length} coins (filtered by: ${currentFilter}, max deviation: ${maxPriceDeviationPercent}%).`, 'info');
+        showToast(`Displaying ${resultsContainer.children.length} coins (filtered by: ${currentFilter}, max deviation: ${maxPriceDeviationPercent}%).`, 'info');
         if (currentFilter === 'All') {
             showToast(`Scan complete! Found ${allScanResults.length} total coins for ${currentTimeframe.toUpperCase()} timeframe with "${currentSensitivity}" sensitivity. Displaying ${resultsContainer.children.length} results after price deviation filter.`, 'success');
         }
@@ -1699,7 +1712,7 @@
             const data = await response.json();
             allScanResults = data;
             filterResults();
-            showToast(`Scan complete! Found ${data.length} total results for ${currentTimeframe.toUpperCase()} timeframe with "${currentSensitivity}" sensitivity.`, 'success');
+            showToast(`Scan complete! Found ${data.length} total coins for ${currentTimeframe.toUpperCase()} timeframe with "${currentSensitivity}" sensitivity. Displaying ${resultsContainer.children.length} results after price deviation filter.`, 'success');
 
         } catch (err) {
             showToast(`Connection/Data Error: ${err.message}. Please check your network connection and try again.`, 'error');

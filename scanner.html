@@ -971,13 +971,14 @@
     let isAdminRegisterMode = false; // Flag for admin registration mode (logic removed for security)
 
     // Predefined parameter presets for different sensitivities
+    // NOTE: requireUnmitigated is removed from here as it's now enforced in the backend.
     const sensitivityPresets = {
-      'lowest': { minBodyRatio: 0.001, minPriceChange: 0.000001, volumeFactor: 0.01, requireBOS: false, requireC3ClosePastC2: false, requireFVG: false, requireUnmitigated: false, minFvgDepthRatio: 0.001 },
-      'low-mid': { minBodyRatio: 0.10, minPriceChange: 0.0003, volumeFactor: 0.4, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, requireUnmitigated: true, minFvgDepthRatio: 0.02 },
-      'mid': { minBodyRatio: 0.15, minPriceChange: 0.0005, volumeFactor: 0.6, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, requireUnmitigated: true, minFvgDepthRatio: 0.05 },
-      'mid-high': { minBodyRatio: 0.20, minPriceChange: 0.001, volumeFactor: 0.8, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, requireUnmitigated: true, minFvgDepthRatio: 0.08 },
-      'high': { minBodyRatio: 0.25, minPriceChange: 0.002, volumeFactor: 1.0, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, requireUnmitigated: true, minFvgDepthRatio: 0.10 },
-      'extreme': { minBodyRatio: 0.30, minPriceChange: 0.003, volumeFactor: 1.2, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, requireUnmitigated: true, minFvgDepthRatio: 0.15 }
+      'lowest': { minBodyRatio: 0.001, minPriceChange: 0.000001, volumeFactor: 0.01, requireBOS: false, requireC3ClosePastC2: false, requireFVG: false, minFvgDepthRatio: 0.001 },
+      'low-mid': { minBodyRatio: 0.10, minPriceChange: 0.0003, volumeFactor: 0.4, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, minFvgDepthRatio: 0.02 },
+      'mid': { minBodyRatio: 0.15, minPriceChange: 0.0005, volumeFactor: 0.6, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, minFvgDepthRatio: 0.05 },
+      'mid-high': { minBodyRatio: 0.20, minPriceChange: 0.001, volumeFactor: 0.8, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, minFvgDepthRatio: 0.08 },
+      'high': { minBodyRatio: 0.25, minPriceChange: 0.002, volumeFactor: 1.0, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, minFvgDepthRatio: 0.10 },
+      'extreme': { minBodyRatio: 0.30, minPriceChange: 0.003, volumeFactor: 1.2, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, minFvgDepthRatio: 0.15 }
     };
 
 
@@ -1687,11 +1688,12 @@
             return;
         }
 
-        const { minBodyRatio, minPriceChange, volumeFactor, requireBOS, requireC3ClosePastC2, requireFVG, requireUnmitigated, minFvgDepthRatio } = selectedPreset;
+        const { minBodyRatio, minPriceChange, volumeFactor, requireBOS, requireC3ClosePastC2, requireFVG, minFvgDepthRatio } = selectedPreset;
 
 
         try {
-            const response = await fetch(`${API_BASE_URL}/scan-order-blocks?interval=${currentTimeframe}&minBodyRatio=${minBodyRatio}&minPriceChange=${minPriceChange}&volumeFactor=${volumeFactor}&requireBOS=${requireBOS}&requireC3ClosePastC2=${requireC3ClosePastC2}&requireFVG=${requireFVG}&requireUnmitigated=${requireUnmitigated}&minFvgDepthRatio=${minFvgDepthRatio}`, {
+            // Removed requireUnmitigated from the URL query string as it's now enforced in backend
+            const response = await fetch(`${API_BASE_URL}/scan-order-blocks?interval=${currentTimeframe}&minBodyRatio=${minBodyRatio}&minPriceChange=${minPriceChange}&volumeFactor=${volumeFactor}&requireBOS=${requireBOS}&requireC3ClosePastC2=${requireC3ClosePastC2}&requireFVG=${requireFVG}&minFvgDepthRatio=${minFvgDepthRatio}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -1745,26 +1747,33 @@
 
       let obInfoHtml = '';
       if (allOrderBlocks && allOrderBlocks.length > 0) {
-          // Sort order blocks for display in the modal, e.g., by price
-          const sortedModalOrderBlocks = [...allOrderBlocks].sort((a, b) => {
-              if (a.obPrice === null) return 1;
-              if (b.obPrice === null) return -1;
-              return a.obPrice - b.obPrice;
-          });
+          // Filter out 'None' type order blocks for display in the modal
+          const displayableOrderBlocks = allOrderBlocks.filter(ob => ob.obType !== 'None');
 
-          obInfoHtml = sortedModalOrderBlocks.map((ob, index) => {
-              const obPriceDisplay = ob.obPrice !== null && ob.obPrice !== undefined ? `$${parseFloat(ob.obPrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })}` : 'N/A';
-              const obZoneInfo = (ob.obType !== 'None' && ob.obZoneStart !== null && ob.obZoneEnd !== null) ?
-                                 ` | Zone: $${parseFloat(ob.obZoneStart).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })} - $${parseFloat(ob.obZoneEnd).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })}` : '';
-              const obTypeClass = ob.obType === 'Buying (Bullish)' ? 'text-green-500 dark:text-green-400' :
-                                  ob.obType === 'Selling (Bearish)' ? 'text-red-500 dark:text-red-400' :
-                                  'text-gray-600 dark:text-gray-400';
-              return `
-                  <p class="text-center text-gray-600 dark:text-gray-300 text-sm">
-                      OB ${index + 1}: <span class="${obTypeClass}">${ob.obType || 'N/A'}</span> | Price Level: <span class="text-gray-800 dark:text-white font-bold">${obPriceDisplay}</span>${obZoneInfo}
-                  </p>
-              `;
-          }).join('');
+          if (displayableOrderBlocks.length > 0) {
+              // Sort order blocks for display in the modal, e.g., by price
+              const sortedModalOrderBlocks = [...displayableOrderBlocks].sort((a, b) => {
+                  if (a.obPrice === null) return 1;
+                  if (b.obPrice === null) return -1;
+                  return a.obPrice - b.obPrice;
+              });
+
+              obInfoHtml = sortedModalOrderBlocks.map((ob, index) => {
+                  const obPriceDisplay = ob.obPrice !== null && ob.obPrice !== undefined ? `$${parseFloat(ob.obPrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })}` : 'N/A';
+                  const obZoneInfo = (ob.obType !== 'None' && ob.obZoneStart !== null && ob.obZoneEnd !== null) ?
+                                     ` | Zone: $${parseFloat(ob.obZoneStart).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })} - $${parseFloat(ob.obZoneEnd).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })}` : '';
+                  const obTypeClass = ob.obType === 'Buying (Bullish)' ? 'text-green-500 dark:text-green-400' :
+                                      ob.obType === 'Selling (Bearish)' ? 'text-red-500 dark:text-red-400' :
+                                      'text-gray-600 dark:text-gray-400';
+                  return `
+                      <p class="text-center text-gray-600 dark:text-gray-300 text-sm">
+                          OB ${index + 1}: <span class="${obTypeClass}">${ob.obType || 'N/A'}</span> | Price Level: <span class="text-gray-800 dark:text-white font-bold">${obPriceDisplay}</span>${obZoneInfo}
+                      </p>
+                  `;
+              }).join('');
+          } else {
+              obInfoHtml = '<p class="text-center text-gray-600 dark:text-gray-300 text-sm">No valid order blocks found for this coin with current criteria.</p>';
+          }
       } else {
           obInfoHtml = '<p class="text-center text-gray-600 dark:text-gray-300 text-sm">No order blocks found for this coin with current criteria.</p>';
       }
@@ -1968,7 +1977,7 @@
         });
     });
 
-    // --- Authentication Event Listeners (Moved here for better visibility of attachment) ---
+    // --- Authentication Event Listeners ---
     if (authForm) {
         authForm.addEventListener('submit', handleAuthSubmit);
     }

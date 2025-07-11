@@ -5,55 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crypto Order Block Scanner</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Primary Font: Inter, Secondary Font: Roboto for headings -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" xintegrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0V4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
+        /* Base styles for light mode */
         body {
             font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #1a202c; /* Tailwind gray-900 */
-            color: #e2e8f0; /* Tailwind gray-200 */
-            min-height: 100vh; /* Ensure body takes full height */
+            background-color: #f0f2f5; /* Light gray background */
+            color: #333; /* Dark text */
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start; /* Align to top, not center */
+            justify-content: flex-start;
             align-items: center;
+            transition: background-color 0.5s ease, color 0.5s ease; /* Smoother theme transition */
         }
         .container {
-            max-width: 1200px;
-            width: 95%; /* Make it slightly more fluid */
+            /* Changed to max-w-6xl for better desktop layout balance */
+            max-width: 1152px; /* Tailwind's max-w-6xl */
+            width: 95%;
             margin: 20px auto;
             padding: 20px;
-            background-color: #2d3748; /* Tailwind gray-800 */
-            border-radius: 0.75rem; /* rounded-xl */
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+            background-color: #ffffff; /* White container */
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.5s ease, box-shadow 0.5s ease;
         }
         .header-area {
-            background-color: #2d3748; /* Same as container, ensures no gaps */
-            padding-bottom: 1rem; /* Add some padding below title */
+            background-image: linear-gradient(to right, #e0f2fe, #e3f2fd); /* Light blue gradient */
+            padding-bottom: 1rem;
+            border-radius: 0.75rem 0.75rem 0 0; /* Rounded top corners */
+            overflow: hidden; /* Ensure gradient stays within bounds */
+            transition: background-image 0.5s ease; /* Theme transition */
+        }
+        h1, h2, h3 {
+            font-family: 'Roboto', sans-serif; /* Apply Roboto to headings */
+            letter-spacing: 0.025em; /* subtle letter spacing */
         }
         .scan-button {
             background-image: linear-gradient(to right, #6366F1 0%, #8B5CF6 51%, #6366F1 100%);
-            transition: 0.5s;
+            /* Enhanced transition for smoother feel */
+            transition: background-color 0.4s ease-in-out, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease-in-out;
             background-size: 200% auto;
             color: white;
-            box-shadow: 0 0 20px rgba(139, 92, 246, 0.5); /* Purple shadow */
-            border-radius: 9999px; /* Full rounded */
-            padding: 12px 30px; /* Slightly larger padding */
-            font-weight: 700; /* Bolder */
-            font-size: 1.25rem; /* text-xl */
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+            border-radius: 9999px;
+            padding: 12px 30px;
+            font-weight: 700;
+            font-size: 1.25rem;
             cursor: pointer;
             border: none;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative; /* For ripple effect */
-            overflow: hidden; /* For ripple effect */
+            position: relative;
+            overflow: hidden;
+            transform: translateY(0);
         }
         .scan-button:hover {
             background-position: right center;
             box-shadow: 0 0 30px rgba(139, 92, 246, 0.8);
-            transform: translateY(-2px); /* Subtle lift */
+            transform: translateY(-3px); /* More pronounced lift */
         }
         .scan-button:disabled {
             opacity: 0.6;
@@ -76,61 +92,69 @@
             }
         }
 
-        .filter-button, .timeframe-button, .sensitivity-button, .chart-button, .auth-button, .payment-button {
-            background-color: #4A5568; /* Gray-700 */
-            color: white;
-            padding: 10px 20px; /* Slightly larger padding */
-            border-radius: 0.5rem; /* rounded-lg */
-            font-weight: 600; /* Bolder */
+        .action-button { /* Consolidated style for filter, timeframe, sensitivity, chart, auth, payment buttons */
+            background-color: #e2e8f0; /* Light gray */
+            color: #333; /* Dark text */
+            padding: 10px 20px;
+            border-radius: 0.5rem;
+            font-weight: 600;
             cursor: pointer;
-            border: 1px solid #6B7280; /* Gray-500 */
-            transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Subtle shadow */
+            border: 1px solid #cbd5e1; /* Light border */
+            /* Enhanced transition for smoother feel */
+            transition: background-color 0.4s ease-in-out, border-color 0.4s ease-in-out, box-shadow 0.3s ease-in-out, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s ease-in-out;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transform: translateY(0);
         }
-        .filter-button:hover:not(:disabled), .timeframe-button:hover:not(:disabled), .sensitivity-button:hover:not(:disabled), .chart-button:hover:not(:disabled), .auth-button:hover:not(:disabled), .payment-button:hover:not(:disabled) {
-            background-color: #6B7280; /* Gray-500 */
-            border-color: #9CA3AF; /* Gray-400 */
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* More pronounced shadow on hover */
+        .action-button:hover:not(:disabled) {
+            background-color: #cbd5e1; /* Slightly darker gray */
+            border-color: #a0aec0; /* Darker border */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
         }
-        .filter-button.active, .timeframe-button.active, .sensitivity-button.active, .auth-button.active {
+        .action-button.active {
             background-color: #4299E1; /* Blue-500 */
             border-color: #2B6CB0; /* Blue-700 */
+            color: white; /* White text for active blue */
             font-weight: 700;
-            box-shadow: 0 0 10px rgba(66, 153, 225, 0.5); /* Blue glow */
+            box-shadow: 0 0 10px rgba(66, 153, 225, 0.5);
+            transform: translateY(0); /* No lift for active */
         }
-        .filter-button:disabled, .timeframe-button:disabled, .sensitivity-button:disabled, .chart-button:disabled, .auth-button:disabled, .payment-button:disabled {
+        .action-button:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             box-shadow: none;
+            transform: none;
         }
+
+        /* Specific hover for admin buttons */
+        .grant-premium-btn:hover:not(:disabled) { background-color: #2F855A; border-color: #276749; } /* Darker green */
+        .revoke-premium-btn:hover:not(:disabled) { background-color: #C53030; border-color: #9B2C2C; } /* Darker red */
+        .activate-trial-btn:hover:not(:disabled) { background-color: #2C5282; border-color: #2A4365; } /* Darker blue */
+
+
         .coin-card {
-            background-color: #2D3748; /* Darker slate */
-            border-left: 5px solid; /* Thicker border */
-            border-radius: 0.75rem; /* rounded-xl */
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25); /* More pronounced shadow */
-            padding: 1.5rem; /* p-6 */
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-            cursor: pointer; /* Indicate clickable */
-            position: relative; /* For potential future enhancements */
-            overflow: hidden; /* Ensure content stays within rounded corners */
+            background-color: #f7fafc; /* Lighter background for cards */
+            border-left: 5px solid;
+            border-radius: 0.75rem;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease-in-out, background-color 0.5s ease;
+            cursor: pointer; /* Cursor on the whole card */
+            position: relative;
+            overflow: hidden;
         }
         .coin-card:hover {
-            transform: translateY(-8px); /* More pronounced lift */
-            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.4); /* Deeper shadow on hover */
+            transform: translateY(-8px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
         }
-        .buying-ob-border {
-            border-left-color: #10B981; /* Green */
-        }
-        .selling-ob-border {
-            border-left-color: #EF4444; /* Red */
-        }
-        .no-ob-border {
-            border-left-color: #6B7280; /* Gray */
-        }
+        .buying-ob-border { border-left-color: #10B981; } /* Green */
+        .selling-ob-border { border-left-color: #EF4444; } /* Red */
+        .no-ob-border { border-left-color: #A0AEC0; } /* Gray */
+
         .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
+            border: 4px solid rgba(0, 0, 0, 0.2); /* Darker spinner for light mode */
             border-radius: 50%;
-            border-top: 4px solid #fff;
+            border-top: 4px solid #4299E1; /* Blue spinner */
             width: 20px;
             height: 20px;
             animation: spin 1s linear infinite;
@@ -141,211 +165,527 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Styles for the parameter sections */
         .parameters-section {
-            background-color: #2D3748; /* Darker slate */
+            background-color: #edf2f7; /* Light gray */
             padding: 1.5rem;
             border-radius: 0.75rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             margin-bottom: 1.5rem;
-        }
-        .parameters-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 0.75rem;
-        }
-        .param-input-group { /* Keep this style for priceDeviation, but removed for others */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-        .param-input-group label {
-            font-weight: 600;
-            color: #9CA3AF; /* gray-400 */
+            transition: background-color 0.5s ease, box-shadow 0.5s ease;
         }
         .param-input-group input[type="number"],
         .param-input-group input[type="text"],
         .param-input-group input[type="email"],
-        .param-input-group input[type="password"] {
-            width: 100%; /* Make text inputs full width within their group */
-            max-width: 250px; /* Limit max width for forms */
-            padding: 0.6rem 0.85rem; /* Slightly more padding */
-            border-radius: 0.375rem; /* rounded-md */
-            background-color: #4A5568; /* gray-700 */
-            color: #E2E8F0; /* gray-200 */
-            border: 1px solid #6B7280; /* gray-600 */
-            text-align: left; /* Align text left for forms */
-            font-size: 0.9rem; /* Slightly larger font */
-            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        .param-input-group input[type="password"],
+        .param-input-group select {
+            width: 100%;
+            max-width: 250px;
+            padding: 0.6rem 0.85rem;
+            border-radius: 0.375rem;
+            background-color: #ffffff; /* White input background */
+            color: #333; /* Dark text */
+            border: 1px solid #cbd5e1; /* Light border */
+            text-align: left;
+            font-size: 0.9rem;
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.5s ease, color 0.5s ease;
         }
         .param-input-group input[type="number"]:focus,
         .param-input-group input[type="text"]:focus,
         .param-input-group input[type="email"]:focus,
-        .param-input-group input[type="password"]:focus {
+        .param-input-group input[type="password"]:focus,
+        .param-input-group select:focus {
             outline: none;
-            border-color: #4299E1; /* blue-500 */
-            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5); /* blue-500 with opacity, thicker glow */
+            border-color: #4299E1;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.3); /* Lighter glow */
         }
 
+        /* Skeleton Loading */
+        .skeleton-card {
+            background-color: #e2e8f0; /* Light gray for skeleton */
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            animation: pulse 1.5s infinite ease-in-out;
+            transition: background-color 0.5s ease;
+        }
+        .skeleton-card .skeleton-line {
+            height: 1em;
+            background-color: #cbd5e1; /* Slightly darker gray for lines */
+            border-radius: 0.25rem;
+            margin-bottom: 0.5em;
+            transition: background-color 0.5s ease;
+        }
+        .skeleton-card .skeleton-line.short { width: 60%; }
+        .skeleton-card .skeleton-line.medium { width: 85%; }
+        .skeleton-card .skeleton-line.long { width: 100%; }
+        @keyframes pulse {
+            0% { opacity: 0.8; }
+            50% { opacity: 0.5; }
+            100% { opacity: 0.8; }
+        }
 
-        /* Modal Styles */
+        /* Modals */
         .modal {
-          position: fixed;
-          z-index: 100; /* High z-index to be on top */
-          left: 0;
-          top: 0;
-          width: 100%;
-          height: 100%;
-          overflow: auto; /* Enable scroll if content is too tall */
-          background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          padding: 20px; /* Add some padding around the modal content */
+            position: fixed;
+            z-index: 1000; /* Increased z-index */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0; /* Start hidden for animation */
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
         }
         .modal-content {
-          background-color: #2d3748; /* Tailwind gray-800 */
-          margin: auto;
-          padding: 20px;
-          border-radius: 0.75rem;
-          box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-          width: 90%; /* Responsive width */
-          max-width: 1000px; /* Max width for larger screens */
-          position: relative;
-          display: flex;
-          flex-direction: column;
-          gap: 15px;
+            background-color: #ffffff; /* White modal background */
+            margin: auto;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+            width: 90%;
+            /* Unified modal padding */
+            padding: 1.5rem; /* Equivalent to p-6 */
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            transform: translateY(20px); /* Start slightly below for slide-in */
+            transition: transform 0.3s ease, background-color 0.5s ease, box-shadow 0.5s ease;
+            max-height: 90vh; /* Ensure modal content can scroll */
+            overflow-y: auto; /* Enable internal scrolling */
+        }
+        .modal.show .modal-content {
+            transform: translateY(0); /* Slide into place */
         }
         .close-button {
-          color: #aaa;
-          position: absolute;
-          top: 10px;
-          right: 20px;
-          font-size: 28px;
-          font-weight: bold;
-          cursor: pointer;
+            color: #666; /* Darker close button */
+            position: sticky; /* Sticky close button */
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001; /* Above modal content */
+            align-self: flex-end; /* Align to top right */
+            background-color: #ffffff; /* Match modal background */
+            border-radius: 50%;
+            padding: 0 8px;
+            transition: color 0.2s ease, background-color 0.5s ease;
         }
         .close-button:hover,
         .close-button:focus {
-          color: white;
-          text-decoration: none;
-          cursor: pointer;
+            color: #333;
+            background-color: #eee;
         }
         .tradingview-widget-container {
-            height: 80vh; /* Use viewport height for responsiveness */
-            max-height: 700px; /* Max height for larger screens */
+            height: 80vh;
+            max-height: 700px;
             width: 100%;
             border-radius: 0.5rem;
-            overflow: hidden; /* Ensure rounded corners on widget */
+            overflow: hidden;
         }
-        /* Responsive adjustments for smaller screens */
+        /* Sticky header for chart modal */
+        .modal-header-sticky {
+            position: sticky;
+            top: 0;
+            background-color: #ffffff; /* Match modal background */
+            padding: 10px 20px;
+            margin: -20px -20px 15px -20px; /* Adjust padding to cover modal edges */
+            border-bottom: 1px solid #e2e8f0; /* Subtle separator */
+            z-index: 10; /* Above chart, below close button */
+            border-radius: 0.75rem 0.75rem 0 0;
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+        }
+        /* Payment Modal Specific Styles */
+        #paymentModal .modal-content { max-width: 500px; text-align: center; } /* max-w-xl */
+        #paymentModal .payment-info {
+            background-color: #f7fafc; /* Lighter background */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            color: #333;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+        /* Admin Panel Styles */
+        #adminPanelModal .modal-content { max-width: 1024px; } /* max-w-5xl */
+        #premiumWelcomeModal .modal-content { max-width: 500px; text-align: center; } /* max-w-xl */
+
+        .user-table-header th {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #cbd5e1; /* Lighter border */
+            color: #666; /* Darker header text */
+            font-weight: 700;
+            letter-spacing: 0.025em;
+            background-color: #edf2f7; /* Light header background */
+            transition: background-color 0.5s ease, border-color 0.5s ease, color 0.5s ease;
+        }
+        .user-table-row td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0; /* Lighter row border */
+            transition: background-color 0.5s ease, border-color 0.5s ease, color 0.5s ease;
+        }
+        .user-table-row:nth-child(even) {
+            background-color: #f7fafc; /* Zebra stripe */
+            transition: background-color 0.5s ease;
+        }
+        .user-table-row:last-child td { border-bottom: none; }
+        .user-table-row button { margin-right: 0.5rem; }
+
+        /* Premium Welcome Modal */
+        #premiumWelcomeModal ul { list-style: none; padding: 0; margin-top: 1rem; text-align: left; color: #666; }
+        #premiumWelcomeModal ul li { margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        #premiumWelcomeModal ul li svg { color: #48BB78; flex-shrink: 0; }
+
+        /* Toast Notifications */
+        #toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000; /* Very high z-index */
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+            max-width: 350px;
+        }
+        .toast {
+            background-color: #333; /* Dark background for toasts */
+            color: white;
+            padding: 15px 20px;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: slideInFadeIn 0.3s forwards, fadeOut 0.3s 2.7s forwards; /* 3s total duration */
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+        .toast.success { background-color: #48BB78; } /* Green */
+        .toast.error { background-color: #EF4444; } /* Red */
+        .toast.info { background-color: #4299E1; } /* Blue */
+
+        @keyframes slideInFadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-20px); }
+        }
+
+        /* Dark Mode Styles */
+        html.dark body {
+            background-color: #1a202c; /* Dark gray background */
+            color: #e2e8f0; /* Light text */
+        }
+        html.dark .container {
+            background-color: #2d3748; /* Darker container */
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+        }
+        html.dark .header-area {
+            background-image: linear-gradient(to right, #1a202c, #2d3748); /* Dark gradient */
+        }
+        html.dark .action-button {
+            background-color: #4A5568; /* Darker gray */
+            color: white;
+            border-color: #6B7280;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        html.dark .action-button:hover:not(:disabled) {
+            background-color: #6B7280;
+            border-color: #9CA3AF;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        html.dark .coin-card {
+            background-color: #2D3748; /* Darker card background */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+        }
+        html.dark .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #fff;
+        }
+        html.dark .parameters-section {
+            background-color: #2D3748;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        html.dark .param-input-group input,
+        html.dark .param-input-group select {
+            background-color: #4A5568;
+            color: #E2E8F0;
+            border-color: #6B7280;
+        }
+        html.dark .param-input-group input:focus,
+        html.dark .param-input-group select:focus {
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+        }
+        html.dark .skeleton-card {
+            background-color: #2D3748;
+        }
+        html.dark .skeleton-card .skeleton-line {
+            background-color: #4A5568;
+        }
+        html.dark .modal-content {
+            background-color: #2d3748;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+        html.dark .close-button {
+            color: #aaa;
+            background-color: #2d3748;
+        }
+        html.dark .close-button:hover,
+        html.dark .close-button:focus {
+            color: white;
+            background-color: #4a5568;
+        }
+        html.dark .modal-header-sticky {
+            background-color: #2d3748;
+            border-color: #4A5568;
+        }
+        html.dark #paymentModal .payment-info {
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+        html.dark .user-table-header th {
+            border-color: #4A5568;
+            color: #A0AEC0;
+            background-color: #2D3748;
+        }
+        html.dark .user-table-row td {
+            border-color: #2D3748;
+        }
+        html.dark .user-table-row:nth-child(even) {
+            background-color: #2d3748;
+        }
+        html.dark #premiumWelcomeModal ul {
+            color: #A0AEC0;
+        }
+        html.dark .toast {
+            background-color: #4A5568;
+            color: white;
+        }
+
+        /* Floating Action Button (FAB) */
+        .fab-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column-reverse; /* Stack from bottom up */
+            gap: 10px;
+            z-index: 999; /* Below modals, above content */
+        }
+        .fab-button {
+            background-image: linear-gradient(to right, #4299E1 0%, #63B3ED 51%, #4299E1 100%); /* Blue gradient */
+            transition: 0.5s, transform 0.2s ease;
+            background-size: 200% auto;
+            color: white;
+            box-shadow: 0 4px 10px rgba(66, 153, 225, 0.4);
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            border: none;
+            position: relative;
+            overflow: hidden;
+            transform: scale(1);
+        }
+        .fab-button:hover {
+            background-position: right center;
+            box-shadow: 0 6px 15px rgba(66, 153, 225, 0.6);
+            transform: scale(1.05);
+        }
+        .fab-button.red {
+            background-image: linear-gradient(to right, #EF4444 0%, #F87171 51%, #EF4444 100%);
+            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.4);
+        }
+        .fab-button.red:hover {
+            box-shadow: 0 6px 15px rgba(239, 68, 68, 0.6);
+        }
+        .fab-button.purple {
+            background-image: linear-gradient(to right, #8B5CF6 0%, #A78BFA 51%, #8B5CF6 100%);
+            box-shadow: 0 4px 10px rgba(139, 92, 246, 0.4);
+        }
+        .fab-button.purple:hover {
+            box-shadow: 0 6px 15px rgba(139, 92, 246, 0.6);
+        }
+        /* FAB menu specific */
+        .fab-menu {
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 10px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none; /* Allow clicks through when hidden */
+        }
+        .fab-menu.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        /* FAB toggle icon rotation */
+        .fab-button svg {
+            transition: transform 0.3s ease;
+        }
+        .fab-button.rotate-45 svg {
+            transform: rotate(45deg);
+        }
+
+
+        /* Dark/Light Mode Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background-color: #e2e8f0;
+            color: #333;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+        }
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        html.dark .theme-toggle {
+            background-color: #4A5568;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        html.dark .theme-toggle:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+        }
+
+        /* Media queries for smaller screens */
         @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                margin: 10px auto;
+            }
+            /* Hide main scan/clear buttons on mobile, use FAB instead */
+            .scanner-main-buttons {
+                display: none;
+            }
+            .action-button {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+            .param-input-group input[type="number"],
+            .param-input-group input[type="text"],
+            .param-input-group input[type="email"],
+            .param-input-group input[type="password"],
+            .param-input-group select {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.875rem;
+            }
             .modal-content {
                 width: 95%;
                 padding: 15px;
             }
             .tradingview-widget-container {
-                height: 60vh; /* Smaller height on mobile */
-                max-height: 400px; /* Adjust max height for mobile */
+                height: 60vh;
+                max-height: 400px;
             }
-        }
-        /* Payment Modal Specific Styles */
-        #paymentModal .modal-content {
-            max-width: 500px; /* Smaller modal for payment */
-            text-align: center;
-        }
-        #paymentModal .payment-info {
-            background-color: #1a202c;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            margin-bottom: 1rem;
-        }
-        /* Admin Panel Styles */
-        #adminPanel {
-            background-color: #2D3748;
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-top: 1.5rem;
-        }
-        .user-table-header th {
-            padding: 0.75rem;
-            text-align: left;
-            border-bottom: 1px solid #4A5568;
-            color: #A0AEC0;
-        }
-        .user-table-row td {
-            padding: 0.75rem;
-            text-align: left; /* Ensure text aligns left */
-            border-bottom: 1px solid #2D3748;
-        }
-        .user-table-row:last-child td {
-            border-bottom: none;
-        }
-        .user-table-row button {
-            margin-right: 0.5rem;
-        }
-
-        /* New styles for Premium Welcome Modal */
-        #premiumWelcomeModal .modal-content {
-            max-width: 600px;
-            text-align: center;
-        }
-        #premiumWelcomeModal ul {
-            list-style: none;
-            padding: 0;
-            margin-top: 1rem;
-            text-align: left;
-            color: #A0AEC0; /* gray-400 */
-        }
-        #premiumWelcomeModal ul li {
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        #premiumWelcomeModal ul li svg {
-            color: #48BB78; /* Green checkmark */
-            flex-shrink: 0;
+            .close-button {
+                font-size: 24px;
+                top: 5px;
+                right: 10px;
+            }
+            .modal-header-sticky {
+                padding: 8px 15px;
+                margin: -15px -15px 10px -15px;
+            }
+            .user-table-header th, .user-table-row td {
+                padding: 0.5rem;
+                font-size: 0.8rem;
+            }
+            .fab-container {
+                bottom: 10px;
+                right: 10px;
+            }
+            #toast-container {
+                top: auto; /* Remove top positioning */
+                bottom: 10px; /* Position at bottom */
+                right: 10px; /* Position at right */
+                left: 10px; /* Span across bottom */
+                max-width: calc(100% - 20px); /* Adjust max width for mobile */
+            }
         }
     </style>
 </head>
 <body class="bg-gray-900 text-gray-200">
-<div class="container">
-    <div class="header-area">
-        <h1 class="text-4xl font-bold text-center text-blue-400 mb-6">
-                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
-                        Crypto Order Block Scanner
-                    </span>
-        </h1>
+<div id="toast-container"></div> <!-- Toast container -->
 
-        <p class="text-center text-gray-400 mb-8">
+<div class="theme-toggle" id="themeToggle">
+    <!-- Sun icon for light mode, Moon for dark mode -->
+    <svg class="w-6 h-6 sun-icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 00-.707-.293h-1a1 1 0 000 2h1a1 1 0 00.707-.293l.707-.707a1 1 0 00-1.414-1.414l-.707.707zM17 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zm-9.464 4.95l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM3 10a1 1 0 01-1 1H2a1 1 0 110-2h1a1 1 0 011 1zm8.464-10.607l-.707-.707a1 1 0 00-1.414 1.414l.707.707a1 1 0 001.414-1.414zM10 15a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1z" clip-rule="evenodd"></path>
+    </svg>
+    <svg class="w-6 h-6 moon-icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+    </svg>
+</div>
+
+<div class="container">
+    <div class="header-area py-8 px-6 text-center rounded-xl">
+        <h1 class="text-4xl lg:text-5xl font-bold text-center text-blue-600 dark:text-blue-400 mb-4 tracking-wide flex items-center justify-center gap-3">
+            <!-- Logo SVG with new styling and hover animation -->
+            <div class="logo-icon-wrapper bg-blue-100 dark:bg-blue-900 shadow-md">
+                <svg class="w-10 h-10 text-purple-600 dark:text-purple-400" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                    <path d="M12 11.25c-1.38 0-2.5 1.12-2.5 2.5s1.12 2.5 2.5 2.5 2.5-1.12 2.5-2.5-1.12-2.5-2.5-2.5zm0 3.5c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/>
+                </svg>
+            </div>
+            <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-700 dark:from-blue-400 dark:to-purple-500">
+                Crypto Order Block Scanner
+            </span>
+        </h1>
+        <p class="text-lg text-gray-600 dark:text-gray-400 mb-4">
             Unlock powerful insights into market order blocks.
         </p>
     </div>
 
     <!-- Authentication Section (Initially visible) -->
-    <div id="authSection" class="bg-gray-800 p-6 rounded-xl shadow-lg mb-8 max-w-md mx-auto">
-        <h2 id="authFormTitle" class="text-2xl font-bold text-blue-300 text-center mb-4">Login</h2>
+    <div id="authSection" class="bg-gray-100 dark:bg-gray-800 p-6 rounded-xl shadow-lg mb-8 max-w-md mx-auto transition-colors duration-500">
+        <h2 id="authFormTitle" class="text-2xl font-bold text-blue-600 dark:text-blue-300 text-center mb-4">Login</h2>
         <form id="authForm" class="flex flex-col gap-4">
             <div class="param-input-group">
-                <label for="username">Username:</label>
+                <label for="username" class="dark:text-gray-400 font-medium">Username:</label>
                 <input type="text" id="username" name="username" required class="w-full">
             </div>
             <div class="param-input-group">
-                <label for="password">Password:</label>
+                <label for="password" class="dark:text-gray-400 font-medium">Password:</label>
                 <input type="password" id="password" name="password" required class="w-full">
             </div>
             <div id="emailGroup" class="param-input-group hidden">
-                <label for="email">Email:</label>
+                <label for="email" class="dark:text-gray-400 font-medium">Email:</label>
                 <input type="email" id="email" name="email" class="w-full">
             </div>
             <div id="planGroup" class="param-input-group hidden">
-                <label for="plan">Plan:</label>
-                <select id="plan" name="plan" class="w-full px-3 py-2 rounded-md bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <label for="plan" class="dark:text-gray-400 font-medium">Plan:</label>
+                <select id="plan" name="plan" class="w-full px-3 py-2 rounded-md bg-white dark:bg-gray-700 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="trial">3-Day Trial</option>
                     <option value="premium">Premium</option>
                 </select>
@@ -353,83 +693,98 @@
             <button type="submit" id="authSubmitButton" class="scan-button w-full">Login</button>
         </form>
         <p class="text-center mt-4">
-            <button id="toggleAuthMode" class="text-blue-400 hover:underline">Don't have an account? Register here.</button>
+            <button id="toggleAuthMode" class="text-blue-600 dark:text-blue-400 hover:underline action-button bg-transparent border-none shadow-none px-0 py-0 font-normal">Don't have an account? Register here.</button>
         </p>
-        <p id="authMessage" class="text-center text-red-400 mt-4"></p>
-        <!-- Temporary Admin Registration Button removed for security -->
     </div>
 
     <!-- Scanner Section (Initially hidden) -->
     <div id="scannerSection" class="hidden">
-        <div class="flex justify-between items-center mb-4">
-            <div class="flex flex-col md:flex-row justify-center items-center gap-4">
-                <button id="scanButton" class="scan-button">
+        <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
+            <div class="flex flex-col md:flex-row justify-center items-center gap-4 w-full md:w-auto scanner-main-buttons">
+                <button id="scanButton" class="scan-button w-full md:w-auto">
                     <span id="spinner" class="spinner hidden"></span>
                     <span id="buttonText">Initiate Scan</span>
                 </button>
-                <button id="clearButton" class="filter-button">Clear Results</button>
+                <button id="clearButton" class="action-button w-full md:w-auto">Clear Results</button>
             </div>
-            <button id="logoutButton" class="auth-button bg-red-600 hover:bg-red-700">Logout</button>
+            <button id="logoutButton" class="action-button bg-red-500 hover:bg-red-600 text-white w-full md:w-auto">Logout</button>
         </div>
 
 
         <div class="flex justify-center gap-3 mb-6 flex-wrap">
-            <span class="text-gray-300 font-semibold self-center">Timeframe:</span>
-            <button id="timeframe1hButton" class="timeframe-button" data-timeframe="1h">1H</button>
-            <button id="timeframe4hButton" class="timeframe-button active" data-timeframe="4h">4H</button>
-            <button id="timeframe1dButton" class="timeframe-button" data-timeframe="1d">1D</button>
+            <span class="text-gray-600 dark:text-gray-300 font-semibold self-center">Timeframe:</span>
+            <button id="timeframe1hButton" class="action-button" data-timeframe="1h">1H</button>
+            <button id="timeframe4hButton" class="action-button active" data-timeframe="4h">4H</button>
+            <button id="timeframe1dButton" class="action-button" data-timeframe="1d">1D</button>
         </div>
 
         <div class="flex justify-center gap-3 mb-6 flex-wrap">
-            <span class="text-gray-300 font-semibold self-center">Filter:</span>
-            <button id="showAllButton" class="filter-button active" data-filter="All">Show All</button>
-            <button id="showBuyingButton" class="filter-button" data-filter="Buying (Bullish)">Show Buying OB</button>
-            <button id="showSellingButton" class="filter-button" data-filter="Selling (Bearish)">Show Selling OB</button>
+            <span class="text-gray-600 dark:text-gray-300 font-semibold self-center">Filter:</span>
+            <button id="showAllButton" class="action-button active" data-filter="All">Show All</button>
+            <button id="showBuyingButton" class="action-button" data-filter="Buying (Bullish)">Show Buying OB</button>
+            <button id="showSellingButton" class="action-button" data-filter="Selling (Bearish)">Show Selling OB</button>
         </div>
 
         <!-- New section for Order Block Detection Parameters and Price Deviation -->
-        <div class="parameters-section">
-            <h2 class="text-2xl font-bold text-blue-300 text-center mb-4">Detection Sensitivity</h2>
+        <div class="parameters-section bg-gray-100 dark:bg-gray-800">
+            <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 text-center mb-4">Detection Sensitivity</h2>
             <div class="parameters-grid mb-4">
-                <button class="sensitivity-button" data-sensitivity="lowest">Lowest Condition</button>
-                <button class="sensitivity-button" data-sensitivity="low-mid">Low Mid</button>
-                <button class="sensitivity-button active" data-sensitivity="mid">Mid</button>
-                <button class="sensitivity-button" data-sensitivity="mid-high">Mid High</button>
-                <button class="sensitivity-button" data-sensitivity="high">High</button>
-                <button class="sensitivity-button" data-sensitivity="extreme">Extreme Detection</button>
+                <button class="sensitivity-button action-button" data-sensitivity="lowest">Lowest Condition</button>
+                <button class="sensitivity-button action-button" data-sensitivity="low-mid">Low Mid</button>
+                <button class="sensitivity-button action-button active" data-sensitivity="mid">Mid</button>
+                <button class="sensitivity-button action-button" data-sensitivity="mid-high">Mid High</button>
+                <button class="sensitivity-button action-button" data-sensitivity="high">High</button>
+                <button class="sensitivity-button action-button" data-sensitivity="extreme">Extreme Detection</button>
             </div>
 
             <div class="flex flex-col sm:flex-row items-center justify-center gap-3 mt-4">
-                <label for="priceDeviation" class="text-gray-300 font-semibold">Max Price Deviation (%):</label>
-                <input type="number" id="priceDeviation" value="20" min="0" max="100" class="w-24 px-3 py-2 rounded-md bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <label for="priceDeviation" class="text-gray-600 dark:text-gray-300 font-semibold">Max Price Deviation (%):</label>
+                <input type="number" id="priceDeviation" value="20" min="0" max="100" class="w-24">
             </div>
         </div>
 
-
-        <p id="statusMessage" class="text-center text-gray-300 italic mb-6">Click "Initiate Scan" to begin analyzing market data.</p>
-        <p id="errorMessage" class="text-center text-red-500 font-bold mb-6"></p>
-
         <div id="resultsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Scan results will be injected here -->
+            <!-- Scan results or skeleton loaders will be injected here -->
         </div>
 
-        <!-- NEW: Admin Panel Button -->
+        <!-- Admin Panel Button -->
         <div class="text-center mt-8">
-            <button id="adminPanelButton" class="auth-button hidden">User Management (Admin)</button>
+            <button id="adminPanelButton" class="action-button hidden bg-purple-600 hover:bg-purple-700 text-white">User Management (Admin)</button>
         </div>
     </div>
 </div>
 
+<!-- Floating Action Button (FAB) for Mobile -->
+<div class="fab-container md:hidden">
+    <button id="fabToggle" class="fab-button">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+    </button>
+    <div id="fabMenu" class="fab-menu">
+        <button id="fabScanButton" class="fab-button">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+        </button>
+        <button id="fabClearButton" class="fab-button red">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+        </button>
+        <button id="fabAdminButton" class="fab-button purple hidden">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h2a2 2 0 002-2V4a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h2m0 0l3-3m-3 3l-3-3m3 3v3m0-6h.01M6 14h.01M6 17h.01M6 20h.01M12 6h.01M12 10h.01M12 14h.01M12 18h.01"></path></svg>
+        </button>
+    </div>
+</div>
+
+
 <!-- Chart Modal Structure -->
 <div id="chartModal" class="modal hidden">
-    <div class="modal-content">
-        <span class="close-button" id="closeModal">&times;</span>
-        <h3 id="modalTitle" class="text-2xl font-bold text-blue-300 text-center mb-4"></h3>
-        <p id="modalOBInfo" class="text-center text-gray-300 mb-4"></p>
+    <div class="modal-content dark:bg-gray-800 transition-colors duration-500">
+        <span class="close-button dark:bg-gray-800 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700" id="closeModal">&times;</span>
+        <div class="modal-header-sticky dark:bg-gray-800 dark:border-gray-700">
+            <h3 id="modalTitle" class="text-2xl font-bold text-blue-600 dark:text-blue-300 text-center mb-2"></h3>
+            <p id="modalOBInfo" class="text-center text-gray-600 dark:text-gray-300 text-sm"></p>
+        </div>
         <div class="tradingview-widget-container">
             <div id="tradingview_chart"></div>
         </div>
-        <a id="tradingViewLink" href="#" target="_blank" class="chart-button inline-block text-center px-4 py-2 rounded-lg font-semibold text-sm self-center">
+        <a id="tradingViewLink" href="#" target="_blank" class="action-button inline-block text-center px-4 py-2 rounded-lg font-semibold text-sm self-center">
             View on TradingView.com for Drawing
         </a>
     </div>
@@ -437,45 +792,43 @@
 
 <!-- Payment Modal Structure -->
 <div id="paymentModal" class="modal hidden">
-    <div class="modal-content">
-        <span class="close-button" id="closePaymentModal">&times;</span>
-        <h3 class="text-2xl font-bold text-blue-300 text-center mb-4">Premium Plan Payment</h3>
-        <p class="text-gray-300 mb-4">
+    <div class="modal-content dark:bg-gray-800 transition-colors duration-500 max-w-xl">
+        <span class="close-button dark:bg-gray-800 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700" id="closePaymentModal">&times;</span>
+        <h3 class="text-2xl font-bold text-blue-600 dark:text-blue-300 text-center mb-4">Premium Plan Payment</h3>
+        <p class="text-gray-600 dark:text-gray-300 mb-4">
             To activate your Premium plan, please send payment to the address below.
             After payment, submit your transaction hash.
         </p>
-        <div class="payment-info p-4 rounded-md bg-gray-700 text-gray-200 mb-4">
+        <div class="payment-info bg-gray-100 dark:bg-gray-900 p-4 rounded-md text-gray-800 dark:text-gray-200 mb-4 transition-colors duration-500">
             <p class="font-semibold">Payment Address (USDT BEP20):</p>
-            <p class="break-all text-green-400 text-lg font-mono">0xe076e29832351413895b42b8ae936bebeb510d2e</p> <!-- REPLACE WITH YOUR ACTUAL ADDRESS -->
+            <p class="break-all text-green-600 dark:text-green-400 text-lg font-mono">0xe076e29832351413895b42b8ae936bebeb510d2e</p> <!-- REPLACE WITH YOUR ACTUAL ADDRESS -->
             <p class="mt-2 font-semibold">Amount: $25 USD</p>
         </div>
         <form id="paymentProofForm" class="flex flex-col gap-4">
             <div class="param-input-group">
-                <label for="transactionHash">Transaction Hash (TxID):</label>
+                <label for="transactionHash" class="dark:text-gray-400 font-medium">Transaction Hash (TxID):</label>
                 <input type="text" id="transactionHash" name="transactionHash" required class="w-full">
             </div>
-            <button type="submit" id="submitPaymentProofButton" class="payment-button w-full">Submit Payment Proof</button>
+            <button type="submit" id="submitPaymentProofButton" class="action-button w-full bg-blue-500 hover:bg-blue-600 text-white">Submit Payment Proof</button>
         </form>
-        <p id="paymentMessage" class="text-center text-red-400 mt-4"></p>
     </div>
 </div>
 
 <!-- Admin Panel Modal Structure -->
 <div id="adminPanelModal" class="modal hidden">
-    <div class="modal-content max-w-4xl">
-        <span class="close-button" id="closeAdminPanelModal">&times;</span>
-        <h3 class="text-2xl font-bold text-blue-300 text-center mb-4">User Management Panel</h3>
-        <p id="adminMessage" class="text-center text-red-400 mb-4"></p>
+    <div class="modal-content dark:bg-gray-800 transition-colors duration-500 max-w-5xl">
+        <span class="close-button dark:bg-gray-800 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700" id="closeAdminPanelModal">&times;</span>
+        <h3 class="text-2xl font-bold text-blue-600 dark:text-blue-300 text-center mb-4">User Management Panel</h3>
         <div class="overflow-x-auto">
-            <table class="min-w-full bg-gray-700 rounded-lg">
+            <table class="min-w-full bg-white dark:bg-gray-700 rounded-lg shadow-md transition-colors duration-500">
                 <thead>
                 <tr class="user-table-header">
                     <th>Username</th>
                     <th>Email</th>
                     <th>Premium</th>
                     <th>Trial Active</th>
-                    <th>Trial Expiry</th>
-                    <th>Roles</th>
+                    <th class="hidden sm:table-cell">Trial Expiry</th> <!-- Hidden on small screens -->
+                    <th class="hidden sm:table-cell">Roles</th> <!-- Hidden on small screens -->
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -489,33 +842,33 @@
 
 <!-- Premium Welcome Modal -->
 <div id="premiumWelcomeModal" class="modal hidden">
-    <div class="modal-content">
-        <span class="close-button" id="closePremiumWelcomeModal">&times;</span>
-        <h3 class="text-3xl font-bold text-blue-300 text-center mb-4">Welcome to Premium!</h3>
-        <p class="text-gray-300 mb-4">
+    <div class="modal-content dark:bg-gray-800 transition-colors duration-500 max-w-xl">
+        <span class="close-button dark:bg-gray-800 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700" id="closePremiumWelcomeModal">&times;</span>
+        <h3 class="text-3xl font-bold text-blue-600 dark:text-blue-300 text-center mb-4">Welcome to Premium!</h3>
+        <p class="text-gray-600 dark:text-gray-300 mb-4">
             Congratulations on unlocking the full power of the Crypto Order Block Scanner!
             Here's what you can now do:
         </p>
-        <ul class="text-lg text-gray-200 mb-6">
-            <li><svg class="w-6 h-6 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        <ul class="text-lg text-gray-700 dark:text-gray-200 mb-6">
+            <li><i class="fas fa-check-circle text-green-500 dark:text-green-400 mr-2"></i>
                 **All Timeframes Unlocked:** Scan for Order Blocks on 1H, 4H, and 1D charts for deeper market analysis.
             </li>
-            <li><svg class="w-6 h-6 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            <li><i class="fas fa-check-circle text-green-500 dark:text-green-400 mr-2"></i>
                 **Full Sensitivity Control:** Utilize all 6 detection sensitivity levels (Lowest to Extreme) to fine-tune your scans.
             </li>
-            <li><svg class="w-6 h-6 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            <li><i class="fas fa-check-circle text-green-500 dark:text-green-400 mr-2"></i>
                 **Advanced Charting:** Click on any coin card to view its Order Block directly on a TradingView chart.
             </li>
-            <li><svg class="w-6 h-6 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            <li><i class="fas fa-check-circle text-green-500 dark:text-green-400 mr-2"></i>
                 **Admin Panel Access (for Admins):** Manage users and their premium/trial statuses (if you have admin privileges).
             </li>
         </ul>
-        <p class="text-gray-400 text-sm mt-4">
+        <p class="text-gray-500 dark:text-gray-400 text-sm mt-4">
             You can always review these features by re-logging in or refreshing the page.
         </p>
         <div class="flex items-center justify-center mt-6">
-            <input type="checkbox" id="dontShowPremiumAgain" class="mr-2 h-4 w-4 text-blue-600 rounded focus:ring-blue-500">
-            <label for="dontShowPremiumAgain" class="text-gray-400">Don't show this again</label>
+            <input type="checkbox" id="dontShowPremiumAgain" class="mr-2 h-4 w-4 text-blue-600 rounded focus:ring-blue-500 bg-gray-200 dark:bg-gray-700 border-gray-400 dark:border-gray-600">
+            <label for="dontShowPremiumAgain" class="text-gray-600 dark:text-gray-400">Don't show this again</label>
         </div>
         <button id="closePremiumWelcomeModalButton" class="scan-button mt-6 w-full max-w-xs mx-auto">Got It!</button>
     </div>
@@ -525,8 +878,7 @@
 <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.umd.js"></script>
 <script>
     // --- Configuration ---
-    // IMPORTANT: Replace with your actual OCI VM Public IP or domain name after setting up HTTPS!
-    const API_BASE_URL ="https://api.obscanner.space/api";
+    const API_BASE_URL ="https://api.obscanner.space/api"; // Your backend API URL
 
     // --- DOM Elements (Authentication) ---
     const authSection = document.getElementById('authSection');
@@ -541,11 +893,9 @@
     const planSelect = document.getElementById('plan');
     const authSubmitButton = document.getElementById('authSubmitButton');
     const toggleAuthModeButton = document.getElementById('toggleAuthMode');
-    const authMessage = document.getElementById('authMessage');
     const logoutButton = document.getElementById('logoutButton');
-    // const registerAdminButton = document.getElementById('registerAdminButton'); // Removed for security
 
-    // --- DOM Elements (Scanner - existing) ---
+    // --- DOM Elements (Scanner) ---
     const scanButton = document.getElementById('scanButton');
     const clearButton = document.getElementById('clearButton');
     const showAllButton = document.getElementById('showAllButton');
@@ -556,8 +906,6 @@
     const timeframe1dButton = document.getElementById('timeframe1dButton');
     const spinner = document.getElementById('spinner');
     const buttonText = document.getElementById('buttonText');
-    const statusMessage = document.getElementById('statusMessage');
-    const errorMessage = document.getElementById('errorMessage');
     const resultsContainer = document.getElementById('resultsContainer');
     const sensitivityButtons = document.querySelectorAll('.sensitivity-button');
     const priceDeviationInput = document.getElementById('priceDeviation');
@@ -575,33 +923,44 @@
     const paymentProofForm = document.getElementById('paymentProofForm');
     const transactionHashInput = document.getElementById('transactionHash');
     const submitPaymentProofButton = document.getElementById('submitPaymentProofButton');
-    const paymentMessage = document.getElementById('paymentMessage');
 
-    // Admin Panel elements (NEW)
+    // Admin Panel elements
     const adminPanelButton = document.getElementById('adminPanelButton');
     const adminPanelModal = document.getElementById('adminPanelModal');
     const closeAdminPanelModalButton = document.getElementById('closeAdminPanelModal');
     const userTableBody = document.getElementById('userTableBody');
-    const adminMessage = document.getElementById('adminMessage');
 
-    // Premium Welcome Modal elements (NEW)
+    // Premium Welcome Modal elements
     const premiumWelcomeModal = document.getElementById('premiumWelcomeModal');
     const closePremiumWelcomeModalButton = document.getElementById('closePremiumWelcomeModalButton');
     const closePremiumWelcomeModalX = document.getElementById('closePremiumWelcomeModal');
     const dontShowPremiumAgainCheckbox = document.getElementById('dontShowPremiumAgain');
 
+    // Theme Toggle elements
+    const themeToggle = document.getElementById('themeToggle');
+    const sunIcon = themeToggle.querySelector('.sun-icon');
+    const moonIcon = themeToggle.querySelector('.moon-icon');
+
+    // FAB elements for mobile
+    const fabContainer = document.querySelector('.fab-container'); // Get the container for click outside logic
+    const fabToggle = document.getElementById('fabToggle');
+    const fabMenu = document.getElementById('fabMenu');
+    const fabScanButton = document.getElementById('fabScanButton');
+    const fabClearButton = document.getElementById('fabClearButton');
+    const fabAdminButton = document.getElementById('fabAdminButton');
+
 
     let allScanResults = [];
-    let currentFilter = 'All';
-    let currentTimeframe = '4h';
-    let currentSensitivity = 'mid'; // Default sensitivity
-    let maxPriceDeviationPercent = 20; // Default max price deviation
-    let isRegisterMode = false; // State for auth form
+    let currentFilter = localStorage.getItem('currentFilter') || 'All';
+    let currentTimeframe = localStorage.getItem('currentTimeframe') || '4h';
+    let currentSensitivity = localStorage.getItem('currentSensitivity') || 'mid';
+    let maxPriceDeviationPercent = parseFloat(localStorage.getItem('maxPriceDeviationPercent')) || 20;
+    let isRegisterMode = false;
     let isAdminRegisterMode = false; // Flag for admin registration mode (logic removed for security)
 
     // Predefined parameter presets for different sensitivities
     const sensitivityPresets = {
-      'lowest': { minBodyRatio: 0.001, minPriceChange: 0.000001, volumeFactor: 0.01, requireBOS: false, requireC3ClosePastC2: false, requireFVG: false, requireUnmitigated: false, minFvgDepthRatio: 0.001 }, // Relaxed for lowest
+      'lowest': { minBodyRatio: 0.001, minPriceChange: 0.000001, volumeFactor: 0.01, requireBOS: false, requireC3ClosePastC2: false, requireFVG: false, requireUnmitigated: false, minFvgDepthRatio: 0.001 },
       'low-mid': { minBodyRatio: 0.10, minPriceChange: 0.0003, volumeFactor: 0.4, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, requireUnmitigated: true, minFvgDepthRatio: 0.02 },
       'mid': { minBodyRatio: 0.15, minPriceChange: 0.0005, volumeFactor: 0.6, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, requireUnmitigated: true, minFvgDepthRatio: 0.05 },
       'mid-high': { minBodyRatio: 0.20, minPriceChange: 0.001, volumeFactor: 0.8, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, requireUnmitigated: true, minFvgDepthRatio: 0.08 },
@@ -610,15 +969,68 @@
     };
 
 
-    // --- Authentication Functions ---
+    // --- Theme Management ---
+    function applyTheme(theme) {
+        if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+            sunIcon.style.display = 'block';
+            moonIcon.style.display = 'none';
+        } else {
+            document.documentElement.classList.remove('dark');
+            sunIcon.style.display = 'none';
+            moonIcon.style.display = 'block';
+        }
+        localStorage.setItem('theme', theme);
+    }
 
+    function toggleTheme() {
+        const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        applyTheme(newTheme);
+    }
+
+    // --- Toast Notification System ---
+    function showToast(message, type = 'info', duration = 3000) {
+        const toastContainer = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.classList.add('toast', type);
+        toast.innerHTML = `
+            ${type === 'success' ? '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>' : ''}
+            ${type === 'error' ? '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>' : ''}
+            ${type === 'info' ? '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>' : ''}
+            <span>${message}</span>
+        `;
+        toastContainer.appendChild(toast);
+
+        setTimeout(() => {
+            toast.remove();
+        }, duration);
+    }
+
+
+    // --- Modal Management (Unified Functions) ---
+    function openModal(modalElement) {
+        modalElement.classList.remove('hidden');
+        // Force reflow to ensure transition plays
+        void modalElement.offsetWidth;
+        modalElement.classList.add('show');
+    }
+
+    function closeModal(modalElement) {
+        modalElement.classList.remove('show');
+        modalElement.addEventListener('transitionend', function handler() {
+            modalElement.classList.add('hidden');
+            modalElement.removeEventListener('transitionend', handler);
+        }, { once: true }); // Use once: true to ensure it only runs once
+    }
+
+    // --- Authentication Functions ---
     function showAuthSection() {
         authSection.classList.remove('hidden');
         scannerSection.classList.add('hidden');
-        paymentModal.classList.add('hidden');
-        adminPanelModal.classList.add('hidden'); // Ensure admin modal is hidden
-        premiumWelcomeModal.classList.add('hidden'); // Ensure premium welcome modal is hidden
-        authMessage.textContent = '';
+        closeModal(paymentModal);
+        closeModal(adminPanelModal);
+        closeModal(premiumWelcomeModal);
         usernameInput.value = '';
         passwordInput.value = '';
         emailInput.value = '';
@@ -627,69 +1039,53 @@
         localStorage.removeItem('roles');
         localStorage.removeItem('userId');
         adminPanelButton.classList.add('hidden'); // Hide admin button on logout
+        fabAdminButton.classList.add('hidden'); // Hide FAB admin button on logout
         // Reset auth form to login mode
         isRegisterMode = false;
-        isAdminRegisterMode = false; // Reset admin register mode flag
+        isAdminRegisterMode = false;
         authFormTitle.textContent = 'Login';
         authSubmitButton.textContent = 'Login';
         emailGroup.classList.add('hidden');
         planGroup.classList.add('hidden');
         toggleAuthModeButton.textContent = "Don't have an account? Register here.";
-        // registerAdminButton.classList.remove('hidden'); // Admin registration button removed permanently
     }
 
     async function showScannerSection() {
         authSection.classList.add('hidden');
-        paymentModal.classList.add('hidden');
-        adminPanelModal.classList.add('hidden'); // Ensure admin modal is hidden
-        premiumWelcomeModal.classList.add('hidden'); // Ensure premium welcome modal is hidden
+        closeModal(paymentModal);
+        closeModal(adminPanelModal);
+        closeModal(premiumWelcomeModal);
         scannerSection.classList.remove('hidden');
-        statusMessage.textContent = `Welcome, ${localStorage.getItem('username')}! Click "Initiate Scan" to begin analyzing market data.`;
-        errorMessage.textContent = '';
-        await fetchUserStatus(); // Fetch status to update UI and admin button visibility
+        showToast(`Welcome, ${localStorage.getItem('username')}! Click "Initiate Scan" to begin analyzing market data.`, 'info');
+        await fetchUserStatus();
 
-        // Show premium welcome modal if user is premium/trial and hasn't seen it
         const userRoles = localStorage.getItem('roles') ? JSON.parse(localStorage.getItem('roles')) : [];
         const isPremiumOrTrial = userRoles.includes('ROLE_PREMIUM') || userRoles.includes('ROLE_TRIAL');
         const hasSeenPremiumWelcome = localStorage.getItem('hasSeenPremiumWelcome');
 
         if (isPremiumOrTrial && hasSeenPremiumWelcome !== 'true') {
-            showPremiumWelcomeModal();
+            openModal(premiumWelcomeModal);
         }
     }
 
     function showPaymentSection(registeredUsername) {
         authSection.classList.add('hidden');
         scannerSection.classList.add('hidden');
-        adminPanelModal.classList.add('hidden'); // Ensure admin modal is hidden
-        premiumWelcomeModal.classList.add('hidden'); // Ensure premium welcome modal is hidden
-        paymentModal.classList.remove('hidden');
-        paymentMessage.textContent = '';
+        closeModal(adminPanelModal);
+        closeModal(premiumWelcomeModal);
+        openModal(paymentModal);
         transactionHashInput.value = '';
         localStorage.setItem('pendingPaymentUsername', registeredUsername);
     }
 
-    // Show Premium Welcome Modal
-    function showPremiumWelcomeModal() {
-        premiumWelcomeModal.classList.remove('hidden');
-    }
-
-    function closePremiumWelcomeModal() {
-        premiumWelcomeModal.classList.add('hidden');
-        if (dontShowPremiumAgainCheckbox.checked) {
-            localStorage.setItem('hasSeenPremiumWelcome', 'true');
-        }
-    }
-
-
     async function showAdminPanel() {
-        adminPanelModal.classList.remove('hidden');
-        adminMessage.textContent = 'Loading users...';
-        userTableBody.innerHTML = ''; // Clear previous users
+        openModal(adminPanelModal);
+        showToast('Loading users...', 'info');
+        userTableBody.innerHTML = '';
 
         const token = localStorage.getItem('jwtToken');
         if (!token) {
-            adminMessage.textContent = "Authentication required for admin panel.";
+            showToast("Authentication required for admin panel.", 'error');
             return;
         }
 
@@ -704,18 +1100,16 @@
 
             if (!response.ok) {
                 const errorData = await response.json();
-                adminMessage.style.color = '#EF4444';
-                adminMessage.textContent = errorData.message || "Failed to fetch users.";
+                showToast(errorData.message || "Failed to fetch users.", 'error');
                 return;
             }
 
             const users = await response.json();
             displayUsersInAdminPanel(users);
-            adminMessage.textContent = ''; // Clear message on success
+            showToast('Users loaded successfully!', 'success');
 
         } catch (error) {
-            adminMessage.style.color = '#EF4444';
-            adminMessage.textContent = `Network error fetching users: ${error.message}`;
+            showToast(`Network error fetching users: ${error.message}`, 'error');
             console.error("Admin panel fetch error:", error);
         }
     }
@@ -724,7 +1118,7 @@
     function displayUsersInAdminPanel(users) {
         userTableBody.innerHTML = '';
         if (users.length === 0) {
-            userTableBody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-gray-400">No users found.</td></tr>';
+            userTableBody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-gray-400 dark:text-gray-500">No users found.</td></tr>';
             return;
         }
 
@@ -735,17 +1129,17 @@
             const roles = user.roles ? user.roles.join(', ') : 'N/A';
 
             userTableBody.innerHTML += `
-                <tr class="user-table-row border-b border-gray-600 last:border-b-0">
+                <tr class="user-table-row">
                     <td class="py-2 px-4">${user.username}</td>
                     <td class="py-2 px-4">${user.email}</td>
                     <td class="py-2 px-4">${isPremium}</td>
                     <td class="py-2 px-4">${trialActive}</td>
-                    <td class="py-2 px-4">${trialExpiry}</td>
-                    <td class="py-2 px-4 text-sm text-gray-400">${roles}</td>
+                    <td class="py-2 px-4 hidden sm:table-cell">${trialExpiry}</td>
+                    <td class="py-2 px-4 hidden sm:table-cell text-sm text-gray-400 dark:text-gray-500">${roles}</td>
                     <td class="py-2 px-4">
-                        <button class="auth-button bg-green-600 hover:bg-green-700 grant-premium-btn" data-username="${user.username}" ${user.isPremium ? 'disabled' : ''}>Grant Premium</button>
-                        <button class="auth-button bg-red-600 hover:bg-red-700 revoke-premium-btn" data-username="${user.username}" ${!user.isPremium ? 'disabled' : ''}>Revoke Premium</button>
-                        <button class="auth-button bg-blue-600 hover:bg-blue-700 activate-trial-btn" data-username="${user.username}" ${user.trialActive ? 'disabled' : ''}>Activate 3-Day Trial</button>
+                        <button class="action-button bg-green-500 hover:bg-green-600 text-white grant-premium-btn" data-username="${user.username}" ${user.isPremium ? 'disabled' : ''}><i class="fas fa-check-circle mr-1"></i>Grant Premium</button>
+                        <button class="action-button bg-red-500 hover:bg-red-600 text-white revoke-premium-btn" data-username="${user.username}" ${!user.isPremium ? 'disabled' : ''}><i class="fas fa-times-circle mr-1"></i>Revoke Premium</button>
+                        <button class="action-button bg-blue-500 hover:bg-blue-600 text-white activate-trial-btn" data-username="${user.username}" ${user.trialActive ? 'disabled' : ''}><i class="fas fa-hourglass-half mr-1"></i>Activate 3-Day Trial</button>
                     </td>
                 </tr>
             `;
@@ -765,7 +1159,7 @@
 
     // Admin Actions
     async function grantPremium(username) {
-        adminMessage.textContent = 'Granting premium...';
+        showToast('Granting premium...', 'info');
         const token = localStorage.getItem('jwtToken');
         try {
             const response = await fetch(`${API_BASE_URL}/admin/grant-premium/${username}`, {
@@ -777,21 +1171,18 @@
             });
             const data = await response.json();
             if (response.ok) {
-                adminMessage.style.color = '#48BB78';
-                adminMessage.textContent = data.message;
+                showToast(data.message, 'success');
                 showAdminPanel(); // Refresh user list
             } else {
-                adminMessage.style.color = '#EF4444';
-                adminMessage.textContent = data.message || `Failed to grant premium to ${username}.`;
+                showToast(data.message || `Failed to grant premium to ${username}.`, 'error');
             }
         } catch (error) {
-            adminMessage.style.color = '#EF4444';
-            adminMessage.textContent = `Network error: ${error.message}`;
+            showToast(`Network error: ${error.message}`, 'error');
         }
     }
 
     async function revokePremium(username) {
-        adminMessage.textContent = 'Revoking premium...';
+        showToast('Revoking premium...', 'info');
         const token = localStorage.getItem('jwtToken');
         try {
             const response = await fetch(`${API_BASE_URL}/admin/revoke-premium/${username}`, {
@@ -803,21 +1194,18 @@
             });
             const data = await response.json();
             if (response.ok) {
-                adminMessage.style.color = '#48BB78';
-                adminMessage.textContent = data.message;
+                showToast(data.message, 'success');
                 showAdminPanel(); // Refresh user list
             } else {
-                adminMessage.style.color = '#EF4444';
-                adminMessage.textContent = data.message || `Failed to revoke premium from ${username}.`;
+                showToast(data.message || `Failed to revoke premium from ${username}.`, 'error');
             }
         } catch (error) {
-            adminMessage.style.color = '#EF4444';
-            adminMessage.textContent = `Network error: ${error.message}`;
+            showToast(`Network error: ${error.message}`, 'error');
         }
         }
 
     async function activateTrial(username) {
-        adminMessage.textContent = 'Activating trial...';
+        showToast('Activating trial...', 'info');
         const token = localStorage.getItem('jwtToken');
         try {
             const response = await fetch(`${API_BASE_URL}/admin/activate-trial/${username}/3`, { // 3 days for trial
@@ -829,16 +1217,13 @@
             });
             const data = await response.json();
             if (response.ok) {
-                adminMessage.style.color = '#48BB78';
-                adminMessage.textContent = data.message;
+                showToast(data.message, 'success');
                 showAdminPanel(); // Refresh user list
             } else {
-                adminMessage.style.color = '#EF4444';
-                adminMessage.textContent = data.message || `Failed to activate trial for ${username}.`;
+                showToast(data.message || `Failed to activate trial for ${username}.`, 'error');
             }
         } catch (error) {
-            adminMessage.style.color = '#EF4444';
-            adminMessage.textContent = `Network error: ${error.message}`;
+            showToast(`Network error: ${error.message}`, 'error');
         }
     }
 
@@ -863,7 +1248,7 @@
                 console.error("Failed to fetch user status:", errorData.message);
                 if (response.status === 401 || response.status === 403) {
                     showAuthSection();
-                    authMessage.textContent = "Session expired or invalid. Please log in again.";
+                    showToast("Session expired or invalid. Please log in again.", 'error');
                 }
                 return;
             }
@@ -875,8 +1260,10 @@
             const userRoles = localStorage.getItem('roles') ? JSON.parse(localStorage.getItem('roles')) : [];
             if (userRoles.includes('ROLE_ADMIN')) {
                 adminPanelButton.classList.remove('hidden');
+                fabAdminButton.classList.remove('hidden'); // Show FAB admin button
             } else {
                 adminPanelButton.classList.add('hidden');
+                fabAdminButton.classList.add('hidden'); // Hide FAB admin button
             }
 
             if (!userData.isPremium && !userData.trialActive) {
@@ -885,13 +1272,13 @@
                 if (currentTimeframe !== '4h') {
                     setTimeframe('4h');
                 }
-                statusMessage.textContent = `Welcome, ${userData.username}! Your trial has expired or you are not premium. Only 4H scans available.`;
+                showToast(`Welcome, ${userData.username}! Your trial has expired or you are not premium. Only 4H scans available.`, 'info');
             } else if (userData.trialActive) {
-                 statusMessage.textContent = `Welcome, ${userData.username}! Your trial expires on ${new Date(userData.trialExpiryDate).toLocaleDateString()}.`;
+                 showToast(`Welcome, ${userData.username}! Your trial expires on ${new Date(userData.trialExpiryDate).toLocaleDateString()}.`, 'info');
                  timeframe1hButton.disabled = false;
                  timeframe1dButton.disabled = false;
             } else if (userData.isPremium) {
-                 statusMessage.textContent = `Welcome, ${userData.username}! You have premium access.`;
+                 showToast(`Welcome, ${userData.username}! You have premium access.`, 'success');
                  timeframe1hButton.disabled = false;
                  timeframe1dButton.disabled = false;
             }
@@ -899,14 +1286,13 @@
 
         } catch (error) {
             console.error("Error fetching user status:", error);
-            authMessage.textContent = "Error connecting to the service. Please try again."; // Generic error message
+            showToast("Error connecting to the service. Please try again.", 'error');
         }
     }
 
 
     async function handleAuthSubmit(event) {
         event.preventDefault();
-        authMessage.textContent = '';
         authSubmitButton.disabled = true;
 
         const username = usernameInput.value;
@@ -919,12 +1305,10 @@
 
         if (isAdminRegisterMode) { // If in admin registration mode (logic removed for security)
             // This block should ideally not be reachable if the button is removed
-            // but keeping the structure for robustness.
-            endpoint = `${API_BASE_URL}/auth/register-admin`;
+            endpoint = `${API_BASE_URL}/auth/register-admin`; // Keeping for robustness, but button removed
             body = { username, password, email };
             if (!username || !password || !email) {
-                authMessage.style.color = '#EF4444';
-                authMessage.textContent = "Username, password, and email are required for admin registration.";
+                showToast("Username, password, and email are required for admin registration.", 'error');
                 authSubmitButton.disabled = false;
                 return;
             }
@@ -934,16 +1318,14 @@
             body.plan = plan;
             // Validate inputs for regular registration
             if (!username || !password || !email) {
-                authMessage.style.color = '#EF4444';
-                authMessage.textContent = "Username, password, and email are required for registration.";
+                showToast("Username, password, and email are required for registration.", 'error');
                 authSubmitButton.disabled = false;
                 return;
             }
         } else { // Login mode
             // Validate inputs for login
             if (!username || !password) {
-                authMessage.style.color = '#EF4444';
-                authMessage.textContent = "Username and password are required for login.";
+                showToast("Username and password are required for login.", 'error');
                 authSubmitButton.disabled = false;
                 return;
             }
@@ -960,21 +1342,19 @@
             const data = await response.json();
 
             if (response.ok) {
-                authMessage.style.color = '#48BB78';
-
                 if (isAdminRegisterMode) { // Admin registration successful
-                    authMessage.textContent = data.message || "Admin registration successful! Please log in as admin.";
+                    showToast(data.message || "Admin registration successful! Please log in as admin.", 'success');
                     showAuthSection(); // Reset to login view
                 } else if (isRegisterMode) { // Regular user registration successful
-                    authMessage.textContent = data.message || "Registration successful!";
+                    showToast(data.message || "Registration successful!", 'success');
                     if (plan === 'premium') {
                         showPaymentSection(username);
                     } else { // Trial registration
                         showAuthSection(); // Reset to login view
-                        authMessage.textContent += " Please log in now.";
+                        showToast("Registration successful! Please log in now.", 'success');
                     }
                 } else { // Login mode successful
-                    authMessage.textContent = data.message || "Login successful!";
+                    showToast(data.message || "Login successful!", 'success');
                     if (data.token) {
                         localStorage.setItem('jwtToken', data.token);
                         localStorage.setItem('username', data.username);
@@ -985,12 +1365,10 @@
                 }
 
             } else {
-                authMessage.style.color = '#EF4444';
-                authMessage.textContent = data.message || "An error occurred.";
+                showToast(data.message || "An error occurred.", 'error');
             }
         } catch (error) {
-            authMessage.style.color = '#EF4444';
-            authMessage.textContent = `Connection error. Please try again.`; // Generic network error
+            showToast(`Connection error. Please try again.`, 'error');
             console.error("Auth fetch error:", error);
         } finally {
             authSubmitButton.disabled = false;
@@ -1006,63 +1384,40 @@
             emailGroup.classList.remove('hidden');
             planGroup.classList.remove('hidden');
             toggleAuthModeButton.textContent = "Already have an account? Login here.";
-            // registerAdminButton.classList.add('hidden'); // Admin registration button removed permanently
         } else {
             authFormTitle.textContent = 'Login';
             authSubmitButton.textContent = 'Login';
             emailGroup.classList.add('hidden');
             planGroup.classList.add('hidden');
             toggleAuthModeButton.textContent = "Don't have an account? Register here.";
-            // registerAdminButton.classList.remove('hidden'); // Admin registration button removed permanently
         }
-        authMessage.textContent = '';
         usernameInput.value = ''; // Clear inputs on mode switch
         passwordInput.value = '';
         emailInput.value = '';
     }
 
-    // Function to switch to Admin Registration Mode (logic removed for security)
-    // function switchToAdminRegisterMode() {
-    //     isRegisterMode = true;
-    //     isAdminRegisterMode = true;
-    //     authFormTitle.textContent = 'Register Admin';
-    //     authSubmitButton.textContent = 'Register Admin';
-    //     emailGroup.classList.remove('hidden');
-    //     planGroup.classList.add('hidden');
-    //     toggleAuthModeButton.textContent = "Go back to regular Login/Register.";
-    //     // registerAdminButton.classList.add('hidden');
-    //     authMessage.textContent = '';
-    //     usernameInput.value = '';
-    //     passwordInput.value = '';
-    //     emailInput.value = '';
-    // }
-
-
     function handleLogout() {
         showAuthSection();
-        authMessage.textContent = "You have been logged out.";
+        showToast("You have been logged out.", 'info');
     }
 
     // --- Payment Functions ---
     async function handleSubmitPaymentProof(event) {
         event.preventDefault();
-        paymentMessage.textContent = '';
         submitPaymentProofButton.disabled = true;
 
         const txHash = transactionHashInput.value;
         const userId = localStorage.getItem('pendingPaymentUsername');
 
         if (!txHash || !userId) {
-            paymentMessage.style.color = '#EF4444';
-            paymentMessage.textContent = "Transaction hash and user information are required.";
+            showToast("Transaction hash and user information are required.", 'error');
             submitPaymentProofButton.disabled = false;
             return;
         }
 
         const token = localStorage.getItem('jwtToken');
         if (!token) {
-            paymentMessage.style.color = '#EF4444';
-            paymentMessage.textContent = "Error: No authentication token found. Please log in first.";
+            showToast("Error: No authentication token found. Please log in first.", 'error');
             submitPaymentProofButton.disabled = false;
             return;
         }
@@ -1080,20 +1435,17 @@
             const data = await response.json();
 
             if (response.ok) {
-                paymentMessage.style.color = '#48BB78';
-                paymentMessage.textContent = data.message || "Payment proof submitted successfully! Your premium access will be activated soon.";
+                showToast(data.message || "Payment proof submitted successfully! Your premium access will be activated soon.", 'success');
                 localStorage.removeItem('pendingPaymentUsername');
                 setTimeout(() => {
                     showAuthSection();
-                    authMessage.textContent = "Payment proof submitted. Please log in to check your status later.";
+                    showToast("Payment proof submitted. Please log in to check your status later.", 'info');
                 }, 3000);
             } else {
-                paymentMessage.style.color = '#EF4444';
-                paymentMessage.textContent = data.message || "Failed to submit payment proof.";
+                showToast(data.message || "Failed to submit payment proof.", 'error');
             }
         } catch (error) {
-            paymentMessage.style.color = '#EF4444';
-            paymentMessage.textContent = `Connection error. Please try again.`; // Generic network error
+            showToast(`Connection error. Please try again.`, 'error');
             console.error("Payment proof fetch error:", error);
         } finally {
             submitPaymentProofButton.disabled = false;
@@ -1103,65 +1455,117 @@
 
     // --- Function Definitions (Order matters for dependencies) ---
 
+    // Skeleton card HTML
+    const skeletonCardHTML = `
+        <div class="skeleton-card">
+            <div class="skeleton-line long"></div>
+            <div class="skeleton-line medium"></div>
+            <div class="skeleton-line short"></div>
+            <div class="mt-4 pt-4 border-t border-gray-300 dark:border-gray-600">
+                <div class="skeleton-line medium"></div>
+                <div class="skeleton-line short"></div>
+                <div class="skeleton-line long"></div>
+            </div>
+        </div>
+    `;
+
     function displayResults(resultsToDisplay) {
         resultsContainer.innerHTML = '';
 
-        let filteredByPriceDeviation = resultsToDisplay.filter(coin => {
-            if (coin.orderBlockType === 'None' || coin.orderBlockPrice === null || coin.orderBlockPrice === undefined) {
-                return true;
+        // Filter based on the main filter (All, Buying, Selling)
+        let filteredByMainType = [];
+        if (currentFilter === 'All') {
+            filteredByMainType = resultsToDisplay;
+        } else {
+            // If filtering by Buying/Selling, we need to check if ANY of the coin's order blocks match
+            filteredByMainType = resultsToDisplay.filter(coin =>
+                coin.orderBlocks.some(ob => ob.obType === currentFilter)
+            );
+        }
+
+        // Further filter by price deviation for each individual order block
+        let finalFilteredResults = [];
+        filteredByMainType.forEach(coin => {
+            const filteredOrderBlocks = coin.orderBlocks.filter(ob => {
+                // 'None' type order blocks or those without price are always shown (e.g., if no OBs detected)
+                if (ob.obType === 'None' || ob.obPrice === null || ob.obPrice === undefined) {
+                    return true;
+                }
+                const priceDiff = Math.abs(ob.obPrice - coin.currentPrice);
+                const percentageDiff = (priceDiff / coin.currentPrice) * 100;
+                return percentageDiff <= maxPriceDeviationPercent;
+            });
+
+            // Only add the coin to final results if it has at least one order block after deviation filtering
+            if (filteredOrderBlocks.length > 0) {
+                // Create a new coin object with only the filtered order blocks
+                finalFilteredResults.push({ ...coin, orderBlocks: filteredOrderBlocks });
             }
-            const priceDiff = Math.abs(coin.orderBlockPrice - coin.currentPrice);
-            const percentageDiff = (priceDiff / coin.currentPrice) * 100;
-            return percentageDiff <= maxPriceDeviationPercent;
         });
 
-        if (filteredByPriceDeviation.length === 0) {
-            resultsContainer.innerHTML = '<p class="text-center text-gray-400 col-span-full">No order block data available for current filters.</p>';
+
+        if (finalFilteredResults.length === 0) {
+            resultsContainer.innerHTML = '<p class="text-center text-gray-600 dark:text-gray-400 col-span-full py-8">No order block data available for current filters. Try adjusting sensitivity or deviation.</p>';
             return;
         }
 
-        filteredByPriceDeviation.forEach(coin => {
-            const orderBlockTypeClass = coin.orderBlockType === 'Buying (Bullish)' ? 'buying-ob-border' :
-                                        coin.orderBlockType === 'Selling (Bearish)' ? 'selling-ob-border' :
-                                        'no-ob-border';
+        finalFilteredResults.forEach(coin => {
+            // Determine the main card border color based on if any Buying/Selling OBs are present
+            let cardBorderClass = 'no-ob-border';
+            if (coin.orderBlocks.some(ob => ob.obType === 'Buying (Bullish)')) {
+                cardBorderClass = 'buying-ob-border';
+            } else if (coin.orderBlocks.some(ob => ob.obType === 'Selling (Bearish)')) {
+                cardBorderClass = 'selling-ob-border';
+            }
 
-            const obPriceDisplay = coin.orderBlockPrice !== null && coin.orderBlockPrice !== undefined ? `$${parseFloat(coin.orderBlockPrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })}` : 'N/A';
             const currentPriceDisplay = coin.currentPrice !== null && coin.currentPrice !== undefined ? parseFloat(coin.currentPrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 }) : 'N/A';
 
+            let orderBlocksHtml = '';
+            // Sort order blocks by price to display them consistently (e.g., lowest price first)
+            const sortedOrderBlocks = [...coin.orderBlocks].sort((a, b) => {
+                if (a.obPrice === null) return 1; // 'None' or null prices go to end
+                if (b.obPrice === null) return -1;
+                return a.obPrice - b.obPrice;
+            });
+
+
+            sortedOrderBlocks.forEach((ob, index) => {
+                const obPriceDisplay = ob.obPrice !== null && ob.obPrice !== undefined ? `$${parseFloat(ob.obPrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })}` : 'N/A';
+                const obZoneInfo = (ob.obType !== 'None' && ob.obZoneStart !== null && ob.obZoneEnd !== null) ?
+                                   ` | Zone: $${parseFloat(ob.obZoneStart).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })} - $${parseFloat(ob.obZoneEnd).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })}` : '';
+                const obTypeClass = ob.obType === 'Buying (Bullish)' ? 'text-green-500 dark:text-green-400' :
+                                    ob.obType === 'Selling (Bearish)' ? 'text-red-500 dark:text-red-400' :
+                                    'text-gray-600 dark:text-gray-400';
+
+                orderBlocksHtml += `
+                    <div class="mt-3 pt-3 ${index > 0 ? 'border-t border-gray-200 dark:border-gray-700' : ''}">
+                        <p class="text-md font-semibold mb-1">
+                            Order Block ${index + 1}: <span class="${obTypeClass}">${ob.obType || 'N/A'}</span>
+                        </p>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm mb-1">
+                            Price Level: <span class="text-gray-800 dark:text-white font-bold">${obPriceDisplay}</span>${obZoneInfo}
+                        </p>
+                        <p class="text-gray-500 dark:text-gray-400 text-xs">${ob.details || 'No additional details.'}</p>
+                    </div>
+                `;
+            });
+
             resultsContainer.innerHTML += `
-                <div class="coin-card ${orderBlockTypeClass}"
+                <div class="coin-card ${cardBorderClass}"
                      data-symbol="${coin.id}"
                      data-timeframe="${coin.timeframe}"
-                     data-ob-type="${coin.obType}"
-                     data-ob-price="${coin.obCandlePrice || 'N/A'}"
                      data-coin-name="${coin.name}"
-                     data-ob-open="${coin.obCandleOpen || ''}"
-                     data-ob-high="${coin.obCandleHigh || ''}"
-                     data-ob-low="${coin.obCandleLow || ''}"
-                     data-ob-close="${coin.obCandleClose || ''}"
-                     data-ob-zone-start="${coin.obZoneStart || ''}"
-                     data-ob-zone-end="${coin.obZoneEnd || ''}">
+                     data-current-price="${coin.currentPrice}"
+                     data-order-blocks='${JSON.stringify(coin.orderBlocks)}'> <!-- Store all OBs as JSON -->
                     <div class="flex justify-between items-center mb-3">
-                        <h2 class="text-2xl font-bold text-blue-300">${coin.name || 'N/A'} (${coin.id || 'N/A'})</h2>
-                        <span class="text-lg font-semibold text-gray-300">Vol: ${coin.volume || 'N/A'}</span>
+                        <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-300 tracking-wide">${coin.name || 'N/A'} (${coin.id || 'N/A'})</h2>
+                        <span class="text-lg font-semibold text-gray-700 dark:text-gray-300">Vol: ${coin.volume || 'N/A'}</span>
                     </div>
-                    <p class="text-gray-400 mb-2">Current Price: <span class="text-white font-medium">$${currentPriceDisplay}</span></p>
-                    <p class="text-gray-400 mb-2">Scan Time: <span class="text-white font-medium">${coin.timestamp || 'N/A'}</span></p>
-                    <p class="text-gray-400 mb-2">Timeframe: <span class="text-white font-medium">${(coin.timeframe || 'N/A').toUpperCase()}</span></p>
-                    <div class="mt-4 pt-4 border-t border-gray-600">
-                        <p class="text-lg font-semibold mb-2">
-                            Order Block Status: <span class="${
-                                coin.orderBlockType === 'Buying (Bullish)' ? 'text-green-400' :
-                                coin.orderBlockType === 'Selling (Bearish)' ? 'text-red-400' :
-                                'text-gray-400'
-                            }">
-                                ${coin.orderBlockType || 'N/A'}
-                            </span>
-                        </p>
-                        <p class="text-gray-300 mb-2">
-                            Order Block Price Level: <span class="text-white font-bold">${obPriceDisplay}</span>
-                        </p>
-                        <p class="text-gray-400 text-sm mb-4">${coin.details || 'No additional details.'}</p>
+                    <p class="text-gray-600 dark:text-gray-400 mb-2">Current Price: <span class="text-gray-800 dark:text-white font-medium">$${currentPriceDisplay}</span></p>
+                    <p class="text-gray-600 dark:text-gray-400 mb-2">Scan Time: <span class="text-gray-800 dark:text-white font-medium">${coin.timestamp || 'N/A'}</span></p>
+                    <p class="text-gray-600 dark:text-gray-400 mb-2">Timeframe: <span class="text-gray-800 dark:text-white font-medium">${(coin.timeframe || 'N/A').toUpperCase()}</span></p>
+                    <div class="mt-4 pt-4 border-t border-gray-300 dark:border-gray-600">
+                        ${orderBlocksHtml}
                     </div>
                 </div>
             `;
@@ -1176,17 +1580,21 @@
         if (currentFilter === 'All') {
             filtered = allScanResults;
         } else {
-            filtered = allScanResults.filter(coin => coin.orderBlockType === currentFilter);
+            // Filter logic now considers if ANY order block in the coin matches the filter
+            filtered = allScanResults.filter(coin =>
+                coin.orderBlocks.some(ob => ob.obType === currentFilter)
+            );
         }
         displayResults(filtered);
-        statusMessage.textContent = `Displaying ${filtered.length} results (filtered by: ${currentFilter}, max deviation: ${maxPriceDeviationPercent}%).`;
+        showToast(`Displaying ${filtered.length} coins (filtered by: ${currentFilter}, max deviation: ${maxPriceDeviationPercent}%).`, 'info');
         if (currentFilter === 'All') {
-            statusMessage.textContent = `Scan complete! Found ${allScanResults.length} total results for ${currentTimeframe.toUpperCase()} timeframe with "${currentSensitivity}" sensitivity. Displaying ${resultsContainer.children.length} results after price deviation filter.`;
+            showToast(`Scan complete! Found ${allScanResults.length} total coins for ${currentTimeframe.toUpperCase()} timeframe with "${currentSensitivity}" sensitivity. Displaying ${resultsContainer.children.length} results after price deviation filter.`, 'success');
         }
     }
 
     function setFilter(filterType) {
         currentFilter = filterType;
+        localStorage.setItem('currentFilter', filterType); // Persist
         document.querySelectorAll('.filter-button').forEach(btn => {
             if (btn.dataset.filter === filterType) {
                 btn.classList.add('active');
@@ -1199,6 +1607,7 @@
 
     function setTimeframe(timeframe) {
         currentTimeframe = timeframe;
+        localStorage.setItem('currentTimeframe', timeframe); // Persist
         document.querySelectorAll('.timeframe-button').forEach(btn => {
             if (btn.dataset.timeframe === timeframe) {
                 btn.classList.add('active');
@@ -1206,11 +1615,12 @@
                 btn.classList.remove('active');
             }
         });
-        statusMessage.textContent = `Timeframe set to ${currentTimeframe.toUpperCase()}. Click Scan to update results.`;
+        showToast(`Timeframe set to ${currentTimeframe.toUpperCase()}. Click Scan to update results.`, 'info');
     }
 
     function setSensitivity(sensitivityType) {
       currentSensitivity = sensitivityType;
+      localStorage.setItem('currentSensitivity', sensitivityType); // Persist
       sensitivityButtons.forEach(btn => {
         if (btn.dataset.sensitivity === sensitivityType) {
           btn.classList.add('active');
@@ -1218,22 +1628,22 @@
           btn.classList.remove('active');
         }
       });
-      statusMessage.textContent = `Detection sensitivity set to "${sensitivityType}". Click Scan to update results.`;
+      showToast(`Detection sensitivity set to "${sensitivityType}". Click Scan to update results.`, 'info');
     }
 
     function clearResults() {
         allScanResults = [];
         currentFilter = 'All';
+        localStorage.setItem('currentFilter', 'All'); // Reset persistence
         setFilter('All');
-        resultsContainer.innerHTML = '<p class="text-center text-gray-400 col-span-full">Results cleared.</p>';
-        statusMessage.textContent = 'Click "Initiate Scan" to begin analyzing market data.';
-        errorMessage.textContent = '';
+        resultsContainer.innerHTML = '<p class="text-center text-gray-600 dark:text-gray-400 col-span-full py-8">Results cleared. Click "Initiate Scan" to begin analyzing market data.</p>';
+        showToast('Results cleared.', 'info');
     }
 
     async function fetchOrderBlocks() {
         const token = localStorage.getItem('jwtToken');
         if (!token) {
-            errorMessage.textContent = "Please log in to use the scanner.";
+            showToast("Please log in to use the scanner.", 'error');
             showAuthSection();
             return;
         }
@@ -1242,21 +1652,24 @@
         clearButton.disabled = true;
         document.querySelectorAll('.filter-button, .timeframe-button, .sensitivity-button').forEach(btn => btn.disabled = true);
         priceDeviationInput.disabled = true;
+        fabScanButton.disabled = true;
+        fabClearButton.disabled = true;
 
 
         spinner.classList.remove('hidden');
         buttonText.textContent = 'Scanning...';
-        statusMessage.textContent = `Fetching real-time data and scanning for ${currentTimeframe.toUpperCase()} order blocks...`;
-        errorMessage.textContent = '';
-        resultsContainer.innerHTML = '';
+        showToast(`Fetching real-time data and scanning for ${currentTimeframe.toUpperCase()} order blocks...`, 'info', 5000); // Longer toast for scan
+        resultsContainer.innerHTML = skeletonCardHTML.repeat(6); // Show 6 skeleton cards
 
         const selectedPreset = sensitivityPresets[currentSensitivity];
         if (!selectedPreset) {
-            errorMessage.textContent = "Invalid sensitivity preset selected.";
+            showToast("Invalid sensitivity preset selected.", 'error');
             scanButton.disabled = false;
             clearButton.disabled = false;
             document.querySelectorAll('.filter-button, .timeframe-button, .sensitivity-button').forEach(btn => btn.disabled = false);
             priceDeviationInput.disabled = false;
+            fabScanButton.disabled = false;
+            fabClearButton.disabled = false;
             spinner.classList.add('hidden');
             buttonText.textContent = 'Initiate Scan';
             return;
@@ -1275,29 +1688,31 @@
             if (!response.ok) {
                 let errorDetail = `Status: ${response.status} ${response.statusText || 'Unknown Error'}`;
                 try {
-                    const errorBody = await response.json(); // Changed to .json() to parse JSON error messages
-                    errorDetail = errorBody.message || JSON.stringify(errorBody); // Use message or stringify the whole object
+                    const errorBody = await response.json();
+                    errorDetail = errorBody.message || JSON.stringify(errorBody);
                 } catch (bodyError) {
                     errorDetail += `. Could not read response body: ${bodyError.message}`;
                 }
-                throw new Error(`Request failed: ${errorDetail}`); // Generic error message
+                throw new Error(`Request failed: ${errorDetail}`);
             }
 
             const data = await response.json();
             allScanResults = data;
             filterResults();
-            statusMessage.textContent = `Scan complete! Found ${data.length} total results for ${currentTimeframe.toUpperCase()} timeframe with "${currentSensitivity}" sensitivity. Displaying ${resultsContainer.children.length} results after price deviation filter.`;
+            showToast(`Scan complete! Found ${data.length} total results for ${currentTimeframe.toUpperCase()} timeframe with "${currentSensitivity}" sensitivity.`, 'success');
 
         } catch (err) {
-            statusMessage.textContent = '';
-            errorMessage.textContent = `Connection/Data Error: ${err.message}. Please check your network connection and try again.`; // Generic error message
+            showToast(`Connection/Data Error: ${err.message}. Please check your network connection and try again.`, 'error');
             console.error("Frontend fetch error:", err);
             allScanResults = [];
+            resultsContainer.innerHTML = '<p class="text-center text-red-500 dark:text-red-400 col-span-full py-8">Failed to load scan results. Please check your connection or try again later.</p>';
         } finally {
             scanButton.disabled = false;
             clearButton.disabled = false;
             document.querySelectorAll('.filter-button, .timeframe-button, .sensitivity-button').forEach(btn => btn.disabled = false);
             priceDeviationInput.disabled = false;
+            fabScanButton.disabled = false;
+            fabClearButton.disabled = false;
             spinner.classList.add('hidden');
             buttonText.textContent = 'Initiate Scan';
         }
@@ -1308,29 +1723,40 @@
       const card = event.currentTarget;
       const symbol = card.dataset.symbol;
       const timeframe = card.dataset.timeframe;
-      const obType = card.dataset.obType;
-      const obPrice = card.dataset.obPrice;
       const coinName = card.dataset.coinName;
-      const obOpen = card.dataset.obOpen;
-      const obHigh = card.dataset.obHigh;
-      const obLow = card.dataset.obLow;
-      const obClose = card.dataset.obClose;
-      const obZoneStart = card.dataset.obZoneStart;
-      const obZoneEnd = card.dataset.obZoneEnd;
+      const currentPrice = parseFloat(card.dataset.currentPrice);
 
+      // Retrieve all order blocks from the data-order-blocks attribute
+      const allOrderBlocks = JSON.parse(card.dataset.orderBlocks || '[]');
 
       modalTitle.textContent = `${coinName} (${symbol}) Chart - ${timeframe.toUpperCase()}`;
 
-      let obZoneInfo = '';
-      if (obType !== 'None' && obZoneStart && obZoneEnd) {
-          obZoneInfo = ` | OB Zone: $${parseFloat(obZoneStart).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })} - $${parseFloat(obZoneEnd).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })}`;
-      }
+      let obInfoHtml = '';
+      if (allOrderBlocks && allOrderBlocks.length > 0) {
+          // Sort order blocks for display in the modal, e.g., by price
+          const sortedModalOrderBlocks = [...allOrderBlocks].sort((a, b) => {
+              if (a.obPrice === null) return 1;
+              if (b.obPrice === null) return -1;
+              return a.obPrice - b.obPrice;
+          });
 
-      modalOBInfo.innerHTML = `Order Block Status: <span class="${
-          obType === 'Buying (Bullish)' ? 'text-green-400' :
-          obType === 'Selling (Bearish)' ? 'text-red-400' :
-          'text-gray-400'
-      }">${obType}</span> | Price Level: <span class="text-white font-bold">${obPrice !== 'N/A' ? `$${parseFloat(obPrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })}` : 'N/A'}</span>${obZoneInfo}`;
+          obInfoHtml = sortedModalOrderBlocks.map((ob, index) => {
+              const obPriceDisplay = ob.obPrice !== null && ob.obPrice !== undefined ? `$${parseFloat(ob.obPrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })}` : 'N/A';
+              const obZoneInfo = (ob.obType !== 'None' && ob.obZoneStart !== null && ob.obZoneEnd !== null) ?
+                                 ` | Zone: $${parseFloat(ob.obZoneStart).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })} - $${parseFloat(ob.obZoneEnd).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })}` : '';
+              const obTypeClass = ob.obType === 'Buying (Bullish)' ? 'text-green-500 dark:text-green-400' :
+                                  ob.obType === 'Selling (Bearish)' ? 'text-red-500 dark:text-red-400' :
+                                  'text-gray-600 dark:text-gray-400';
+              return `
+                  <p class="text-center text-gray-600 dark:text-gray-300 text-sm">
+                      OB ${index + 1}: <span class="${obTypeClass}">${ob.obType || 'N/A'}</span> | Price Level: <span class="text-gray-800 dark:text-white font-bold">${obPriceDisplay}</span>${obZoneInfo}
+                  </p>
+              `;
+          }).join('');
+      } else {
+          obInfoHtml = '<p class="text-center text-gray-600 dark:text-gray-300 text-sm">No order blocks found for this coin with current criteria.</p>';
+      }
+      modalOBInfo.innerHTML = obInfoHtml;
 
       let tvInterval = '240';
       if (timeframe === '1h') {
@@ -1348,10 +1774,10 @@
           "symbol": `BINANCE:${symbol}`,
           "interval": tvInterval,
           "timezone": "Etc/UTC",
-          "theme": "dark",
+          "theme": document.documentElement.classList.contains('dark') ? "dark" : "light", // Dynamic theme
           "style": "1",
           "locale": "en",
-          "toolbar_bg": "#f1f3f6",
+          "toolbar_bg": document.documentElement.classList.contains('dark') ? "#2d3748" : "#f1f3f6", // Dynamic toolbar bg
           "enable_publishing": false,
           "allow_symbol_change": true,
           "container_id": "tradingview_chart"
@@ -1360,19 +1786,24 @@
 
       tradingViewLink.href = `https://www.tradingview.com/chart/?symbol=BINANCE:${symbol}.P&interval=${tvInterval}`;
 
-      chartModal.classList.remove('hidden');
+      openModal(chartModal);
     }
 
     function closeChartModal() {
-      chartModal.classList.add('hidden');
-      document.getElementById('tradingview_chart').innerHTML = '';
+      closeModal(chartModal);
+      document.getElementById('tradingview_chart').innerHTML = ''; // Clear chart content on close
     }
 
-
     // --- Initial Setup Calls ---
-    displayResults([]);
-    setTimeframe(currentTimeframe);
-    setSensitivity(currentSensitivity);
+    // Apply theme on load
+    const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    applyTheme(savedTheme);
+
+    // Restore persisted states
+    priceDeviationInput.value = maxPriceDeviationPercent;
+    setTimeframe(currentTimeframe); // This also sets active class
+    setFilter(currentFilter); // This also sets active class
+    setSensitivity(currentSensitivity); // This also sets active class
 
     if (localStorage.getItem('jwtToken')) {
         showScannerSection();
@@ -1401,53 +1832,26 @@
         const newValue = parseFloat(event.target.value);
         if (!isNaN(newValue) && newValue >= 0 && newValue <= 100) {
             maxPriceDeviationPercent = newValue;
+            localStorage.setItem('maxPriceDeviationPercent', newValue); // Persist
             filterResults();
         } else {
-            errorMessage.textContent = "Please enter a valid percentage between 0 and 100.";
-            event.target.value = maxPriceDeviationPercent;
+            showToast("Please enter a valid percentage between 0 and 100.", 'error');
+            event.target.value = maxPriceDeviationPercent; // Revert to last valid
         }
     });
 
-    closeModalButton.addEventListener('click', closeChartModal);
-    chartModal.addEventListener('click', (event) => {
-      if (event.target === chartModal) {
-        closeChartModal();
-      }
-    });
-
-    // Authentication Event Listeners
-    authForm.addEventListener('submit', handleAuthSubmit);
-    toggleAuthModeButton.addEventListener('click', toggleAuthFormMode);
-    logoutButton.addEventListener('click', handleLogout);
-    // registerAdminButton.addEventListener('click', switchToAdminRegisterMode); // Removed for security
-
-
-    // Payment Event Listeners
-    closePaymentModalButton.addEventListener('click', () => paymentModal.classList.add('hidden'));
-    paymentModal.addEventListener('click', (event) => {
-        if (event.target === paymentModal) {
-            paymentModal.classList.add('hidden');
-        }
-    });
+    closeModalButton.addEventListener('click', () => closeModal(chartModal));
     paymentProofForm.addEventListener('submit', handleSubmitPaymentProof);
 
-    // Admin Panel Event Listeners (NEW)
+    // Admin Panel Event Listeners
     adminPanelButton.addEventListener('click', showAdminPanel);
-    closeAdminPanelModalButton.addEventListener('click', () => adminPanelModal.classList.add('hidden'));
-    adminPanelModal.addEventListener('click', (event) => {
-        if (event.target === adminPanelModal) {
-            adminPanelModal.classList.add('hidden');
-        }
-    });
 
-    // Premium Welcome Modal Event Listeners (NEW)
-    closePremiumWelcomeModalButton.addEventListener('click', closePremiumWelcomeModal);
-    closePremiumWelcomeModalX.addEventListener('click', closePremiumWelcomeModal);
-    premiumWelcomeModal.addEventListener('click', (event) => {
-        if (event.target === premiumWelcomeModal) {
-            closePremiumWelcomeModal();
-        }
-    });
+    // Premium Welcome Modal Event Listeners
+    closePremiumWelcomeModalButton.addEventListener('click', () => closeModal(premiumWelcomeModal));
+    closePremiumWelcomeModalX.addEventListener('click', () => closeModal(premiumWelcomeModal));
+
+    // Theme Toggle Event Listener
+    themeToggle.addEventListener('click', toggleTheme);
 
 
     // Load TradingView widget script dynamically
@@ -1456,8 +1860,8 @@
     script.async = true;
     document.head.appendChild(script);
 
-    // Ripple effect for buttons
-    document.querySelectorAll('.scan-button, .filter-button, .timeframe-button, .sensitivity-button, .chart-button, .auth-button, .payment-button').forEach(button => {
+    // Ripple effect for buttons (already present, ensured it works with new styling)
+    document.querySelectorAll('.scan-button, .action-button, .fab-button').forEach(button => {
         button.addEventListener('click', function(e) {
             if (this.disabled) return;
 
@@ -1475,6 +1879,78 @@
             ripple.addEventListener('animationend', () => {
                 this.removeChild(ripple);
             });
+        });
+    });
+
+    // FAB Toggle for mobile
+    fabToggle.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent click from propagating to document and closing immediately
+        fabMenu.classList.toggle('show');
+        fabToggle.classList.toggle('rotate-45'); // Rotate FAB toggle icon
+    });
+
+    // FAB button actions
+    fabScanButton.addEventListener('click', () => {
+        fetchOrderBlocks();
+        fabMenu.classList.remove('show'); // Close FAB menu after action
+        fabToggle.classList.remove('rotate-45');
+    });
+    fabClearButton.addEventListener('click', () => {
+        clearResults();
+        fabMenu.classList.remove('show'); // Close FAB menu after action
+        fabToggle.classList.remove('rotate-45');
+    });
+    fabAdminButton.addEventListener('click', () => {
+        showAdminPanel();
+        fabMenu.classList.remove('show'); // Close FAB menu after action
+        fabToggle.classList.remove('rotate-45');
+    });
+
+    // Close FAB menu if clicking outside
+    document.addEventListener('click', (e) => {
+        if (fabMenu.classList.contains('show') && !fabContainer.contains(e.target)) {
+            fabMenu.classList.remove('show');
+            fabToggle.classList.remove('rotate-45');
+        }
+    });
+    // Prevent FAB menu from closing when clicking its buttons - already handled by e.stopPropagation() on fabToggle, but good to have
+    fabMenu.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+
+    // Initial check for admin button visibility on FAB
+    function updateFabAdminButtonVisibility() {
+        const userRoles = localStorage.getItem('roles') ? JSON.parse(localStorage.getItem('roles')) : [];
+        if (userRoles.includes('ROLE_ADMIN')) {
+            fabAdminButton.classList.remove('hidden');
+        } else {
+            fabAdminButton.classList.add('hidden');
+        }
+    }
+    // Call this on initial load and after login/logout
+    updateFabAdminButtonVisibility();
+
+    // Close modals on Escape key press
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            if (chartModal.classList.contains('show')) {
+                closeModal(chartModal);
+            } else if (paymentModal.classList.contains('show')) {
+                closeModal(paymentModal);
+            } else if (adminPanelModal.classList.contains('show')) {
+                closeModal(adminPanelModal);
+            } else if (premiumWelcomeModal.classList.contains('show')) {
+                closeModal(premiumWelcomeModal);
+            }
+        }
+    });
+
+    // Close modals on background click
+    [chartModal, paymentModal, adminPanelModal, premiumWelcomeModal].forEach(modal => {
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) { // Check if the click was directly on the overlay
+                closeModal(modal);
+            }
         });
     });
 

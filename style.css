@@ -1,0 +1,274 @@
+/* style.css (With Animated Gradient & AOS Preparations) */
+
+/* --- Global Variables & Base Styles --- */
+:root {
+    --color-dark-bg-primary: #0A0D18; /* Deep dark blue/purple */
+    --color-dark-bg-secondary: #1E253F; /* Slightly lighter dark for cards/sections */
+    --color-text-light: #E0E6F0; /* Light text for readability */
+    --color-text-accent: #9CA3AF; /* Muted text for secondary info */
+    --color-accent-blue: #007BFF; /* Vibrant blue for highlights/buttons */
+    --color-accent-blue-dark: #0056b3; /* Darker blue for hover */
+    --color-accent-purple: #8A2BE2; /* Purple accent */
+    --color-border: #374151; /* Subtle border color */
+    --color-glowing-text-shadow: 0 0 8px rgba(0, 123, 255, 0.7), 0 0 15px rgba(0, 123, 255, 0.5);
+
+    --font-heading: 'Poppins', sans-serif;
+    --font-body: 'Inter', sans-serif;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--color-dark-bg-primary); /* Fallback */
+    color: var(--color-text-light);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+
+    /* --- Animated Gradient Background --- */
+    background: linear-gradient(-45deg, #0A0D18, #1a2a3a, #0A0D18, #1f3a4f);
+    background-size: 400% 400%;
+    animation: gradientAnimation 15s ease infinite; /* Slower, smoother animation */
+}
+
+/* Keyframe for background gradient animation */
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    color: var(--color-text-light);
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+}
+
+a {
+    color: var(--color-accent-blue);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--color-accent-blue-dark);
+}
+
+/* --- Glowing Text Effect --- */
+.glowing-text {
+    color: #ffffff;
+    text-shadow: var(--color-glowing-text-shadow);
+    transition: text-shadow 0.3s ease-in-out;
+}
+
+/* --- Buttons --- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.75rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    border: none;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background-color: var(--color-accent-blue);
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-accent-blue-dark);
+    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--color-accent-blue);
+    border: 2px solid var(--color-accent-blue);
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-accent-blue);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* --- Cards/Sections --- */
+.card {
+    background-color: var(--color-dark-bg-secondary);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--color-border);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* --- Input Fields --- */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+    background-color: var(--color-dark-bg-primary);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-light);
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+    border-color: var(--color-accent-blue);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3);
+    outline: none;
+}
+
+/* --- Utilities & Layout --- */
+.container {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+.section-padding {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.flex {
+    display: flex;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.space-x-6 > :not([hidden]) ~ :not([hidden]) {
+    margin-left: 1.5rem;
+}
+
+.space-y-4 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 1rem;
+}
+
+.grid {
+    display: grid;
+}
+
+.gap-8 {
+    gap: 2rem;
+}
+
+@media (min-width: 768px) {
+    .md\:grid-cols-2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .md\:grid-cols-3 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .md\:flex-row {
+        flex-direction: row;
+    }
+}
+
+/* --- Specific Header Styles --- */
+header {
+    background-color: transparent;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    transition: background-color 0.3s ease;
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header nav ul {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+header nav ul li {
+    margin-left: 1.5rem;
+}
+
+header nav ul li a {
+    color: var(--color-text-light);
+    font-weight: 500;
+    padding: 0.5rem 0.75rem;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+header nav ul li a:hover {
+    color: var(--color-accent-blue);
+    transform: translateY(-2px);
+}
+
+header nav ul li .btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+}
+
+/* --- Hero Section Specifics (for initial load animation) --- */
+/* The data-aos attributes will handle entrance animations for sub-elements better */
+
+
+/* --- Pricing Features List Specific Styles (from previous step) --- */
+.feature-list li {
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed var(--color-border);
+}
+.feature-list li:last-child {
+    border-bottom: none;
+}

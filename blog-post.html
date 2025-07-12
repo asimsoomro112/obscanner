@@ -4,396 +4,109 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog Post Title - Crypto Order Block Scanner</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #1a202c;
-            color: #e2e8f0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .container {
-            max-width: 1200px;
-            width: 95%;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #2d3748;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
-        }
-        .glowing-text {
-            background-image: linear-gradient(to right, #6366F1, #8B5CF6, #EC4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-        @keyframes glow {
-            from { text-shadow: 0 0 5px rgba(139, 92, 246, 0.5), 0 0 10px rgba(139, 92, 246, 0.3); }
-            to { text-shadow: 0 0 10px rgba(139, 92, 246, 0.8), 0 0 20px rgba(139, 92, 246, 0.6); }
-        }
-        .cta-button {
-            background-image: linear-gradient(to right, #6366F1 0%, #8B5CF6 51%, #6366F1 100%);
-            transition: 0.5s;
-            background-size: 200% auto;
-            color: white;
-            box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
-            border-radius: 9999px;
-            padding: 12px 30px;
-            font-weight: 700;
-            font-size: 1.25rem;
-            cursor: pointer;
-            border: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-        }
-        .cta-button:hover {
-            background-position: right center;
-            box-shadow: 0 0 30px rgba(139, 92, 246, 0.8);
-        }
-        .blog-post-header img {
-            width: 100%;
-            max-height: 400px;
-            object-fit: cover;
-            border-radius: 0.75rem;
-            margin-bottom: 2rem;
-        }
-        .blog-content h2, .blog-content h3 {
-            color: #4299E1;
-            margin-top: 1.5rem;
-            margin-bottom: 0.75rem;
-            font-weight: 600;
-        }
-        .blog-content p {
-            margin-bottom: 1rem;
-            line-height: 1.6;
-        }
-        .blog-content ul {
-            list-style: disc;
-            margin-left: 1.5rem;
-            margin-bottom: 1rem;
-        }
-        .testimonial-card {
-            background-color: #2D3748;
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
-        }
-        .testimonial-card blockquote {
-            font-style: italic;
-            color: #CBD5E0;
-            margin-bottom: 1rem;
-        }
-        .testimonial-card .author {
-            font-weight: 600;
-            color: #E2E8F0;
-        }
-        .blog-list-related .blog-post-card {
-            background-color: #2D3748;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-            cursor: pointer;
-        }
-        .blog-list-related .blog-post-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-        }
-        .blog-list-related .blog-post-card img {
-            width: 100%;
-            height: 150px; /* Smaller image for related posts */
-            object-fit: cover;
-        }
-        .blog-list-related .blog-post-card-content {
-            padding: 1rem;
-        }
-        .blog-list-related .blog-post-card h3 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #4299E1;
-            margin-bottom: 0.5rem;
-        }
-        .blog-list-related .blog-post-card p {
-            font-size: 0.9rem;
-            color: #CBD5E0;
-            margin-bottom: 0.75rem;
-        }
-        .newsletter-section {
-            background-color: #2D3748;
-            padding: 2.5rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            margin-top: 2rem;
-        }
-        .newsletter-section input[type="email"] {
-            padding: 0.75rem 1rem;
-            border-radius: 0.375rem;
-            border: 1px solid #6B7280;
-            background-color: #4A5568;
-            color: #E2E8F0;
-            width: 100%;
-            max-width: 300px;
-            margin-right: 1rem;
-        }
-        .newsletter-section button {
-            background-color: #4299E1;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.375rem;
-            font-weight: 600;
-            transition: background-color 0.2s ease-in-out;
-        }
-        .newsletter-section button:hover {
-            background-color: #2B6CB0;
-        }
-        /* Navbar styles */
-        .navbar {
-            background-color: #2d3748;
-            padding: 1rem 0;
-            width: 100%;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            position: sticky;
-            top: 0;
-            z-index: 50;
-        }
-        .navbar-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        .nav-link {
-            color: #e2e8f0;
-            font-weight: 600;
-            padding: 0.5rem 1rem;
-            border-radius: 0.375rem;
-            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
-        }
-        .nav-link:hover {
-            background-color: #4A5568;
-        }
-        .nav-link.active {
-            color: #4299E1; /* Blue-500 */
-        }
-        @media (max-width: 768px) {
-            .navbar-container {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            .nav-links {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 0.5rem;
-            }
-            .blog-post-header img {
-                max-height: 250px;
-            }
-            .blog-content h2 {
-                font-size: 1.75rem;
-            }
-            .blog-content h3 {
-                font-size: 1.5rem;
-            }
-            .blog-content p {
-                font-size: 0.9rem;
-            }
-            .newsletter-section input[type="email"] {
-                margin-right: 0;
-                margin-bottom: 1rem;
-            }
-            .newsletter-section form {
-                flex-direction: column;
-            }
-        }
-    </style>
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
 </head>
-<body class="bg-gray-900 text-gray-200">
+<body>
+    
+    <header>
+        <div class="container">
+            <a href="index.html" class="text-2xl font-bold text-white">
+                <span class="glowing-text">CryptoScanner</span>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="features.html">Features</a></li>
+                    <li><a href="pricing.html">Pricing</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="login.html" class="btn btn-secondary">Login</a></li>
+                    <li><a href="signup.html" class="btn btn-primary">Sign Up</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="navbar-container">
-            <div class="text-2xl font-bold glowing-text">OB Scanner</div>
-            <div class="nav-links">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="features.html" class="nav-link">Features</a>
-                <a href="pricing.html" class="nav-link">Pricing</a>
-                <a href="blog.html" class="nav-link active">Blog</a>
+    
+    <section class="relative section-padding text-center min-h-screen-minus-header flex items-center justify-center" data-aos="fade-down">
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://via.placeholder.com/1920x400/0A0D18/0A0D18?text=Blog+Post+Hero+Background'); opacity: 0.2;"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-70"></div>
+        <div class="relative z-10 container">
+            <h1 class="text-5xl md:text-6xl font-bold mb-4">
+                The Power of Order Blocks in <span class="glowing-text">Crypto Trading</span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-300">By John Doe | July 1, 2025 | <span class="text-accent-blue">Trading Strategies</span></p>
+        </div>
+    </section>
+
+    
+    <section class="section-padding">
+        <div class="container max-w-4xl mx-auto">
+            <img src="https://via.placeholder.com/800x450/1E253F/E0E6F0?text=Featured+Image" alt="Featured Blog Image" class="w-full rounded-lg mb-8" data-aos="fade-up">
+
+            <div class="prose text-gray-300 text-lg leading-relaxed space-y-6" data-aos="fade-up" data-aos-delay="100">
+                <p>In the dynamic world of cryptocurrency trading, identifying reliable signals is paramount to success. While many indicators exist, the concept of "Order Blocks" has gained significant traction among savvy traders. These specific price areas often signal the presence of institutional buying or selling, providing invaluable insights into potential market reversals or continuations.</p>
+
+                <h2 class="text-3xl font-bold text-text-light mt-8 mb-4">What Exactly Are Order Blocks?</h2>
+                <p>An order block is essentially the last opposing candle (bearish before a bullish move, or bullish before a bearish move) that occurs just before a strong, impulsive price movement that breaks market structure. These blocks represent areas where large financial institutions likely placed significant orders, leading to the subsequent strong move. When price revisits these areas, traders anticipate a reaction as these pending orders are filled.</p>
+
+                <h3 class="text-2xl font-bold text-text-light mt-6 mb-3">Why Are They Important?</h3>
+                <p>The significance of order blocks lies in their ability to pinpoint areas of concentrated institutional activity. Unlike retail traders, institutions move markets. By understanding where their significant orders might be located, retail traders can align themselves with the "smart money," increasing their probability of successful trades.</p>
+                <ul>
+                    <li>Identify potential reversal zones.</li>
+                    <li>Pinpoint areas of strong supply or demand.</li>
+                    <li>Improve risk-to-reward ratios by entering at precise levels.</li>
+                    <li>Validate other technical analysis signals.</li>
+                </ul>
+
+                <h2 class="text-3xl font-bold text-text-light mt-8 mb-4">Integrating Order Blocks with CryptoScanner</h2>
+                <p>Our CryptoScanner leverages advanced AI to automate the detection of these crucial order blocks. Gone are the days of manually scrutinizing charts for hours. The scanner meticulously analyzes market data across multiple exchanges and timeframes (1H, 4H, 1D), presenting you with high-probability setups in real-time.</p>
+                <p>With features like customizable sensitivity presets and max price deviation filters, you can tailor the scanner to your specific trading style, ensuring you only receive alerts for the cleanest and most actionable order blocks. The integrated TradingView charts allow for immediate visual confirmation, making your decision-making process swift and confident.</p>
+
+                <blockquote class="border-l-4 border-accent-blue pl-4 py-2 italic text-gray-400">
+                    "Understanding institutional flow is the key to unlocking consistent profitability in crypto. Order blocks provide that crucial insight."
+                </blockquote>
+
+                <h2 class="text-3xl font-bold text-text-light mt-8 mb-4">Conclusion</h2>
+                <p>Harnessing the power of order blocks can transform your crypto trading strategy. By combining this potent concept with the cutting-edge technology of CryptoScanner, you gain an unparalleled advantage, enabling you to trade with precision and confidence in even the most volatile markets. Start your free trial today and experience the difference.</p>
+            </div>
+
+            <div class="mt-12 pt-8 border-t border-gray-700" data-aos="fade-up" data-aos-delay="200">
+                <h3 class="text-2xl font-bold text-text-light mb-4">Share This Post:</h3>
+                <div class="flex space-x-4 justify-center md:justify-start">
+                    <a href="#" class="text-gray-400 hover:text-accent-blue text-3xl"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-accent-blue text-3xl"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-accent-blue text-3xl"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-accent-blue text-3xl"><i class="fas fa-envelope"></i></a>
+                </div>
             </div>
         </div>
-    </nav>
+    </section>
 
-    <div class="container">
-        <!-- Blog Post Header Section -->
-        <section class="blog-post-header text-center py-12">
-            <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4">
-                The Power of Order Blocks: A Deep Dive
-            </h1>
-            <p class="text-lg text-gray-400 mb-2">By Crypto Analyst | Published on July 5, 2024</p>
-            <img src="https://placehold.co/800x400/2D3748/A0AEC0?text=Featured+Image" alt="Featured Blog Post Image" class="mx-auto">
-        </section>
-
-        <!-- Blog Post Body Section -->
-        <section class="blog-content py-8 px-4 md:px-8 bg-gray-800 rounded-xl shadow-lg">
-            <p class="mb-4">
-                In the dynamic world of cryptocurrency trading, identifying key supply and demand zones is paramount.
-                Order blocks stand out as a powerful concept derived from Smart Money Concepts (SMC) that can
-                provide traders with an edge by revealing where institutional money has likely entered or exited the market.
-            </p>
-            <p class="mb-4">
-                At its core, an order block is the last opposing candle before a strong impulsive move that breaks market structure.
-                This move often leaves behind an "imbalance" or "Fair Value Gap" (FVG), signaling an area where price is likely
-                to return to rebalance before continuing its original direction.
-            </p>
-
-            <h2 class="text-3xl font-bold">What Makes an Order Block Valid?</h2>
-            <p>
-                Not every candle before an impulsive move is an order block. Several criteria enhance its validity:
-            </p>
-            <ul class="list-disc list-inside ml-4 mb-4">
-                <li>**Break of Structure (BOS):** The impulsive move must break a significant high (for bullish OB) or low (for bearish OB).</li>
-                <li>**Fair Value Gap (FVG):** An inefficiency in price delivery, visible as a gap between the wicks of the first and third candles in a three-candle sequence.</li>
-                <li>**Unmitigated:** The order block zone should not have been revisited and traded through by subsequent price action.</li>
-                <li>**Volume Confluence:** Often, the order block candle itself, or the impulsive candle, will exhibit higher than average volume.</li>
-            </ul>
-
-            <h2 class="text-3xl font-bold">Bullish vs. Bearish Order Blocks</h2>
-            <p>
-                Understanding the direction is crucial:
-            </p>
-            <h3 class="text-2xl font-bold">Bullish Order Blocks (Buying OB)</h3>
-            <p>
-                A bullish order block is typically the last bearish candle before an aggressive bullish move that breaks market structure.
-                Price is expected to return to this zone, which acts as a demand area, before continuing its upward trend.
-            </p>
-            <img src="https://placehold.co/600x350/2D3748/A0AEC0?text=Bullish+OB+Example" alt="Bullish Order Block Example" class="mx-auto my-6 rounded-lg shadow-md">
-
-            <h3 class="text-2xl font-bold">Bearish Order Blocks (Selling OB)</h3>
-            <p>
-                Conversely, a bearish order block is the last bullish candle before a sharp bearish move that breaks market structure.
-                This zone acts as a supply area where price is likely to retrace to before continuing its downward movement.
-            </p>
-            <img src="https://placehold.co/600x350/2D3748/A0AEC0?text=Bearish+OB+Example" alt="Bearish Order Block Example" class="mx-auto my-6 rounded-lg shadow-md">
-
-            <p class="mb-4">
-                Our Crypto Order Block Scanner automates the detection of these complex patterns,
-                saving you countless hours of manual chart analysis. By combining AI-powered logic
-                with customizable sensitivity, it provides you with high-probability trade setups
-                across various cryptocurrencies and timeframes.
-            </p>
-            <p>
-                Ready to integrate this powerful tool into your trading arsenal?
-                <a href="pricing.html" class="text-blue-400 hover:underline font-semibold">Explore our pricing plans</a>.
-            </p>
-        </section>
-
-        <!-- Testimonial Section -->
-        <section class="py-16">
-            <h2 class="text-4xl font-bold text-center text-blue-300 mb-12">What Our Users Say</h2>
-            <div class="testimonial-card">
-                <blockquote>"This blog post perfectly explains order blocks. The scanner is a game-changer!"</blockquote>
-                <p class="author">- Alex T., Pro Trader</p>
-            </div>
-            <div class="testimonial-card">
-                <blockquote>"Finally, a clear explanation of FVG! The insights here are invaluable."</blockquote>
-                <p class="author">- Sarah M., Crypto Enthusiast</p>
-            </div>
-        </section>
-
-        <!-- Blog List Section (Related Posts) -->
-        <section class="py-16 blog-list-related">
-            <h2 class="text-4xl font-bold text-center text-blue-300 mb-12">Related Posts</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Related Blog Post Card 1 -->
-                <a href="blog-post.html" class="blog-post-card">
-                    <img src="https://placehold.co/600x150/2D3748/A0AEC0?text=Related+1" alt="Related Post Image">
-                    <div class="blog-post-card-content">
-                        <h3>Mastering Market Structure Shifts</h3>
-                        <p>Learn to identify key shifts for better trade entries.</p>
-                        <div class="blog-meta">
-                            <span>By John Doe</span> | <span>July 10, 2024</span>
-                        </div>
-                    </div>
-                </a>
-                <!-- Related Blog Post Card 2 -->
-                <a href="blog-post.html" class="blog-post-card">
-                    <img src="https://placehold.co/600x150/2D3748/A0AEC0?text=Related+2" alt="Related Post Image">
-                    <div class="blog-post-card-content">
-                        <h3>Volume Analysis for Confluence</h3>
-                        <p>How to use volume to confirm order block validity.</p>
-                        <div class="blog-meta">
-                            <span>By Jane Smith</span> | <span>July 8, 2024</span>
-                        </div>
-                    </div>
-                </a>
-                <!-- Related Blog Post Card 3 -->
-                <a href="blog-post.html" class="blog-post-card">
-                    <img src="https://placehold.co/600x150/2D3748/A0AEC0?text=Related+3" alt="Related Post Image">
-                    <div class="blog-post-card-content">
-                        <h3>Risk Management with Order Blocks</h3>
-                        <p>Protect your capital using OBs for stop-loss placement.</p>
-                        <div class="blog-meta">
-                            <span>By Crypto Guru</span> | <span>July 3, 2024</span>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </section>
-
-        <!-- CTA Section -->
-        <section class="text-center py-16">
-            <h2 class="text-4xl font-bold text-center text-white mb-6">Don't Miss Out on New Insights!</h2>
-            <p class="text-xl text-gray-400 mb-8">
-                Subscribe to our newsletter for exclusive content and scanner updates.
-            </p>
-            <a href="blog.html#newsletter-section" class="cta-button">
-                <i class="fas fa-envelope mr-3"></i> Subscribe Now
-            </a>
-        </section>
-
-        <!-- Newsletter Section (Reused from Blog page for consistency) -->
-        <section class="py-16" id="newsletter-section">
-            <div class="newsletter-section">
-                <h2 class="text-3xl font-bold text-white mb-4">Join Our Community</h2>
-                <p class="text-gray-300 mb-6">Get the latest insights, updates, and trading strategies delivered straight to your inbox.</p>
-                <form class="flex flex-col sm:flex-row justify-center items-center gap-4">
-                    <input type="email" placeholder="Enter your email address" class="flex-grow">
-                    <button type="submit" class="cta-button text-base px-6 py-3">
-                        <i class="fas fa-envelope mr-2"></i> Subscribe
-                    </button>
-                </form>
-            </div>
-        </section>
-    </div>
-
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-gray-400 text-center py-8 mt-auto w-full">
-        <div class="max-w-1200 mx-auto px-4">
-            <p>&copy; 2024 Crypto Order Block Scanner. All rights reserved.</p>
-            <p class="mt-2">
-                <a href="#" class="text-blue-400 hover:underline mx-2">Privacy Policy</a> |
-                <a href="#" class="text-blue-400 hover:underline mx-2">Terms of Service</a>
-            </p>
-            <div class="flex justify-center space-x-4 mt-4">
-                <a href="#" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-twitter"></i></a>
-                <a href="#" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-telegram"></i></a>
-                <a href="#" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-discord"></i></a>
+    
+    <footer class="bg-dark-bg-secondary py-10">
+        <div class="container text-center text-gray-400">
+            <p>&copy; 2025 CryptoScanner. All rights reserved.</p>
+            <div class="mt-4 space-x-6">
+                <a href="#" class="hover:text-white"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="hover:text-white"><i class="fab fa-telegram"></i></a>
+                <a href="#" class="hover:text-white"><i class="fab fa-discord"></i></a>
             </div>
         </div>
     </footer>
 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init({
+        duration: 800,
+        once: true,
+        easing: 'ease-out-quad',
+        offset: 100,
+      });
+    </script>
 </body>
 </html>

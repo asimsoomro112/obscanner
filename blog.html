@@ -4,372 +4,124 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog - Crypto Order Block Scanner</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #1a202c;
-            color: #e2e8f0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .container {
-            max-width: 1200px;
-            width: 95%;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #2d3748;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
-        }
-        .glowing-text {
-            background-image: linear-gradient(to right, #6366F1, #8B5CF6, #EC4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-        @keyframes glow {
-            from { text-shadow: 0 0 5px rgba(139, 92, 246, 0.5), 0 0 10px rgba(139, 92, 246, 0.3); }
-            to { text-shadow: 0 0 10px rgba(139, 92, 246, 0.8), 0 0 20px rgba(139, 92, 246, 0.6); }
-        }
-        .cta-button {
-            background-image: linear-gradient(to right, #6366F1 0%, #8B5CF6 51%, #6366F1 100%);
-            transition: 0.5s;
-            background-size: 200% auto;
-            color: white;
-            box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
-            border-radius: 9999px;
-            padding: 12px 30px;
-            font-weight: 700;
-            font-size: 1.25rem;
-            cursor: pointer;
-            border: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-        }
-        .cta-button:hover {
-            background-position: right center;
-            box-shadow: 0 0 30px rgba(139, 92, 246, 0.8);
-        }
-        .blog-post-card {
-            background-color: #2D3748;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-            cursor: pointer;
-        }
-        .blog-post-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-        }
-        .blog-post-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-        .blog-post-card-content {
-            padding: 1.5rem;
-        }
-        .blog-post-card h3 {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: #4299E1;
-            margin-bottom: 0.75rem;
-        }
-        .blog-post-card p {
-            font-size: 1rem;
-            color: #CBD5E0;
-            margin-bottom: 1rem;
-        }
-        .blog-meta {
-            font-size: 0.875rem;
-            color: #A0AEC0;
-        }
-        .newsletter-section {
-            background-color: #2D3748;
-            padding: 2.5rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        .newsletter-section input[type="email"] {
-            padding: 0.75rem 1rem;
-            border-radius: 0.375rem;
-            border: 1px solid #6B7280;
-            background-color: #4A5568;
-            color: #E2E8F0;
-            width: 100%;
-            max-width: 300px;
-            margin-right: 1rem;
-        }
-        .newsletter-section button {
-            background-color: #4299E1;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.375rem;
-            font-weight: 600;
-            transition: background-color 0.2s ease-in-out;
-        }
-        .newsletter-section button:hover {
-            background-color: #2B6CB0;
-        }
-        .faq-item {
-            background-color: #2D3748;
-            border-radius: 0.5rem;
-            margin-bottom: 1rem;
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        .faq-question {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 1.5rem;
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: #E2E8F0;
-            cursor: pointer;
-            background-color: #4A5568;
-            transition: background-color 0.2s ease-in-out;
-        }
-        .faq-question:hover {
-            background-color: #6B7280;
-        }
-        .faq-answer {
-            padding: 1rem 1.5rem;
-            font-size: 1rem;
-            color: #CBD5E0;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
-        }
-        .faq-answer.open {
-            max-height: 200px; /* Adjust as needed for content */
-            padding: 1rem 1.5rem;
-        }
-        /* Navbar styles */
-        .navbar {
-            background-color: #2d3748;
-            padding: 1rem 0;
-            width: 100%;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            position: sticky;
-            top: 0;
-            z-index: 50;
-        }
-        .navbar-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        .nav-link {
-            color: #e2e8f0;
-            font-weight: 600;
-            padding: 0.5rem 1rem;
-            border-radius: 0.375rem;
-            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
-        }
-        .nav-link:hover {
-            background-color: #4A5568;
-        }
-        .nav-link.active {
-            color: #4299E1; /* Blue-500 */
-        }
-        @media (max-width: 768px) {
-            .navbar-container {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            .nav-links {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 0.5rem;
-            }
-            .newsletter-section input[type="email"] {
-                margin-right: 0;
-                margin-bottom: 1rem;
-            }
-            .newsletter-section form {
-                flex-direction: column;
-            }
-            .blog-post-card h3 {
-                font-size: 1.5rem;
-            }
-            .blog-post-card p {
-                font-size: 0.9rem;
-            }
-        }
-    </style>
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
 </head>
-<body class="bg-gray-900 text-gray-200">
+<body>
+    
+    <header>
+        <div class="container">
+            <a href="index.html" class="text-2xl font-bold text-white">
+                <span class="glowing-text">CryptoScanner</span>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="features.html">Features</a></li>
+                    <li><a href="pricing.html">Pricing</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="login.html" class="btn btn-secondary">Login</a></li>
+                    <li><a href="signup.html" class="btn btn-primary">Sign Up</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="navbar-container">
-            <div class="text-2xl font-bold glowing-text">OB Scanner</div>
-            <div class="nav-links">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="features.html" class="nav-link">Features</a>
-                <a href="pricing.html" class="nav-link">Pricing</a>
-                <a href="blog.html" class="nav-link active">Blog</a>
+    
+    <section class="relative section-padding text-center min-h-screen-minus-header flex items-center justify-center" data-aos="fade-down">
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://via.placeholder.com/1920x400/0A0D18/0A0D18?text=Blog+Hero+Background'); opacity: 0.2;"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-70"></div>
+        <div class="relative z-10 container">
+            <h1 class="text-5xl md:text-6xl font-bold mb-4">
+                Latest Insights from Our <span class="glowing-text">Blog</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto">
+                Stay updated with market analysis, trading strategies, and platform news.
+            </p>
+        </div>
+    </section>
+
+    
+    <section class="section-padding">
+        <div class="container">
+            <h2 class="text-4xl font-bold text-center mb-12" data-aos="fade-up">Recent Posts</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <div class="card p-6 flex flex-col" data-aos="zoom-in" data-aos-delay="100">
+                    <img src="https://via.placeholder.com/400x250/1e253f/e0e6f0?text=Blog+Image+1" alt="Blog Post Image" class="w-full h-48 object-cover rounded-md mb-4">
+                    <h3 class="text-2xl font-semibold mb-2">The Power of Order Blocks in Crypto Trading</h3>
+                    <p class="text-gray-400 text-sm mb-4">By John Doe | July 1, 2025</p>
+                    <p class="text-gray-300 mb-4 flex-grow">Discover how identifying order blocks can give you an edge in volatile crypto markets...</p>
+                    <a href="blog-post.html" class="text-accent-blue hover:underline font-semibold mt-auto">Read More &rarr;</a>
+                </div>
+
+                <div class="card p-6 flex flex-col" data-aos="zoom-in" data-aos-delay="200">
+                    <img src="https://via.placeholder.com/400x250/1e253f/e0e6f0?text=Blog+Image+2" alt="Blog Post Image" class="w-full h-48 object-cover rounded-md mb-4">
+                    <h3 class="text-2xl font-semibold mb-2">Understanding AI in Crypto Trading Scanners</h3>
+                    <p class="text-gray-400 text-sm mb-4">By Jane Smith | June 25, 2025</p>
+                    <p class="text-gray-300 mb-4 flex-grow">Explore the role of artificial intelligence in enhancing the accuracy of market analysis...</p>
+                    <a href="blog-post.html" class="text-accent-blue hover:underline font-semibold mt-auto">Read More &rarr;</a>
+                </div>
+
+                <div class="card p-6 flex flex-col" data-aos="zoom-in" data-aos-delay="300">
+                    <img src="https://via.placeholder.com/400x250/1e253f/e0e6f0?text=Blog+Image+3" alt="Blog Post Image" class="w-full h-48 object-cover rounded-md mb-4">
+                    <h3 class="text-2xl font-semibold mb-2">Top 5 Crypto Pairs to Watch This Quarter</h3>
+                    <p class="text-gray-400 text-sm mb-4">By Crypto Analyst | June 18, 2025</p>
+                    <p class="text-gray-300 mb-4 flex-grow">A deep dive into the cryptocurrencies showing promising signs for institutional interest...</p>
+                    <a href="blog-post.html" class="text-accent-blue hover:underline font-semibold mt-auto">Read More &rarr;</a>
+                </div>
+
+                <div class="card p-6 flex flex-col" data-aos="zoom-in" data-aos-delay="400">
+                    <img src="https://via.placeholder.com/400x250/1e253f/e0e6f0?text=Blog+Image+4" alt="Blog Post Image" class="w-full h-48 object-cover rounded-md mb-4">
+                    <h3 class="text-2xl font-semibold mb-2">Maximizing Profits with Sensitivity Presets</h3>
+                    <p class="text-gray-400 text-sm mb-4">By David Lee | June 10, 2025</p>
+                    <p class="text-gray-300 mb-4 flex-grow">Learn how to customize your scanner settings to capture the best trading opportunities...</p>
+                    <a href="blog-post.html" class="text-accent-blue hover:underline font-semibold mt-auto">Read More &rarr;</a>
+                </div>
+
+                <div class="card p-6 flex flex-col" data-aos="zoom-in" data-aos-delay="500">
+                    <img src="https://via.placeholder.com/400x250/1e253f/e0e6f0?text=Blog+Image+5" alt="Blog Post Image" class="w-full h-48 object-cover rounded-md mb-4">
+                    <h3 class="text-2xl font-semibold mb-2">The Future of Decentralized Finance (DeFi)</h3>
+                    <p class="text-gray-400 text-sm mb-4">By Sarah Kim | June 5, 2025</p>
+                    <p class="text-gray-300 mb-4 flex-grow">An insightful look into the evolving landscape of DeFi and its implications for traders...</p>
+                    <a href="blog-post.html" class="text-accent-blue hover:underline font-semibold mt-auto">Read More &rarr;</a>
+                </div>
+
+                <div class="card p-6 flex flex-col" data-aos="zoom-in" data-aos-delay="600">
+                    <img src="https://via.placeholder.com/400x250/1e253f/e0e6f0?text=Blog+Image+6" alt="Blog Post Image" class="w-full h-48 object-cover rounded-md mb-4">
+                    <h3 class="text-2xl font-semibold mb-2">Getting Started with Our Crypto Scanner</h3>
+                    <p class="text-gray-400 text-sm mb-4">By Support Team | May 28, 2025</p>
+                    <p class="text-gray-300 mb-4 flex-grow">A beginner's guide to setting up and effectively using your new CryptoScanner account...</p>
+                    <a href="blog-post.html" class="text-accent-blue hover:underline font-semibold mt-auto">Read More &rarr;</a>
+                </div>
             </div>
         </div>
-    </nav>
+    </section>
 
-    <div class="container">
-        <!-- Header Section -->
-        <section class="text-center py-16">
-            <h1 class="text-4xl md:text-5xl font-extrabold mb-4">
-                <span class="glowing-text">
-                    Crypto Trading Insights
-                </span>
-            </h1>
-            <p class="text-xl md:text-2xl text-gray-400 mb-8">
-                Stay updated with the latest trends, strategies, and news on crypto order blocks.
-            </p>
-        </section>
-
-        <!-- Blog List Section -->
-        <section class="py-16">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Blog Post Card 1 -->
-                <a href="blog-post.html" class="blog-post-card">
-                    <img src="https://placehold.co/600x200/2D3748/A0AEC0?text=Blog+Image+1" alt="Blog Post Image">
-                    <div class="blog-post-card-content">
-                        <h3>Understanding Order Blocks: A Beginner's Guide</h3>
-                        <p>Dive into the fundamentals of order blocks and how they can revolutionize your trading strategy.</p>
-                        <div class="blog-meta">
-                            <span>By John Doe</span> | <span>July 1, 2024</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Blog Post Card 2 -->
-                <a href="blog-post.html" class="blog-post-card">
-                    <img src="https://placehold.co/600x200/2D3748/A0AEC0?text=Blog+Image+2" alt="Blog Post Image">
-                    <div class="blog-post-card-content">
-                        <h3>Advanced FVG Techniques for High-Probability Trades</h3>
-                        <p>Explore sophisticated Fair Value Gap strategies to pinpoint precise entry and exit points.</p>
-                        <div class="blog-meta">
-                            <span>By Jane Smith</span> | <span>June 20, 2024</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Blog Post Card 3 -->
-                <a href="blog-post.html" class="blog-post-card">
-                    <img src="https://placehold.co/600x200/2D3748/A0AEC0?text=Blog+Image+3" alt="Blog Post Image">
-                    <div class="blog-post-card-content">
-                        <h3>The Role of Liquidity in Smart Money Concepts</h3>
-                        <p>Learn how liquidity drives market movements and influences order block formations.</p>
-                        <div class="blog-meta">
-                            <span>By Crypto Guru</span> | <span>June 10, 2024</span>
-                        </div>
-                    </div>
-                </a>
-                <!-- Add more blog post cards as needed -->
-            </div>
-        </section>
-
-        <!-- Newsletter Section -->
-        <section class="py-16">
-            <div class="newsletter-section">
-                <h2 class="text-3xl font-bold text-white mb-4">Subscribe to Our Newsletter</h2>
-                <p class="text-gray-300 mb-6">Get the latest insights, updates, and trading strategies delivered straight to your inbox.</p>
-                <form class="flex flex-col sm:flex-row justify-center items-center gap-4">
-                    <input type="email" placeholder="Enter your email address" class="flex-grow">
-                    <button type="submit" class="cta-button text-base px-6 py-3">
-                        <i class="fas fa-envelope mr-2"></i> Subscribe
-                    </button>
-                </form>
-            </div>
-        </section>
-
-        <!-- FAQ Section -->
-        <section class="py-16">
-            <h2 class="text-4xl font-bold text-center text-blue-300 mb-12">Blog & Newsletter FAQs</h2>
-            <div class="space-y-4">
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <span>How often do you publish new blog posts?</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        We aim to publish new blog posts weekly, covering a range of topics from beginner guides to advanced trading strategies.
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <span>What kind of content can I expect in the newsletter?</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        Our newsletter includes summaries of recent blog posts, exclusive trading tips, market analysis, and updates on our scanner app's features.
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <span>Can I suggest a topic for a blog post?</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        Absolutely! We welcome suggestions from our community. Feel free to contact us with your ideas.
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-gray-400 text-center py-8 mt-auto w-full">
-        <div class="max-w-1200 mx-auto px-4">
-            <p>&copy; 2024 Crypto Order Block Scanner. All rights reserved.</p>
-            <p class="mt-2">
-                <a href="#" class="text-blue-400 hover:underline mx-2">Privacy Policy</a> |
-                <a href="#" class="text-blue-400 hover:underline mx-2">Terms of Service</a>
-            </p>
-            <div class="flex justify-center space-x-4 mt-4">
-                <a href="#" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-twitter"></i></a>
-                <a href="#" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-telegram"></i></a>
-                <a href="#" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-discord"></i></a>
+    
+    <footer class="bg-dark-bg-secondary py-10">
+        <div class="container text-center text-gray-400">
+            <p>&copy; 2025 CryptoScanner. All rights reserved.</p>
+            <div class="mt-4 space-x-6">
+                <a href="#" class="hover:text-white"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="hover:text-white"><i class="fab fa-telegram"></i></a>
+                <a href="#" class="hover:text-white"><i class="fab fa-discord"></i></a>
             </div>
         </div>
     </footer>
 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // FAQ Accordion Logic
-        document.querySelectorAll('.faq-question').forEach(question => {
-            question.addEventListener('click', () => {
-                const answer = question.nextElementSibling;
-                const icon = question.querySelector('i');
-
-                // Close other open answers
-                document.querySelectorAll('.faq-answer.open').forEach(openAnswer => {
-                    if (openAnswer !== answer) {
-                        openAnswer.classList.remove('open');
-                        openAnswer.previousElementSibling.querySelector('i').classList.replace('fa-chevron-up', 'fa-chevron-down');
-                    }
-                });
-
-                // Toggle current answer
-                answer.classList.toggle('open');
-                icon.classList.toggle('fa-chevron-down');
-                icon.classList.toggle('fa-chevron-up');
-            });
-        });
+      AOS.init({
+        duration: 800,
+        once: true,
+        easing: 'ease-out-quad',
+        offset: 100,
+      });
     </script>
 </body>
 </html>

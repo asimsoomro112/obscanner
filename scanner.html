@@ -3,54 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Order Block Scanner</title>
-    <!-- Tailwind CSS CDN - Re-added for direct interpretation of classes -->
+    <title>Crypto Order Block Scanner - Modern & Refined</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Primary Font: Inter, Secondary Font: Roboto for headings -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@500;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
-    <!-- AOS CSS for scroll animations -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
-        /* --- Global Theme Variables (for consistent theming) --- */
-        /* These variables are used by the custom CSS below and can be overridden by .dark class */
+        /* --- Global Theme Variables (Modern Dark Theme) --- */
         :root {
-            --color-dark-bg-primary: #0A0D18; /* Deep dark blue/purple */
-            --color-dark-bg-secondary: #1E253F; /* Slightly lighter dark for cards/sections */
-            --color-dark-bg-alt: #2C335B; /* Another dark shade for zebra striping */
-            --color-text-light: #E0E6F0; /* Light text for readability */
-            --color-text-secondary: #9CA3AF; /* Muted text for secondary info */
-            --color-accent-blue: #007BFF; /* Vibrant blue for highlights/buttons */
-            --color-accent-blue-dark: #0056b3; /* Darker blue for hover */
-            --color-accent-blue-light: #4299E1; /* Lighter blue for gradients */
-            --color-accent-purple: #8B5CF6; /* Purple accent */
-            --color-accent-purple-light: #A78BFA; /* Lighter purple for gradients */
-            --color-red-accent: #EF4444; /* Red accent */
-            --color-red-light: #F87171; /* Lighter red for gradients */
-            --color-green-accent: #10B981; /* Green accent */
-            --color-orange-accent: #F97316; /* Orange accent */
-            --color-glowing-text-shadow: 0 0 8px rgba(0, 123, 255, 0.7), 0 0 15px rgba(0, 123, 255, 0.5);
-            --color-border-dark: #374151; /* Subtle border color */
-            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.2);
-            --shadow-deep: 0 5px 20px rgba(0, 0, 0, 0.2);
+            --color-dark-bg-primary: #121212; /* Deep charcoal */
+            --color-dark-bg-secondary: #1E1E1E; /* Slightly lighter charcoal for cards */
+            --color-dark-bg-alt: #282828; /* Darker grey for inputs/sections */
+            --color-text-light: #E0E0E0; /* Light grey text */
+            --color-text-secondary: #B0B0B0; /* Muted grey text */
+            --color-accent-blue: #00BFFF; /* Deep Sky Blue */
+            --color-accent-blue-dark: #009ACD;
+            --color-accent-blue-light: #4DD0FF;
+            --color-accent-purple: #9370DB; /* Medium Purple */
+            --color-accent-purple-light: #A78BFA;
+            --color-red-accent: #FF6347; /* Tomato */
+            --color-red-light: #FF8C6A; /* Lighter Red */
+            --color-green-accent: #32CD32; /* Lime Green */
+            --color-orange-accent: #FFA500; /* Orange */
+            --color-glowing-text-shadow: 0 0 8px rgba(0, 191, 255, 0.7), 0 0 15px rgba(0, 191, 255, 0.5);
+            --color-border-dark: #444444; /* Subtle border */
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.5);
+            --shadow-deep: 0 12px 25px rgba(0, 0, 0, 0.6);
 
-            /* Light Mode Variables (default) */
-            --lm-bg-primary: #f0f2f5;
-            --lm-bg-secondary: #ffffff;
-            --lm-bg-alt: #edf2f7;
-            --lm-text-primary: #333;
-            --lm-text-secondary: #666;
-            --lm-border: #cbd5e1;
-            --lm-input-bg: #ffffff;
-            --lm-input-border: #cbd5e1;
-            --lm-toast-bg: #333;
+            /* Light Mode Variables (default, but will be overridden by dark theme) */
+            --lm-bg-primary: #F0F2F5;
+            --lm-bg-secondary: #FFFFFF;
+            --lm-bg-alt: #E2E8F0;
+            --lm-text-primary: #2D3748;
+            --lm-text-secondary: #718096;
+            --lm-border: #CBD5E0;
+            --lm-input-bg: #FFFFFF;
+            --lm-input-border: #CBD5E0;
+            --lm-toast-bg: #2D3748;
             --lm-toast-text: white;
-            --lm-table-header-bg: #edf2f7;
-            --lm-table-row-even-bg: #f7fafc;
+            --lm-table-header-bg: #E2E8F0;
+            --lm-table-row-even-bg: #F7FAFC;
         }
 
         /* Base styles for light mode (default) and animated background */
@@ -58,11 +52,11 @@
             font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
-            /* Animated gradient background for the body */
-            background: linear-gradient(-45deg, var(--lm-bg-primary), #e3f2fd, var(--lm-bg-primary), #e0f2fe);
+            /* Animated gradient background for the body - now using dark theme colors directly */
+            background: linear-gradient(-45deg, var(--color-dark-bg-primary), #2a2a2a, var(--color-dark-bg-primary), #3a3a3a);
             background-size: 400% 400%;
             animation: gradientAnimation 15s ease infinite;
-            color: var(--lm-text-primary);
+            color: var(--color-text-light); /* Default to light text for dark theme */
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -77,8 +71,8 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Dark Mode Overrides */
-        html.dark {
+        /* Dark Mode Overrides - Ensure these are always active for this theme */
+        html.dark, html { /* Apply dark theme variables by default */
             --lm-bg-primary: var(--color-dark-bg-primary);
             --lm-bg-secondary: var(--color-dark-bg-secondary);
             --lm-bg-alt: var(--color-dark-bg-alt);
@@ -93,8 +87,9 @@
             --lm-table-row-even-bg: var(--color-dark-bg-alt);
         }
 
-        html.dark body {
-            background: linear-gradient(-45deg, var(--color-dark-bg-primary), #1a2a3a, var(--color-dark-bg-primary), #1f3a4f);
+        /* Ensure body background is always dark theme's gradient */
+        html.dark body, body {
+            background: linear-gradient(-45deg, var(--color-dark-bg-primary), #2a2a2a, var(--color-dark-bg-primary), #3a3a3a);
             background-size: 400% 400%;
             animation: gradientAnimation 15s ease infinite;
             color: var(--lm-text-primary);
@@ -119,6 +114,7 @@
             border-radius: 0.75rem 0.75rem 0 0;
             overflow: hidden;
             transition: background-image 0.5s ease;
+            border-bottom: 1px solid var(--lm-border); /* Added subtle border */
         }
         h1, h2, h3 {
             font-family: 'Roboto', sans-serif;
@@ -146,7 +142,7 @@
             transition: background-color 0.4s ease-in-out, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease-in-out;
             background-size: 200% auto;
             color: white;
-            box-shadow: 0 0 20px var(--color-accent-purple-light);
+            box-shadow: 0 0 20px rgba(0, 191, 255, 0.5); /* Adjusted glow for Modern Dark */
             border-radius: 9999px;
             padding: 12px 30px;
             font-weight: 700;
@@ -201,7 +197,7 @@
         .action-button:hover:not(:disabled) {
             background-color: var(--lm-border); /* Slightly darker gray */
             border-color: var(--color-accent-blue);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* Adjusted for dark theme */
             transform: translateY(-2px);
         }
         .action-button.active {
@@ -209,7 +205,7 @@
             border-color: var(--color-accent-blue-dark) !important;
             color: white !important;
             font-weight: 700;
-            box-shadow: 0 0 10px rgba(66, 153, 225, 0.5);
+            box-shadow: 0 0 10px rgba(0, 191, 255, 0.5); /* Adjusted for Modern Dark */
             transform: translateY(0);
         }
         .action-button:disabled {
@@ -236,10 +232,12 @@
             position: relative;
             overflow: hidden;
             color: var(--lm-text-primary);
+            border: 1px solid var(--lm-border); /* Added subtle border */
         }
         .coin-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); /* Deeper shadow on hover */
+            border-color: var(--color-accent-blue-light); /* Highlight border on hover */
         }
         .buying-ob-border { border-left-color: var(--color-green-accent); }
         .selling-ob-border { border-left-color: var(--color-red-accent); }
@@ -247,7 +245,7 @@
 
         /* Spinner */
         .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.2); /* Darker spinner for light mode */
+            border: 4px solid rgba(255, 255, 255, 0.2); /* Adjusted for dark mode visibility */
             border-radius: 50%;
             border-top: 4px solid var(--color-accent-blue); /* Blue spinner */
             width: 20px;
@@ -268,6 +266,7 @@
             box-shadow: var(--shadow-md);
             margin-bottom: 1.5rem;
             transition: background-color 0.5s ease, box-shadow 0.5s ease;
+            border: 1px solid var(--lm-border);
         }
         .param-input-group input[type="number"],
         .param-input-group input[type="text"],
@@ -292,8 +291,91 @@
         .param-input-group select:focus {
             outline: none;
             border-color: var(--color-accent-blue);
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3);
+            box-shadow: 0 0 0 3px rgba(0, 191, 255, 0.3); /* Adjusted for Modern Dark */
         }
+
+        /* Slider specific styles */
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(to right, var(--color-accent-blue-light) 0%, var(--lm-border) 100%); /* Gradient track */
+            outline: none;
+            opacity: 0.9;
+            -webkit-transition: .2s;
+            transition: opacity .2s, background 0.4s ease;
+            border-radius: 5px;
+        }
+
+        input[type="range"]:hover {
+            opacity: 1;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--color-accent-blue);
+            cursor: pointer;
+            box-shadow: 0 0 0 3px rgba(0, 191, 255, 0.3); /* Adjusted for Modern Dark */
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--color-accent-blue);
+            cursor: pointer;
+            box-shadow: 0 0 0 3px rgba(0, 191, 255, 0.3); /* Adjusted for Modern Dark */
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        /* Tooltip for sensitivity buttons */
+        .tooltip-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--lm-toast-bg);
+            color: var(--lm-toast-text);
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; /* Position above the button */
+            left: 50%;
+            margin-left: -100px; /* Center the tooltip */
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+            line-height: 1.2;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--lm-border);
+        }
+
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%; /* At the bottom of the tooltip */
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: var(--lm-toast-bg) transparent transparent transparent;
+        }
+
+        .tooltip-container:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
 
         /* Skeleton Loading */
         .skeleton-card {
@@ -345,7 +427,7 @@
             background-color: var(--lm-bg-secondary);
             margin: auto;
             border-radius: 0.75rem;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5); /* Adjusted for Modern Dark */
             width: 90%;
             padding: 1.5rem;
             position: relative;
@@ -381,12 +463,13 @@
             color: var(--lm-text-primary);
             background-color: var(--lm-bg-alt);
         }
-        .tradingview-widget-container {
+        .chart-container {
             height: 80vh;
             max-height: 700px;
             width: 100%;
             border-radius: 0.5rem;
             overflow: hidden;
+            background-color: var(--color-dark-bg-primary); /* Chart background */
         }
         .modal-header-sticky {
             position: sticky;
@@ -410,6 +493,8 @@
         }
         #adminPanelModal .modal-content { max-width: 1024px; }
         #premiumWelcomeModal .modal-content { max-width: 500px; text-align: center; }
+        #onboardingModal .modal-content { max-width: 600px; }
+
 
         .user-table-header th {
             padding: 0.75rem;
@@ -434,9 +519,9 @@
         .user-table-row:last-child td { border-bottom: none; }
         .user-table-row button { margin-right: 0.5rem; }
 
-        #premiumWelcomeModal ul { list-style: none; padding: 0; margin-top: 1rem; text-align: left; color: var(--lm-text-secondary); }
-        #premiumWelcomeModal ul li { margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
-        #premiumWelcomeModal ul li svg { color: var(--color-green-accent); flex-shrink: 0; }
+        #premiumWelcomeModal ul, #onboardingModal ul { list-style: none; padding: 0; margin-top: 1rem; text-align: left; color: var(--lm-text-secondary); }
+        #premiumWelcomeModal ul li, #onboardingModal ul li { margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        #premiumWelcomeModal ul li svg, #onboardingModal ul li svg { color: var(--color-green-accent); flex-shrink: 0; }
 
         /* Toast Notifications */
         #toast-container {
@@ -455,7 +540,7 @@
             color: var(--lm-toast-text);
             padding: 15px 20px;
             border-radius: 0.5rem;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); /* Adjusted for Modern Dark */
             opacity: 0;
             transform: translateY(-20px);
             animation: slideInFadeIn 0.3s forwards, fadeOut 0.3s 2.7s forwards;
@@ -491,7 +576,7 @@
             transition: 0.5s, transform 0.2s ease;
             background-size: 200% auto;
             color: white;
-            box-shadow: 0 4px 10px rgba(66, 153, 225, 0.4);
+            box-shadow: 0 4px 10px rgba(0, 191, 255, 0.4); /* Adjusted for Modern Dark */
             border-radius: 50%;
             width: 56px;
             height: 56px;
@@ -507,23 +592,46 @@
         }
         .fab-button:hover {
             background-position: right center;
-            box-shadow: 0 6px 15px rgba(66, 153, 225, 0.6);
+            box-shadow: 0 6px 15px rgba(0, 191, 255, 0.6); /* Adjusted for Modern Dark */
             transform: scale(1.05);
+        }
+        /* FAB Button colors using new variables */
+        .fab-button.green {
+            background-image: linear-gradient(to right, var(--color-green-accent) 0%, #66DD66 51%, var(--color-green-accent) 100%); /* Adjusted for Modern Dark */
+            box-shadow: 0 4px 10px rgba(50, 205, 50, 0.4); /* Adjusted for Modern Dark */
+        }
+        .fab-button.green:hover {
+            box-shadow: 0 6px 15px rgba(50, 205, 50, 0.6); /* Adjusted for Modern Dark */
+        }
+        .fab-button.orange {
+            background-image: linear-gradient(to right, var(--color-orange-accent) 0%, #FFC04D 51%, var(--color-orange-accent) 100%); /* Adjusted for Modern Dark */
+            box-shadow: 0 4px 10px rgba(255, 165, 0, 0.4); /* Adjusted for Modern Dark */
+        }
+        .fab-button.orange:hover {
+            box-shadow: 0 6px 15px rgba(255, 165, 0, 0.6); /* Adjusted for Modern Dark */
         }
         .fab-button.red {
             background-image: linear-gradient(to right, var(--color-red-accent) 0%, var(--color-red-light) 51%, var(--color-red-accent) 100%);
-            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.4);
+            box-shadow: 0 4px 10px rgba(255, 99, 71, 0.4); /* Adjusted for Modern Dark */
         }
         .fab-button.red:hover {
-            box-shadow: 0 6px 15px rgba(239, 68, 68, 0.6);
+            box-shadow: 0 6px 15px rgba(255, 99, 71, 0.6); /* Adjusted for Modern Dark */
         }
         .fab-button.purple {
             background-image: linear-gradient(to right, var(--color-accent-purple) 0%, var(--color-accent-purple-light) 51%, var(--color-accent-purple) 100%);
-            box-shadow: 0 4px 10px rgba(139, 92, 246, 0.4);
+            box-shadow: 0 4px 10px rgba(147, 112, 219, 0.4); /* Adjusted for Modern Dark */
         }
         .fab-button.purple:hover {
-            box-shadow: 0 6px 15px rgba(139, 92, 246, 0.6);
+            box-shadow: 0 6px 15px rgba(147, 112, 219, 0.6); /* Adjusted for Modern Dark */
         }
+        .fab-button.blue { /* Default blue for logout */
+            background-image: linear-gradient(to right, var(--color-accent-blue) 0%, var(--color-accent-blue-light) 51%, var(--color-accent-blue) 100%);
+            box-shadow: 0 4px 10px rgba(0, 191, 255, 0.4); /* Adjusted for Modern Dark */
+        }
+        .fab-button.blue:hover {
+            box-shadow: 0 6px 15px rgba(0, 191, 255, 0.6); /* Adjusted for Modern Dark */
+        }
+
         .fab-menu {
             display: flex;
             flex-direction: column-reverse;
@@ -538,7 +646,7 @@
             transform: translateY(0);
             pointer-events: auto;
         }
-        .fab-button svg {
+        .fab-button svg, .fab-button i { /* Include i for Font Awesome icons */
             transition: transform 0.3s ease;
         }
         .fab-button.rotate-45 svg {
@@ -593,7 +701,7 @@
                 width: 95%;
                 padding: 15px;
             }
-            .tradingview-widget-container {
+            .chart-container {
                 height: 60vh;
                 max-height: 400px;
             }
@@ -627,9 +735,9 @@
 <body>
 <div id="toast-container"></div> <!-- Toast container -->
 
-<div class="theme-toggle" id="themeToggle">
+<div class="theme-toggle" id="themeToggle" aria-label="Toggle dark and light theme">
     <!-- Sun icon for light mode, Moon for dark mode -->
-    <svg class="w-6 h-6 sun-icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <svg class="w-6 h-6 sun-icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" style="display: block;">
         <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 00-.707-.293h-1a1 1 0 000 2h1a1 1 0 00.707-.293l.707-.707a1 1 0 00-1.414-1.414l-.707.707zM17 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zm-9.464 4.95l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM3 10a1 1 0 01-1 1H2a1 1 0 110-2h1a1 1 0 011 1zm8.464-10.607l-.707-.707a1 1 0 00-1.414 1.414l.707.707a1 1 0 001.414-1.414zM10 15a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1z" clip-rule="evenodd"></path>
     </svg>
     <svg class="w-6 h-6 moon-icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -657,32 +765,32 @@
     </div>
 
     <!-- Authentication Section (Initially visible - display:flex for proper centering) -->
-    <div id="authSection" class="bg-dark-bg-secondary p-6 rounded-xl shadow-lg mb-8 max-w-md mx-auto transition-colors duration-500 flex flex-col items-center justify-center">
-        <h2 id="authFormTitle" class="text-2xl font-bold text-accent-blue text-center mb-4">Login</h2>
+    <div id="authSection" class="bg-lm-bg-secondary p-6 rounded-xl shadow-lg mb-8 max-w-md mx-auto transition-colors duration-500 flex flex-col items-center justify-center">
+        <h2 id="authFormTitle" class="text-2xl font-bold text-color-accent-blue text-center mb-4">Login</h2>
         <form id="authForm" class="flex flex-col gap-4 w-full">
             <div class="param-input-group">
-                <label for="username" class="text-text-secondary font-medium">Username:</label>
-                <input type="text" id="username" name="username" required class="w-full">
+                <label for="username" class="text-lm-text-secondary font-medium">Username:</label>
+                <input type="text" id="username" name="username" required class="w-full" aria-label="Username">
             </div>
             <div class="param-input-group">
-                <label for="password" class="text-text-secondary font-medium">Password:</label>
-                <input type="password" id="password" name="password" required class="w-full">
+                <label for="password" class="text-lm-text-secondary font-medium">Password:</label>
+                <input type="password" id="password" name="password" required class="w-full" aria-label="Password">
             </div>
             <div id="emailGroup" class="param-input-group hidden">
-                <label for="email" class="text-text-secondary font-medium">Email:</label>
-                <input type="email" id="email" name="email" class="w-full">
+                <label for="email" class="text-lm-text-secondary font-medium">Email:</label>
+                <input type="email" id="email" name="email" class="w-full" aria-label="Email">
             </div>
             <div id="planGroup" class="param-input-group hidden">
-                <label for="plan" class="text-text-secondary font-medium">Plan:</label>
-                <select id="plan" name="plan" class="w-full px-3 py-2 rounded-md bg-dark-bg-primary text-text-light border border-border-dark focus:outline-none focus:ring-2 focus:ring-accent-blue">
+                <label for="plan" class="text-lm-text-secondary font-medium">Plan:</label>
+                <select id="plan" name="plan" class="w-full px-3 py-2 rounded-md bg-lm-input-bg text-lm-text-primary border border-lm-input-border focus:outline-none focus:ring-2 focus:ring-color-accent-blue" aria-label="Select Plan">
                     <option value="trial">3-Day Trial</option>
                     <option value="premium">Premium</option>
                 </select>
             </div>
-            <button type="submit" id="authSubmitButton" class="scan-button w-full">Login</button>
+            <button type="submit" id="authSubmitButton" class="scan-button w-full" aria-label="Submit Authentication">Login</button>
         </form>
         <p class="text-center mt-4">
-            <button id="toggleAuthMode" class="text-accent-blue hover:underline action-button bg-transparent border-none shadow-none px-0 py-0 font-normal">Don't have an account? Register here.</button>
+            <button id="toggleAuthMode" class="text-color-accent-blue hover:underline action-button bg-transparent border-none shadow-none px-0 py-0 font-normal" aria-label="Toggle authentication mode">Don't have an account? Register here.</button>
         </p>
     </div>
 
@@ -690,45 +798,66 @@
     <div id="scannerSection" class="hidden" style="display: none;">
         <div class="flex flex-col md:flex-row justify-between items-center mb-4 gap-4" data-aos="fade-up">
             <div class="flex flex-col md:flex-row justify-center items-center gap-4 w-full md:w-auto scanner-main-buttons">
-                <button id="scanButton" class="scan-button w-full md:w-auto">
+                <button id="scanButton" class="scan-button w-full md:w-auto" aria-label="Initiate Scan">
                     <span id="spinner" class="spinner hidden"></span>
                     <span id="buttonText">Initiate Scan</span>
                 </button>
-                <button id="clearButton" class="action-button w-full md:w-auto">Clear Results</button>
+                <button id="clearButton" class="action-button w-full md:w-auto" aria-label="Clear Results">Clear Results</button>
             </div>
-            <button id="logoutButton" class="action-button bg-red-accent hover:bg-red-light text-white w-full md:w-auto">Logout</button>
+            <button id="logoutButton" class="action-button bg-color-red-accent hover:bg-color-red-light text-white w-full md:w-auto" aria-label="Logout">Logout</button>
         </div>
 
 
         <div class="flex justify-center gap-3 mb-6 flex-wrap" data-aos="fade-up" data-aos-delay="100">
-            <span class="text-text-secondary font-semibold self-center">Timeframe:</span>
-            <button id="timeframe1hButton" class="action-button" data-timeframe="1h">1H</button>
-            <button id="timeframe4hButton" class="action-button active" data-timeframe="4h">4H</button>
-            <button id="timeframe1dButton" class="action-button" data-timeframe="1d">1D</button>
+            <span class="text-lm-text-secondary font-semibold self-center">Timeframe:</span>
+            <button id="timeframe15mButton" class="action-button" data-timeframe="15m" aria-label="15 Minute Timeframe">15M</button>
+            <button id="timeframe30mButton" class="action-button" data-timeframe="30m" aria-label="30 Minute Timeframe">30M</button>
+            <button id="timeframe1hButton" class="action-button" data-timeframe="1h" aria-label="1 Hour Timeframe">1H</button>
+            <button id="timeframe4hButton" class="action-button active" data-timeframe="4h" aria-label="4 Hour Timeframe">4H</button>
+            <button id="timeframe1dButton" class="action-button" data-timeframe="1d" aria-label="1 Day Timeframe">1D</button>
         </div>
 
         <div class="flex justify-center gap-3 mb-6 flex-wrap" data-aos="fade-up" data-aos-delay="200">
-            <span class="text-text-secondary font-semibold self-center">Filter:</span>
-            <button id="showAllButton" class="action-button active" data-filter="All">Show All</button>
-            <button id="showBuyingButton" class="action-button" data-filter="Buying (Bullish)">Show Buying OB</button>
-            <button id="showSellingButton" class="action-button" data-filter="Selling (Bearish)">Show Selling OB</button>
+            <span class="text-lm-text-secondary font-semibold self-center">Filter:</span>
+            <button id="showAllButton" class="action-button active" data-filter="All" aria-label="Show All Order Blocks">Show All</button>
+            <button id="showBuyingButton" class="action-button" data-filter="Buying (Bullish)" aria-label="Show Buying Order Blocks">Show Buying OB</button>
+            <button id="showSellingButton" class="action-button" data-filter="Selling (Bearish)" aria-label="Show Selling Order Blocks">Show Selling OB</button>
         </div>
 
         <!-- New section for Order Block Detection Parameters and Price Deviation -->
         <div class="parameters-section" data-aos="fade-up" data-aos-delay="300">
-            <h2 class="text-2xl font-bold text-accent-blue text-center mb-4">Detection Sensitivity</h2>
-            <div class="parameters-grid mb-4">
-                <button class="sensitivity-button action-button" data-sensitivity="lowest">Lowest Condition</button>
-                <button class="sensitivity-button action-button" data-sensitivity="low-mid">Low Mid</button>
-                <button class="sensitivity-button action-button active" data-sensitivity="mid">Mid</button>
-                <button class="sensitivity-button action-button" data-sensitivity="mid-high">Mid High</button>
-                <button class="sensitivity-button action-button" data-sensitivity="high">High</button>
-                <button class="sensitivity-button action-button" data-sensitivity="extreme">Extreme Detection</button>
+            <h2 class="text-2xl font-bold text-color-accent-blue text-center mb-4">Detection Sensitivity</h2>
+            <div class="parameters-grid mb-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
+                <div class="tooltip-container">
+                    <button class="sensitivity-button action-button" data-sensitivity="lowest" aria-label="Lowest Sensitivity">Lowest Condition</button>
+                    <span class="tooltip-text" id="tooltip-lowest"></span>
+                </div>
+                <div class="tooltip-container">
+                    <button class="sensitivity-button action-button" data-sensitivity="low-mid" aria-label="Low-Mid Sensitivity">Low Mid</button>
+                    <span class="tooltip-text" id="tooltip-low-mid"></span>
+                </div>
+                <div class="tooltip-container">
+                    <button class="sensitivity-button action-button active" data-sensitivity="mid" aria-label="Mid Sensitivity">Mid</button>
+                    <span class="tooltip-text" id="tooltip-mid"></span>
+                </div>
+                <div class="tooltip-container">
+                    <button class="sensitivity-button action-button" data-sensitivity="mid-high" aria-label="Mid-High Sensitivity">Mid High</button>
+                    <span class="tooltip-text" id="tooltip-mid-high"></span>
+                </div>
+                <div class="tooltip-container">
+                    <button class="sensitivity-button action-button" data-sensitivity="high" aria-label="High Sensitivity">High</button>
+                    <span class="tooltip-text" id="tooltip-high"></span>
+                </div>
+                <div class="tooltip-container">
+                    <button class="sensitivity-button action-button" data-sensitivity="extreme" aria-label="Extreme Sensitivity">Extreme Detection</button>
+                    <span class="tooltip-text" id="tooltip-extreme"></span>
+                </div>
             </div>
 
             <div class="flex flex-col sm:flex-row items-center justify-center gap-3 mt-4">
-                <label for="priceDeviation" class="text-text-secondary font-semibold">Max Price Deviation (%):</label>
-                <input type="number" id="priceDeviation" value="20" min="0" max="100" class="w-24">
+                <label for="priceDeviation" class="text-lm-text-secondary font-semibold">Max Price Deviation (%):</label>
+                <input type="range" id="priceDeviation" value="20" min="0" max="100" step="1" class="w-full max-w-xs" aria-label="Max Price Deviation Percentage">
+                <span id="priceDeviationValue" class="text-lm-text-primary font-bold w-12 text-center">20%</span>
             </div>
         </div>
 
@@ -738,30 +867,30 @@
 
         <!-- Admin Panel Button -->
         <div class="text-center mt-8" data-aos="fade-up" data-aos-delay="400">
-            <button id="adminPanelButton" class="action-button hidden bg-purple-600 hover:bg-purple-700 text-white">User Management (Admin)</button>
+            <button id="adminPanelButton" class="action-button hidden bg-color-accent-purple hover:bg-color-accent-purple text-white" aria-label="Open User Management Panel">User Management (Admin)</button>
         </div>
     </div>
 </div>
 
 <!-- Floating Action Button (FAB) for Mobile -->
 <div class="fab-container md:hidden">
-    <button id="fabToggle" class="fab-button">
+    <button id="fabToggle" class="fab-button" aria-label="Toggle Mobile Menu">
         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
     </button>
     <div id="fabMenu" class="fab-menu">
-        <button id="fabScanButton" class="fab-button green">
+        <button id="fabScanButton" class="fab-button green" aria-label="Initiate Scan (Mobile)">
             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
         </button>
-        <button id="fabClearButton" class="fab-button orange">
+        <button id="fabClearButton" class="fab-button orange" aria-label="Clear Results (Mobile)">
             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
         </button>
-        <button id="fabAdminButton" class="fab-button purple hidden">
+        <button id="fabAdminButton" class="fab-button purple hidden" aria-label="User Management (Mobile)">
             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h2a2 2 0 002-2V4a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h2m0 0l3-3m-3 3l-3-3m3 3v3m0-6h.01M6 14h.01M6 17h.01M6 20h.01M12 6h.01M12 10h.01M12 14h.01M12 18h.01"></path></svg>
         </button>
-        <button id="fabPaymentButton" class="fab-button red" title="Manage Subscription">
+        <button id="fabPaymentButton" class="fab-button red" title="Manage Subscription" aria-label="Manage Subscription (Mobile)">
                 <i class="fas fa-credit-card"></i>
             </button>
-        <button id="fabLogoutButton" class="fab-button blue" title="Logout">
+        <button id="fabLogoutButton" class="fab-button blue" title="Logout" aria-label="Logout (Mobile)">
                 <i class="fas fa-sign-out-alt"></i>
             </button>
     </div>
@@ -769,53 +898,50 @@
 
 
 <!-- Chart Modal Structure -->
-<div id="chartModal" class="modal hidden">
+<div id="chartModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-content">
-        <span class="close-button" id="closeModal">&times;</span>
+        <span class="close-button" id="closeModal" aria-label="Close Chart Modal">&times;</span>
         <div class="modal-header-sticky">
-            <h3 id="modalTitle" class="text-2xl font-bold text-accent-blue text-center mb-2"></h3>
-            <p id="modalOBInfo" class="text-center text-text-secondary text-sm"></p>
+            <h3 id="modalTitle" class="text-2xl font-bold text-color-accent-blue text-center mb-2"></h3>
+            <p id="modalOBInfo" class="text-center text-lm-text-secondary text-sm"></p>
         </div>
-        <div class="tradingview-widget-container">
-            <div id="tradingview_chart"></div>
+        <div id="lightweightChartContainer" class="chart-container">
+            <!-- Lightweight Chart will be rendered here -->
         </div>
-        <a id="tradingViewLink" href="#" target="_blank" class="action-button inline-block text-center px-4 py-2 rounded-lg font-semibold text-sm self-center">
-            View on TradingView.com for Drawing
-        </a>
     </div>
 </div>
 
 <!-- Payment Modal Structure -->
-<div id="paymentModal" class="modal hidden">
+<div id="paymentModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="paymentModalTitle">
     <div class="modal-content max-w-xl">
-        <span class="close-button" id="closePaymentModal">&times;</span>
-        <h3 class="text-2xl font-bold text-accent-blue text-center mb-4">Premium Plan Payment</h3>
-        <p class="text-text-secondary mb-4">
+        <span class="close-button" id="closePaymentModal" aria-label="Close Payment Modal">&times;</span>
+        <h3 id="paymentModalTitle" class="text-2xl font-bold text-color-accent-blue text-center mb-4">Premium Plan Payment</h3>
+        <p class="text-lm-text-secondary mb-4">
             To activate your Premium plan, please send payment to the address below.
             After payment, submit your transaction hash.
         </p>
-        <div class="payment-info p-4 rounded-md text-text-light mb-4">
+        <div class="payment-info p-4 rounded-md text-lm-text-primary mb-4">
             <p class="font-semibold">Payment Address (USDT BEP20):</p>
-            <p class="break-all text-green-accent text-lg font-mono">0xe076e29832351413895b42b8ae936bebeb510d2e</p> <!-- REPLACE WITH YOUR ACTUAL ADDRESS -->
+            <p class="break-all text-color-green-accent text-lg font-mono">0xe076e29832351413895b42b8ae936bebeb510d2e</p> <!-- REPLACE WITH YOUR ACTUAL ADDRESS -->
             <p class="mt-2 font-semibold">Amount: $25 USD</p>
         </div>
         <form id="paymentProofForm" class="flex flex-col gap-4">
             <div class="param-input-group">
-                <label for="transactionHash" class="text-text-secondary font-medium">Transaction Hash (TxID):</label>
-                <input type="text" id="transactionHash" name="transactionHash" required class="w-full">
+                <label for="transactionHash" class="text-lm-text-secondary font-medium">Transaction Hash (TxID):</label>
+                <input type="text" id="transactionHash" name="transactionHash" required class="w-full" aria-label="Transaction Hash (TxID)">
             </div>
-            <button type="submit" id="submitPaymentProofButton" class="action-button w-full bg-accent-blue hover:bg-accent-blue-dark text-white">Submit Payment Proof</button>
+            <button type="submit" id="submitPaymentProofButton" class="action-button w-full bg-color-accent-blue hover:bg-color-accent-blue-dark text-white" aria-label="Submit Payment Proof">Submit Payment Proof</button>
         </form>
     </div>
 </div>
 
 <!-- Admin Panel Modal Structure -->
-<div id="adminPanelModal" class="modal hidden">
+<div id="adminPanelModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="adminPanelModalTitle">
     <div class="modal-content max-w-5xl">
-        <span class="close-button" id="closeAdminPanelModal">&times;</span>
-        <h3 class="text-2xl font-bold text-accent-blue text-center mb-4">User Management Panel</h3>
+        <span class="close-button" id="closeAdminPanelModal" aria-label="Close Admin Panel Modal">&times;</span>
+        <h3 id="adminPanelModalTitle" class="text-2xl font-bold text-color-accent-blue text-center mb-4">User Management Panel</h3>
         <div class="overflow-x-auto">
-            <table class="min-w-full bg-dark-bg-primary rounded-lg shadow-md">
+            <table class="min-w-full bg-lm-bg-primary rounded-lg shadow-md">
                 <thead>
                 <tr class="user-table-header">
                     <th>Username</th>
@@ -836,36 +962,55 @@
 </div>
 
 <!-- Premium Welcome Modal -->
-<div id="premiumWelcomeModal" class="modal hidden">
+<div id="premiumWelcomeModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="premiumWelcomeModalTitle">
     <div class="modal-content max-w-xl">
-        <span class="close-button" id="closePremiumWelcomeModal">&times;</span>
-        <h3 class="text-3xl font-bold text-accent-blue text-center mb-4">Welcome to Premium!</h3>
-        <p class="text-text-secondary mb-4">
+        <span class="close-button" id="closePremiumWelcomeModal" aria-label="Close Premium Welcome Modal">&times;</span>
+        <h3 id="premiumWelcomeModalTitle" class="text-3xl font-bold text-color-accent-blue text-center mb-4">Welcome to Premium!</h3>
+        <p class="text-lm-text-secondary mb-4">
             Congratulations on unlocking the full power of the Crypto Order Block Scanner!
             Here's what you can now do:
         </p>
-        <ul class="text-lg text-text-light mb-6">
-            <li><i class="fas fa-check-circle text-green-accent mr-2"></i>
-                **All Timeframes Unlocked:** Scan for Order Blocks on 1H, 4H, and 1D charts for deeper market analysis.
+        <ul class="text-lg text-lm-text-primary mb-6">
+            <li><i class="fas fa-check-circle text-color-green-accent mr-2"></i>
+                **All Timeframes Unlocked:** Scan for Order Blocks on 15M, 30M, 1H, 4H, and 1D charts for deeper market analysis.
             </li>
-            <li><i class="fas fa-check-circle text-green-accent mr-2"></i>
+            <li><i class="fas fa-check-circle text-color-green-accent mr-2"></i>
                 **Full Sensitivity Control:** Utilize all 6 detection sensitivity levels (Lowest to Extreme) to fine-tune your scans.
             </li>
-            <li><i class="fas fa-check-circle text-green-accent mr-2"></i>
+            <li><i class="fas fa-check-circle text-color-green-accent mr-2"></i>
                 **Advanced Charting:** Click on any coin card to view its Order Block directly on a TradingView chart.
             </li>
-            <li><i class="fas fa-check-circle text-green-accent mr-2"></i>
+            <li><i class="fas fa-check-circle text-color-green-accent mr-2"></i>
+                **Trade Setup Suggestions:** Get suggested Entry, Stop Loss, and Take Profit levels for detected order blocks.
+            </li>
+            <li><i class="fas fa-check-circle text-color-green-accent mr-2"></i>
                 **Admin Panel Access (for Admins):** Manage users and their premium/trial statuses (if you have admin privileges).
             </li>
         </ul>
-        <p class="text-text-secondary text-sm mt-4">
+        <p class="text-lm-text-secondary text-sm mt-4">
             You can always review these features by re-logging in or refreshing the page.
         </p>
         <div class="flex items-center justify-center mt-6">
-            <input type="checkbox" id="dontShowPremiumAgain" class="mr-2 h-4 w-4 text-accent-blue rounded focus:ring-accent-blue bg-dark-bg-primary border-border-dark">
-            <label for="dontShowPremiumAgain" class="text-text-secondary">Don't show this again</label>
+            <input type="checkbox" id="dontShowPremiumAgain" class="mr-2 h-4 w-4 text-color-accent-blue rounded focus:ring-color-accent-blue bg-lm-input-bg border-lm-input-border" aria-label="Don't show premium welcome again">
+            <label for="dontShowPremiumAgain" class="text-lm-text-secondary">Don't show this again</label>
         </div>
-        <button id="closePremiumWelcomeModalButton" class="scan-button mt-6 w-full max-w-xs mx-auto">Got It!</button>
+        <button id="closePremiumWelcomeModalButton" class="scan-button mt-6 w-full max-w-xs mx-auto" aria-label="Got It!">Got It!</button>
+    </div>
+</div>
+
+<!-- Onboarding Modal -->
+<div id="onboardingModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="onboardingModalTitle">
+    <div class="modal-content max-w-xl">
+        <span class="close-button" id="closeOnboardingModal" aria-label="Close Onboarding Modal">&times;</span>
+        <h3 id="onboardingModalTitle" class="text-3xl font-bold text-color-accent-blue text-center mb-4">Welcome to Crypto OB Scanner!</h3>
+        <div id="onboardingContent">
+            <!-- Onboarding steps will be injected here -->
+        </div>
+        <div class="flex justify-between mt-6">
+            <button id="onboardingPrev" class="action-button hidden" aria-label="Previous Onboarding Step">Previous</button>
+            <button id="onboardingNext" class="scan-button ml-auto" aria-label="Next Onboarding Step">Next</button>
+            <button id="onboardingFinish" class="scan-button hidden ml-auto" aria-label="Finish Onboarding">Got It!</button>
+        </div>
     </div>
 </div>
 
@@ -904,6 +1049,9 @@
     const showAllButton = document.getElementById('showAllButton');
     const showBuyingButton = document.getElementById('showBuyingButton');
     const showSellingButton = document.getElementById('showSellingButton');
+    // NEW Timeframe Buttons
+    const timeframe15mButton = document.getElementById('timeframe15mButton');
+    const timeframe30mButton = document.getElementById('timeframe30mButton');
     const timeframe1hButton = document.getElementById('timeframe1hButton');
     const timeframe4hButton = document.getElementById('timeframe4hButton');
     const timeframe1dButton = document.getElementById('timeframe1dButton');
@@ -912,13 +1060,15 @@
     const resultsContainer = document.getElementById('resultsContainer');
     const sensitivityButtons = document.querySelectorAll('.sensitivity-button');
     const priceDeviationInput = document.getElementById('priceDeviation');
+    const priceDeviationValueSpan = document.getElementById('priceDeviationValue');
+
 
     // Modal elements
     const chartModal = document.getElementById('chartModal');
     const closeModalButton = document.getElementById('closeModal');
     const modalTitle = document.getElementById('modalTitle');
     const modalOBInfo = document.getElementById('modalOBInfo');
-    const tradingViewLink = document.getElementById('tradingViewLink');
+    const lightweightChartContainer = document.getElementById('lightweightChartContainer');
 
     // Payment Modal elements
     const paymentModal = document.getElementById('paymentModal');
@@ -951,9 +1101,16 @@
     const fabScanButton = document.getElementById('fabScanButton');
     const fabClearButton = document.getElementById('fabClearButton');
     const fabAdminButton = document.getElementById('fabAdminButton');
-    const fabPaymentButton = document.getElementById('fabPaymentButton'); // Added FAB Payment Button
-    const fabLogoutButton = document.getElementById('fabLogoutButton'); // Added FAB Logout Button
+    const fabPaymentButton = document.getElementById('fabPaymentButton');
+    const fabLogoutButton = document.getElementById('fabLogoutButton');
 
+    // Onboarding Modal elements
+    const onboardingModal = document.getElementById('onboardingModal');
+    const closeOnboardingModalButton = document.getElementById('closeOnboardingModal');
+    const onboardingContent = document.getElementById('onboardingContent');
+    const onboardingPrevButton = document.getElementById('onboardingPrev');
+    const onboardingNextButton = document.getElementById('onboardingNext');
+    const onboardingFinishButton = document.getElementById('onboardingFinish');
 
     let allScanResults = [];
     let currentFilter = localStorage.getItem('currentFilter') || 'All';
@@ -961,37 +1118,109 @@
     let currentSensitivity = localStorage.getItem('currentSensitivity') || 'mid';
     let maxPriceDeviationPercent = parseFloat(localStorage.getItem('maxPriceDeviationPercent')) || 20;
     let isRegisterMode = false;
-    let isAdminRegisterMode = false; // Flag for admin registration mode (logic removed for security)
+    let isAdminRegisterMode = false;
+    let currentOnboardingStep = 0;
 
     // Predefined parameter presets for different sensitivities
+    // 'requireUnmitigated' parameter removed as it's now always enforced in the backend.
     const sensitivityPresets = {
-      'lowest': { minBodyRatio: 0.001, minPriceChange: 0.000001, volumeFactor: 0.01, requireBOS: false, requireC3ClosePastC2: false, requireFVG: false, minFvgDepthRatio: 0.001 },
-      'low-mid': { minBodyRatio: 0.10, minPriceChange: 0.0003, volumeFactor: 0.4, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, minFvgDepthRatio: 0.02 },
-      'mid': { minBodyRatio: 0.15, minPriceChange: 0.0005, volumeFactor: 0.6, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, minFvgDepthRatio: 0.05 },
-      'mid-high': { minBodyRatio: 0.20, minPriceChange: 0.001, volumeFactor: 0.8, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, minFvgDepthRatio: 0.08 },
-      'high': { minBodyRatio: 0.25, minPriceChange: 0.002, volumeFactor: 1.0, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, minFvgDepthRatio: 0.10 },
-      'extreme': { minBodyRatio: 0.30, minPriceChange: 0.003, volumeFactor: 1.2, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, minFvgDepthRatio: 0.15 }
+      'lowest': { minBodyRatio: 0.005, minPriceChange: 0.00001, volumeFactor: 0.05, requireBOS: false, requireC3ClosePastC2: false, requireFVG: false, minFvgDepthRatio: 0.005, description: "Broadest detection, high noise." },
+      'low-mid': { minBodyRatio: 0.015, minPriceChange: 0.00005, volumeFactor: 0.1, requireBOS: true, requireC3ClosePastC2: true, requireFVG: false, minFvgDepthRatio: 0.01, description: "Balanced, less noise, some BOS/C3." },
+      'mid': { minBodyRatio: 0.03, minPriceChange: 0.0001, volumeFactor: 0.2, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, minFvgDepthRatio: 0.02, description: "Standard, good balance of criteria." },
+      'mid-high': { minBodyRatio: 0.05, minPriceChange: 0.0002, volumeFactor: 0.4, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, minFvgDepthRatio: 0.03, description: "Stricter, higher conviction setups." },
+      'high': { minBodyRatio: 0.07, minPriceChange: 0.0005, volumeFactor: 0.6, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, minFvgDepthRatio: 0.05, description: "Very strict, high quality signals." },
+      'extreme': { minBodyRatio: 0.10, minPriceChange: 0.001, volumeFactor: 0.8, requireBOS: true, requireC3ClosePastC2: true, requireFVG: true, minFvgDepthRatio: 0.08, description: "Most stringent, rare, strong signals." }
     };
 
+    // Onboarding steps content
+    const onboardingSteps = [
+        {
+            title: "Welcome to Crypto OB Scanner!",
+            content: `
+                <p class="text-lm-text-secondary mb-4">Discover powerful Order Blocks in cryptocurrency markets.</p>
+                <ul class="text-lg text-lm-text-primary mb-6">
+                    <li><i class="fas fa-search text-color-green-accent mr-2"></i> Scan for Buying & Selling Order Blocks.</li>
+                    <li><i class="fas fa-chart-line text-color-green-accent mr-2"></i> Visualize OBs directly on interactive charts.</li>
+                    <li><i class="fas fa-cogs text-color-green-accent mr-2"></i> Customize scan sensitivity and filters.</li>
+                </ul>
+                <p class="text-lm-text-secondary text-sm">Let's get you started!</p>
+            `
+        },
+        {
+            title: "Understanding Order Blocks",
+            content: `
+                <p class="text-lm-text-secondary mb-4">Order Blocks (OBs) are specific price areas where large institutional orders likely reside, often leading to significant price reactions.</p>
+                <ul class="text-lg text-lm-text-primary mb-6">
+                    <li><i class="fas fa-arrow-alt-circle-up text-color-green-accent mr-2"></i> <b>Buying (Bullish) OBs:</b> Areas where price might bounce up.</li>
+                    <li><i class="fas fa-arrow-alt-circle-down text-color-red-accent mr-2"></i> <b>Selling (Bearish) OBs:</b> Areas where price might drop down.</li>
+                </ul>
+                <p class="text-lm-text-secondary text-sm">Our scanner helps you find these key zones.</p>
+            `
+        },
+        {
+            title: "How to Use the Scanner",
+            content: `
+                <p class="text-lm-text-secondary mb-4">It's simple to find your next trade opportunity:</p>
+                <ul class="text-lg text-lm-text-primary mb-6">
+                    <li><i class="fas fa-clock text-color-green-accent mr-2"></i> Select your desired <b>Timeframe</b> (e.g., 4H, 1D).</li>
+                    <li><i class="fas fa-sliders-h text-color-green-accent mr-2"></i> Adjust <b>Detection Sensitivity</b> for more or fewer results.</li>
+                    <li><i class="fas fa-filter text-color-green-accent mr-2"></i> Use the <b>Filter</b> buttons to narrow down to Buying or Selling OBs.</li>
+                    <li><i class="fas fa-play-circle text-color-green-accent mr-2"></i> Click <b>"Initiate Scan"</b> to get real-time data!</li>
+                </ul>
+                <p class="text-lm-text-secondary text-sm">Click on any coin card to see its chart!</p>
+            `
+        },
+        {
+            title: "Chart Visualizations & Trade Setups",
+            content: `
+                <p class="text-lm-text-secondary mb-4">When you click a coin card, you'll see a detailed chart:</p>
+                <ul class="text-lg text-lm-text-primary mb-6">
+                    <li><i class="fas fa-square text-color-accent-purple mr-2"></i> Detected Order Block zones are highlighted.</li>
+                    <li><i class="fas fa-money-bill-wave text-color-green-accent mr-2"></i> Suggested Entry, Stop Loss, and Take Profit levels are plotted.</li>
+                    <li><i class="fas fa-chart-area text-color-green-accent mr-2"></i> Use these visual aids to plan your trades more effectively.</li>
+                </ul>
+                <p class="text-lm-text-secondary text-sm">Happy trading!</p>
+            `
+        }
+    ];
 
     // --- Theme Management ---
     function applyTheme(theme) {
-        if (theme === 'dark') {
-            document.documentElement.classList.add('dark');
-            sunIcon.style.display = 'block';
-            moonIcon.style.display = 'none';
-        } else {
-            document.documentElement.classList.remove('dark');
-            sunIcon.style.display = 'none';
-            moonIcon.style.display = 'block';
+        // For this theme, we want it to always be 'dark' visually
+        // So we ensure the 'dark' class is always present
+        document.documentElement.classList.add('dark');
+        sunIcon.style.display = 'block'; // Show sun icon (indicating it's dark mode)
+        moonIcon.style.display = 'none'; // Hide moon icon
+
+        localStorage.setItem('theme', 'dark'); // Force save 'dark' theme
+
+        // Update chart theme if chart is open
+        if (window.currentChart) {
+            window.currentChart.applyOptions({
+                layout: {
+                    textColor: 'var(--color-text-light)',
+                    background: { color: 'var(--color-dark-bg-primary)' },
+                },
+                grid: {
+                    vertLines: { color: 'var(--color-border-dark)' },
+                    horzLines: { color: 'var(--color-border-dark)' },
+                },
+                timeScale: {
+                    borderColor: 'var(--color-border-dark)',
+                },
+                priceScale: {
+                    borderColor: 'var(--color-border-dark)',
+                }
+            });
         }
-        localStorage.setItem('theme', theme);
     }
 
     function toggleTheme() {
-        const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        applyTheme(newTheme);
+        // Since this theme is always dark, the toggle will just re-apply dark
+        // or could be removed if no light mode functionality is desired.
+        // For now, it will just ensure dark mode is active.
+        applyTheme('dark');
+        showToast("This theme is optimized for dark mode.", 'info');
     }
 
     // --- Toast Notification System ---
@@ -1036,6 +1265,7 @@
         closeModal(paymentModal);
         closeModal(adminPanelModal);
         closeModal(premiumWelcomeModal);
+        closeModal(onboardingModal); // Close onboarding if open
         usernameInput.value = '';
         passwordInput.value = '';
         emailInput.value = '';
@@ -1043,8 +1273,8 @@
         localStorage.removeItem('username');
         localStorage.removeItem('roles');
         localStorage.removeItem('userId');
+        logoutButton.classList.add('hidden'); // Hide main logout button
         adminPanelButton.classList.add('hidden'); // Hide admin button on logout
-        fabAdminButton.classList.add('hidden'); // Hide FAB admin button on logout
         // Reset auth form to login mode
         isRegisterMode = false;
         isAdminRegisterMode = false;
@@ -1062,16 +1292,24 @@
         closeModal(paymentModal);
         closeModal(adminPanelModal);
         closeModal(premiumWelcomeModal);
+        closeModal(onboardingModal); // Close onboarding if open
+        logoutButton.classList.remove('hidden'); // Show main logout button
         showToast(`Welcome, ${localStorage.getItem('username')}! Click "Initiate Scan" to begin analyzing market data.`, 'info');
         await fetchUserStatus();
 
         const userRoles = localStorage.getItem('roles') ? JSON.parse(localStorage.getItem('roles')) : [];
         const isPremiumOrTrial = userRoles.includes('ROLE_PREMIUM') || userRoles.includes('ROLE_TRIAL');
         const hasSeenPremiumWelcome = localStorage.getItem('hasSeenPremiumWelcome');
+        const hasSeenOnboarding = localStorage.getItem('hasSeenOnboarding');
 
         if (isPremiumOrTrial && hasSeenPremiumWelcome !== 'true') {
             openModal(premiumWelcomeModal);
         }
+
+        if (hasSeenOnboarding !== 'true') {
+            showOnboardingModal();
+        }
+
         updateFabAdminButtonVisibility(); // Update FAB visibility after login
     }
 
@@ -1080,6 +1318,7 @@
         scannerSection.style.display = 'none';
         closeModal(adminPanelModal);
         closeModal(premiumWelcomeModal);
+        closeModal(onboardingModal); // Close onboarding if open
         openModal(paymentModal);
         transactionHashInput.value = '';
         localStorage.setItem('pendingPaymentUsername', registeredUsername);
@@ -1087,12 +1326,12 @@
 
     async function showAdminPanel() {
         openModal(adminPanelModal);
-        showToast('Loading users...', 'info');
+        showToast('Loading users...', 'info', 1500); // Shorter toast for loading
         userTableBody.innerHTML = '';
 
         const token = localStorage.getItem('jwtToken');
         if (!token) {
-            showToast("Authentication required for admin panel.", 'error');
+            showToast("Authentication required to access admin panel.", 'error');
             return;
         }
 
@@ -1107,7 +1346,7 @@
 
             if (!response.ok) {
                 const errorData = await response.json();
-                showToast(errorData.message || "Failed to fetch users.", 'error');
+                showToast(errorData.message || "Failed to fetch users. Please check your admin privileges.", 'error');
                 return;
             }
 
@@ -1116,7 +1355,7 @@
             showToast('Users loaded successfully!', 'success');
 
         } catch (error) {
-            showToast(`Network error fetching users: ${error.message}`, 'error');
+            showToast(`Network error fetching users: ${error.message}. Please check your connection.`, 'error');
             console.error("Admin panel fetch error:", error);
         }
     }
@@ -1125,7 +1364,7 @@
     function displayUsersInAdminPanel(users) {
         userTableBody.innerHTML = '';
         if (users.length === 0) {
-            userTableBody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-text-secondary">No users found.</td></tr>';
+            userTableBody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-lm-text-secondary">No users found.</td></tr>';
             return;
         }
 
@@ -1142,11 +1381,11 @@
                     <td class="py-2 px-4">${isPremium}</td>
                     <td class="py-2 px-4">${trialActive}</td>
                     <td class="py-2 px-4 hidden sm:table-cell">${trialExpiry}</td>
-                    <td class="py-2 px-4 hidden sm:table-cell text-sm text-text-secondary">${roles}</td>
+                    <td class="py-2 px-4 hidden sm:table-cell text-sm text-lm-text-secondary">${roles}</td>
                     <td class="py-2 px-4">
-                        <button class="action-button bg-green-accent hover:bg-green-accent text-white grant-premium-btn" data-username="${user.username}" ${user.isPremium ? 'disabled' : ''}><i class="fas fa-check-circle mr-1"></i>Grant Premium</button>
-                        <button class="action-button bg-red-accent hover:bg-red-light text-white revoke-premium-btn" data-username="${user.username}" ${!user.isPremium ? 'disabled' : ''}><i class="fas fa-times-circle mr-1"></i>Revoke Premium</button>
-                        <button class="action-button bg-accent-blue hover:bg-accent-blue-dark text-white activate-trial-btn" data-username="${user.username}" ${user.trialActive ? 'disabled' : ''}><i class="fas fa-hourglass-half mr-1"></i>Activate 3-Day Trial</button>
+                        <button class="action-button bg-color-green-accent hover:bg-color-green-accent text-white grant-premium-btn" data-username="${user.username}" ${user.isPremium ? 'disabled' : ''} aria-label="Grant Premium to ${user.username}"><i class="fas fa-check-circle mr-1"></i>Grant Premium</button>
+                        <button class="action-button bg-color-red-accent hover:bg-color-red-light text-white revoke-premium-btn" data-username="${user.username}" ${!user.isPremium ? 'disabled' : ''} aria-label="Revoke Premium from ${user.username}"><i class="fas fa-times-circle mr-1"></i>Revoke Premium</button>
+                        <button class="action-button bg-color-accent-blue hover:bg-color-accent-blue-dark text-white activate-trial-btn" data-username="${user.username}" ${user.trialActive ? 'disabled' : ''} aria-label="Activate 3-Day Trial for ${user.username}"><i class="fas fa-hourglass-half mr-1"></i>Activate 3-Day Trial</button>
                     </td>
                 </tr>
             `;
@@ -1166,7 +1405,7 @@
 
     // Admin Actions
     async function grantPremium(username) {
-        showToast('Granting premium...', 'info');
+        showToast(`Granting premium to ${username}...`, 'info');
         const token = localStorage.getItem('jwtToken');
         try {
             const response = await fetch(`${API_BASE_URL}/admin/grant-premium/${username}`, {
@@ -1178,18 +1417,18 @@
             });
             const data = await response.json();
             if (response.ok) {
-                showToast(data.message, 'success');
+                showToast(data.message || `Premium granted to ${username} successfully!`, 'success');
                 showAdminPanel(); // Refresh user list
             } else {
-                showToast(data.message || `Failed to grant premium to ${username}.`, 'error');
+                showToast(data.message || `Failed to grant premium to ${username}. Please try again.`, 'error');
             }
         } catch (error) {
-            showToast(`Network error: ${error.message}`, 'error');
+            showToast(`Network error: ${error.message}. Please check your connection.`, 'error');
         }
     }
 
     async function revokePremium(username) {
-        showToast('Revoking premium...', 'info');
+        showToast(`Revoking premium from ${username}...`, 'info');
         const token = localStorage.getItem('jwtToken');
         try {
             const response = await fetch(`${API_BASE_URL}/admin/revoke-premium/${username}`, {
@@ -1201,18 +1440,18 @@
             });
             const data = await response.json();
             if (response.ok) {
-                showToast(data.message, 'success');
+                showToast(data.message || `Premium revoked from ${username} successfully!`, 'success');
                 showAdminPanel(); // Refresh user list
             } else {
-                showToast(data.message || `Failed to revoke premium from ${username}.`, 'error');
+                showToast(data.message || `Failed to revoke premium from ${username}. Please try again.`, 'error');
             }
         } catch (error) {
-            showToast(`Network error: ${error.message}`, 'error');
+            showToast(`Network error: ${error.message}. Please check your connection.`, 'error');
         }
         }
 
     async function activateTrial(username) {
-        showToast('Activating trial...', 'info');
+        showToast(`Activating trial for ${username}...`, 'info');
         const token = localStorage.getItem('jwtToken');
         try {
             const response = await fetch(`${API_BASE_URL}/admin/activate-trial/${username}/3`, { // 3 days for trial
@@ -1224,13 +1463,13 @@
             });
             const data = await response.json();
             if (response.ok) {
-                showToast(data.message, 'success');
+                showToast(data.message || `3-day trial activated for ${username} successfully!`, 'success');
                 showAdminPanel(); // Refresh user list
             } else {
-                showToast(data.message || `Failed to activate trial for ${username}.`, 'error');
+                showToast(data.message || `Failed to activate trial for ${username}. Please try again.`, 'error');
             }
         } catch (error) {
-            showToast(`Network error: ${error.message}`, 'error');
+            showToast(`Network error: ${error.message}. Please check your connection.`, 'error');
         }
     }
 
@@ -1269,27 +1508,32 @@
             const userRoles = localStorage.getItem('roles') ? JSON.parse(localStorage.getItem('roles')) : [];
             if (userRoles.includes('ROLE_ADMIN')) {
                 adminPanelButton.classList.remove('hidden');
-                fabAdminButton.classList.remove('hidden'); // Show FAB admin button
+                fabAdminButton.style.display = 'flex'; // Show FAB admin button
             } else {
                 adminPanelButton.classList.add('hidden');
-                fabAdminButton.classList.add('hidden'); // Hide FAB admin button
+                fabAdminButton.style.display = 'none'; // Hide FAB admin button
             }
 
-            if (!userData.isPremium && !userData.trialActive) {
-                timeframe1hButton.disabled = true;
-                timeframe1dButton.disabled = true;
+            // Disable/enable timeframe buttons based on premium/trial status
+            const isPremium = userData.isPremium;
+            const isTrialActive = userData.trialActive;
+
+            // 15m, 30m, 1h, 1d are premium/trial features
+            timeframe15mButton.disabled = !(isPremium || isTrialActive);
+            timeframe30mButton.disabled = !(isPremium || isTrialActive);
+            timeframe1hButton.disabled = !(isPremium || isTrialActive);
+            timeframe1dButton.disabled = !(isPremium || isTrialActive);
+
+            // If current timeframe is not allowed for non-premium/non-trial, switch to 4h
+            if (!isPremium && !isTrialActive) {
                 if (currentTimeframe !== '4h') {
-                    setTimeframe('4h');
+                    setTimeframe('4h'); // This will also update localStorage and active button
                 }
                 showToast(`Welcome, ${userData.username}! Your trial has expired or you are not premium. Only 4H scans available.`, 'info');
-            } else if (userData.trialActive) {
+            } else if (isTrialActive) {
                  showToast(`Welcome, ${userData.username}! Your trial expires on ${new Date(userData.trialExpiryDate).toLocaleDateString()}.`, 'info');
-                 timeframe1hButton.disabled = false;
-                 timeframe1dButton.disabled = false;
-            } else if (userData.isPremium) {
+            } else if (isPremium) {
                  showToast(`Welcome, ${userData.username}! You have premium access.`, 'success');
-                 timeframe1hButton.disabled = false;
-                 timeframe1dButton.disabled = false;
             }
 
 
@@ -1354,6 +1598,7 @@
                     if (plan === 'premium') {
                         showPaymentSection(username);
                     } else {
+                        localStorage.setItem('hasSeenOnboarding', 'false'); // Mark for onboarding
                         showAuthSection();
                         showToast("Registration successful! Please log in now.", 'info');
                     }
@@ -1372,7 +1617,7 @@
                 }
 
             } else {
-                showToast(data.message || "An error occurred.", 'error');
+                showToast(data.message || "An error occurred during authentication.", 'error');
             }
         } catch (error) {
             showToast(`Connection error. Please check your network connection and try again.`, 'error');
@@ -1449,7 +1694,7 @@
                     showToast("Payment proof submitted. Please log in to check your status later.", 'info');
                 }, 3000);
             } else {
-                showToast(data.message || "Failed to submit payment proof.", 'error');
+                showToast(data.message || "Failed to submit payment proof. Please double-check the hash.", 'error');
             }
         } catch (error) {
             showToast(`Connection error. Please try again.`, 'error');
@@ -1475,6 +1720,19 @@
             </div>
         </div>
     `;
+
+    function formatPrice(price) {
+        if (price === null || price === undefined) return 'N/A';
+        // Use toFixed to ensure consistent decimal places for display,
+        // but parseFloat to remove trailing zeros if not needed for precision.
+        // For crypto, often more decimals are needed.
+        return parseFloat(price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 });
+    }
+
+    function formatPercentage(value) {
+        if (value === null || value === undefined) return 'N/A';
+        return `${(value * 100).toFixed(2)}%`;
+    }
 
     function displayResults(resultsToDisplay) {
         resultsContainer.innerHTML = '';
@@ -1512,20 +1770,31 @@
 
 
         if (finalFilteredResults.length === 0) {
-            resultsContainer.innerHTML = '<p class="text-center text-text-secondary col-span-full py-8">No order block data available for current filters. Try adjusting sensitivity or deviation.</p>';
+            resultsContainer.innerHTML = `
+                <p class="text-center text-lm-text-secondary col-span-full py-8">
+                    No order block data available for current filters.
+                    <br>Try adjusting sensitivity, price deviation, or timeframe, then click "Initiate Scan" again.
+                </p>
+            `;
             return;
         }
 
         finalFilteredResults.forEach((coin, index) => {
             // Determine the main card border color based on if any Buying/Selling OBs are present
             let cardBorderClass = 'no-ob-border';
+            let obTypeIcon = '';
             if (coin.orderBlocks.some(ob => ob.obType === 'Buying (Bullish)')) {
                 cardBorderClass = 'buying-ob-border';
+                obTypeIcon = '<i class="fas fa-arrow-alt-circle-up text-color-green-accent mr-1"></i>';
             } else if (coin.orderBlocks.some(ob => ob.obType === 'Selling (Bearish)')) {
                 cardBorderClass = 'selling-ob-border';
+                obTypeIcon = '<i class="fas fa-arrow-alt-circle-down text-color-red-accent mr-1"></i>';
             }
 
-            const currentPriceDisplay = coin.currentPrice !== null && coin.currentPrice !== undefined ? parseFloat(coin.currentPrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 }) : 'N/A';
+            const currentPriceDisplay = formatPrice(coin.currentPrice);
+            const priceChange24h = coin.priceChange24h ? formatPercentage(coin.priceChange24h) : 'N/A';
+            const priceChangeClass = coin.priceChange24h > 0 ? 'text-color-green-accent' : coin.priceChange24h < 0 ? 'text-color-red-accent' : 'text-lm-text-secondary';
+
 
             let orderBlocksHtml = '';
             // Sort order blocks by price to display them consistently (e.g., lowest price first)
@@ -1537,22 +1806,39 @@
 
 
             sortedOrderBlocks.forEach((ob, obIndex) => {
-                const obPriceDisplay = ob.obPrice !== null && ob.obPrice !== undefined ? `$${parseFloat(ob.obPrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })}` : 'N/A';
+                const obPriceDisplay = formatPrice(ob.obPrice);
                 const obZoneInfo = (ob.obType !== 'None' && ob.obZoneStart !== null && ob.obZoneEnd !== null) ?
-                                   ` | Zone: $${parseFloat(ob.obZoneStart).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })} - $${parseFloat(ob.obZoneEnd).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })}` : '';
-                const obTypeClass = ob.obType === 'Buying (Bullish)' ? 'text-green-accent' :
-                                    ob.obType === 'Selling (Bearish)' ? 'text-red-accent' :
-                                    'text-text-secondary';
+                                   ` | Zone: $${formatPrice(ob.obZoneStart)} - $${formatPrice(ob.obZoneEnd)}` : '';
+                const obTypeClass = ob.obType === 'Buying (Bullish)' ? 'text-color-green-accent' :
+                                    ob.obType === 'Selling (Bearish)' ? 'text-color-red-accent' :
+                                    'text-lm-text-secondary';
+                const obIcon = ob.obType === 'Buying (Bullish)' ? '<i class="fas fa-arrow-alt-circle-up mr-1"></i>' :
+                               ob.obType === 'Selling (Bearish)' ? '<i class="fas fa-arrow-alt-circle-down mr-1"></i>' : '';
+
+                let tradeSetupHtml = '';
+                if (ob.suggestedEntryPrice !== null && ob.suggestedEntryPrice !== undefined) {
+                    tradeSetupHtml = `
+                        <div class="mt-2 text-xs text-lm-text-secondary border-t border-lm-border pt-2">
+                            <p>Entry: <span class="font-bold text-lm-text-primary">$${formatPrice(ob.suggestedEntryPrice)}</span></p>
+                            <p>Stop Loss: <span class="font-bold text-color-red-accent">$${formatPrice(ob.suggestedStopLoss)}</span> (Risk: $${formatPrice(ob.riskAmount)})</p>
+                            <p>TP1 (1R): <span class="font-bold text-color-green-accent">$${formatPrice(ob.suggestedTakeProfit1)}</span></p>
+                            <p>TP2 (2R): <span class="font-bold text-color-green-accent">$${formatPrice(ob.suggestedTakeProfit2)}</span></p>
+                            <p>TP3 (3R): <span class="font-bold text-color-green-accent">$${formatPrice(ob.suggestedTakeProfit3)}</span></p>
+                        </div>
+                    `;
+                }
+
 
                 orderBlocksHtml += `
                     <div class="mt-3 pt-3 ${obIndex > 0 ? 'border-t border-lm-border' : ''}">
                         <p class="text-md font-semibold mb-1">
-                            Order Block ${obIndex + 1}: <span class="${obTypeClass}">${ob.obType || 'N/A'}</span>
+                            Order Block ${obIndex + 1}: <span class="${obTypeClass}">${obIcon}${ob.obType || 'N/A'}</span>
                         </p>
-                        <p class="text-text-secondary text-sm mb-1">
-                            Price Level: <span class="text-text-light font-bold">${obPriceDisplay}</span>${obZoneInfo}
+                        <p class="text-lm-text-secondary text-sm mb-1">
+                            Price Level: <span class="text-lm-text-primary font-bold">$${obPriceDisplay}</span>${obZoneInfo}
                         </p>
-                        <p class="text-text-secondary text-xs">${ob.details || 'No additional details.'}</p>
+                        <p class="text-lm-text-secondary text-xs">${ob.details || 'No additional details.'}</p>
+                        ${tradeSetupHtml}
                     </div>
                 `;
             });
@@ -1566,12 +1852,13 @@
                      data-order-blocks='${JSON.stringify(coin.orderBlocks)}'
                      data-aos="fade-up" data-aos-delay="${index * 100}">
                     <div class="flex justify-between items-center mb-3">
-                        <h2 class="text-2xl font-bold text-accent-blue tracking-wide">${coin.name || 'N/A'} (${coin.id || 'N/A'})</h2>
-                        <span class="text-lg font-semibold text-text-secondary">Vol: ${coin.volume || 'N/A'}</span>
+                        <h2 class="text-2xl font-bold text-color-accent-blue tracking-wide">${coin.name || 'N/A'} (${coin.id || 'N/A'})</h2>
+                        <span class="text-lg font-semibold text-lm-text-secondary">Vol: ${coin.volume || 'N/A'}</span>
                     </div>
-                    <p class="text-text-secondary mb-2">Current Price: <span class="text-text-light font-medium">$${currentPriceDisplay}</span></p>
-                    <p class="text-text-secondary mb-2">Scan Time: <span class="text-text-light font-medium">${coin.timestamp || 'N/A'}</span></p>
-                    <p class="text-text-secondary mb-2">Timeframe: <span class="text-text-light font-medium">${(coin.timeframe || 'N/A').toUpperCase()}</span></p>
+                    <p class="text-lm-text-secondary mb-2">Current Price: <span class="text-lm-text-primary font-medium">$${currentPriceDisplay}</span></p>
+                    <p class="text-lm-text-secondary mb-2">24h Change: <span class="${priceChangeClass} font-medium">${priceChange24h}</span></p>
+                    <p class="text-lm-text-secondary mb-2">Scan Time: <span class="text-lm-text-primary font-medium">${coin.timestamp || 'N/A'}</span></p>
+                    <p class="text-lm-text-secondary mb-2">Timeframe: <span class="text-lm-text-primary font-medium">${(coin.timeframe || 'N/A').toUpperCase()}</span></p>
                     <div class="mt-4 pt-4 border-t border-lm-border">
                         ${orderBlocksHtml}
                     </div>
@@ -1638,12 +1925,35 @@
       showToast(`Detection sensitivity set to "${sensitivityType}". Click Scan to update results.`, 'info');
     }
 
+    // Function to update sensitivity tooltips
+    function updateSensitivityTooltips() {
+        sensitivityButtons.forEach(button => {
+            const sensitivityType = button.dataset.sensitivity;
+            const preset = sensitivityPresets[sensitivityType];
+            const tooltipId = `tooltip-${sensitivityType}`;
+            const tooltipElement = document.getElementById(tooltipId);
+            if (tooltipElement && preset) {
+                tooltipElement.innerHTML = `
+                    <b>${sensitivityType.replace('-', ' ').toUpperCase()}</b><br>
+                    ${preset.description}<br>
+                    Min Body Ratio: ${preset.minBodyRatio}<br>
+                    Min Price Change: ${preset.minPriceChange}<br>
+                    Volume Factor: ${preset.volumeFactor}<br>
+                    Require BOS: ${preset.requireBOS ? 'Yes' : 'No'}<br>
+                    Require C3 Close Past C2: ${preset.requireC3ClosePastC2 ? 'Yes' : 'No'}<br>
+                    Require FVG: ${preset.requireFVG ? 'Yes' : 'No'}<br>
+                    Min FVG Depth Ratio: ${preset.minFvgDepthRatio}
+                `;
+            }
+        });
+    }
+
     function clearResults() {
         allScanResults = [];
         currentFilter = 'All';
         localStorage.setItem('currentFilter', 'All');
         setFilter('All');
-        resultsContainer.innerHTML = '<p class="text-center text-text-secondary col-span-full py-8">Results cleared. Click "Initiate Scan" to begin analyzing market data.</p>';
+        resultsContainer.innerHTML = '<p class="text-center text-lm-text-secondary col-span-full py-8">Results cleared. Click "Initiate Scan" to begin analyzing market data.</p>';
         showToast('Results cleared.', 'info');
     }
 
@@ -1670,7 +1980,7 @@
 
         const selectedPreset = sensitivityPresets[currentSensitivity];
         if (!selectedPreset) {
-            showToast("Invalid sensitivity preset selected.", 'error');
+            showToast("Invalid sensitivity preset selected. Please choose a valid preset.", 'error');
             scanButton.disabled = false;
             clearButton.disabled = false;
             document.querySelectorAll('.action-button[data-filter], .action-button[data-timeframe], .sensitivity-button').forEach(btn => btn.disabled = false);
@@ -1686,6 +1996,8 @@
 
 
         try {
+            // Note: requireUnmitigated is no longer sent from frontend,
+            // as it's enforced on the backend.
             const response = await fetch(`${API_BASE_URL}/scan-order-blocks?interval=${currentTimeframe}&minBodyRatio=${minBodyRatio}&minPriceChange=${minPriceChange}&volumeFactor=${volumeFactor}&requireBOS=${requireBOS}&requireC3ClosePastC2=${requireC3ClosePastC2}&requireFVG=${requireFVG}&minFvgDepthRatio=${minFvgDepthRatio}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -1698,9 +2010,9 @@
                     const errorBody = await response.json();
                     errorDetail = errorBody.message || JSON.stringify(errorBody);
                 } catch (bodyError) {
-                    errorDetail += `. Could not read response body: ${bodyError.message}`;
+                    errorDetail += `. Could not read response body: ${bodyError.message}.`;
                 }
-                throw new Error(`Request failed: ${errorDetail}`);
+                throw new Error(`Scan failed: ${errorDetail}`);
             }
 
             const data = await response.json();
@@ -1709,10 +2021,10 @@
             showToast(`Scan complete! Found ${data.length} total coins for ${currentTimeframe.toUpperCase()} timeframe with "${currentSensitivity}" sensitivity. Displaying ${resultsContainer.children.length} results after price deviation filter.`, 'success');
 
         } catch (err) {
-            showToast(`Connection/Data Error: ${err.message}. Please check your network connection and try again.`, 'error');
+            showToast(`Scan Error: ${err.message}. Please check your network connection or try adjusting parameters.`, 'error');
             console.error("Frontend fetch error:", err);
             allScanResults = [];
-            resultsContainer.innerHTML = '<p class="text-center text-red-accent col-span-full py-8">Failed to load scan results. Please check your connection or try again later.</p>';
+            resultsContainer.innerHTML = '<p class="text-center text-color-red-accent col-span-full py-8">Failed to load scan results. Please check your connection or try again later.</p>';
         } finally {
             scanButton.disabled = false;
             clearButton.disabled = false;
@@ -1726,98 +2038,262 @@
     }
 
     // --- Chart Modal Functions ---
+
+    // Mock function to generate candlestick data for Lightweight Charts
+    // In a real application, this would fetch from a data provider
+    function generateMockCandleData(numDays, currentPrice, obPrice, obZoneStart, obZoneEnd) {
+        const data = [];
+        let lastClose = currentPrice * 0.95 + (Math.random() * currentPrice * 0.1); // Start price
+        let lastTime = Date.now() / 1000 - numDays * 24 * 60 * 60; // Start 'numDays' ago
+
+        for (let i = 0; i < numDays; i++) {
+            const open = lastClose;
+            const high = open * (1 + Math.random() * 0.02);
+            const low = open * (1 - Math.random() * 0.02);
+            const close = open + (Math.random() - 0.5) * open * 0.03;
+
+            data.push({
+                time: lastTime + i * 24 * 60 * 60, // Daily candles
+                open: open,
+                high: high,
+                low: low,
+                close: close
+            });
+            lastClose = close;
+        }
+
+        // Ensure the current price is somewhat near the end of the data
+        const latestCandle = data[data.length - 1];
+        if (latestCandle) {
+            latestCandle.close = currentPrice;
+            latestCandle.high = Math.max(latestCandle.high, currentPrice);
+            latestCandle.low = Math.min(latestCandle.low, currentPrice);
+            latestCandle.open = latestCandle.open; // Keep open relative
+        }
+
+        return data;
+    }
+
+
     function openChartModal(event) {
       const card = event.currentTarget;
       const symbol = card.dataset.symbol;
       const timeframe = card.dataset.timeframe;
-      const coinName = card.dataset.coinName;
-      const currentPrice = parseFloat(card.dataset.currentPrice);
-
-      const allOrderBlocks = JSON.parse(card.dataset.orderBlocks || '[]');
+      const coinName = card.dataset.coin-name;
+      const currentPrice = parseFloat(card.dataset.current-price);
+      const allOrderBlocks = JSON.parse(card.dataset.order-blocks || '[]');
 
       modalTitle.textContent = `${coinName} (${symbol}) Chart - ${timeframe.toUpperCase()}`;
 
       let obInfoHtml = '';
-      if (allOrderBlocks && allOrderBlocks.length > 0) {
-          const displayableOrderBlocks = allOrderBlocks.filter(ob => ob.obType !== 'None');
+      const displayableOrderBlocks = allOrderBlocks.filter(ob => ob.obType !== 'None' && ob.obPrice !== null && ob.obPrice !== undefined);
 
-          if (displayableOrderBlocks.length > 0) {
-              const sortedModalOrderBlocks = [...displayableOrderBlocks].sort((a, b) => {
-                  if (a.obPrice === null) return 1;
-                  if (b.obPrice === null) return -1;
-                  return a.obPrice - b.obPrice;
-              });
+      if (displayableOrderBlocks.length > 0) {
+          const sortedModalOrderBlocks = [...displayableOrderBlocks].sort((a, b) => {
+              return a.obPrice - b.obPrice;
+          });
 
-              obInfoHtml = sortedModalOrderBlocks.map((ob, index) => {
-                  const obPriceDisplay = ob.obPrice !== null && ob.obPrice !== undefined ? `$${parseFloat(ob.obPrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })}` : 'N/A';
-                  const obZoneInfo = (ob.obType !== 'None' && ob.obZoneStart !== null && ob.obZoneEnd !== null) ?
-                                     ` | Zone: $${parseFloat(ob.obZoneStart).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })} - $${parseFloat(ob.obZoneEnd).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })}` : '';
-                  const obTypeClass = ob.obType === 'Buying (Bullish)' ? 'text-green-accent' :
-                                      ob.obType === 'Selling (Bearish)' ? 'text-red-accent' :
-                                      'text-text-secondary';
-                  return `
-                      <p class="text-center text-text-secondary text-sm">
-                          OB ${index + 1}: <span class="${obTypeClass}">${ob.obType || 'N/A'}</span> | Price Level: <span class="text-text-light font-bold">${obPriceDisplay}</span>${obZoneInfo}
-                      </p>
+          obInfoHtml = sortedModalOrderBlocks.map((ob, index) => {
+              const obPriceDisplay = formatPrice(ob.obPrice);
+              const obZoneInfo = (ob.obZoneStart !== null && ob.obZoneEnd !== null) ?
+                                 ` | Zone: $${formatPrice(ob.obZoneStart)} - $${formatPrice(ob.obZoneEnd)}` : '';
+              const obTypeClass = ob.obType === 'Buying (Bullish)' ? 'text-color-green-accent' :
+                                  ob.obType === 'Selling (Bearish)' ? 'text-color-red-accent' : '';
+              const obIcon = ob.obType === 'Buying (Bullish)' ? '<i class="fas fa-arrow-alt-circle-up mr-1"></i>' :
+                             ob.obType === 'Selling (Bearish)' ? '<i class="fas fa-arrow-alt-circle-down mr-1"></i>' : '';
+
+              let tradeSetupModalHtml = '';
+              if (ob.suggestedEntryPrice !== null && ob.suggestedEntryPrice !== undefined) {
+                  tradeSetupModalHtml = `
+                      <div class="mt-2 text-xs text-lm-text-secondary border-t border-lm-border pt-2">
+                          <p>Entry: <span class="font-bold text-lm-text-primary">$${formatPrice(ob.suggestedEntryPrice)}</span></p>
+                          <p>Stop Loss: <span class="font-bold text-color-red-accent">$${formatPrice(ob.suggestedStopLoss)}</span> (Risk: $${formatPrice(ob.riskAmount)})</p>
+                          <p>TP1 (1R): <span class="font-bold text-color-green-accent">$${formatPrice(ob.suggestedTakeProfit1)}</span></p>
+                          <p>TP2 (2R): <span class="font-bold text-color-green-accent">$${formatPrice(ob.suggestedTakeProfit2)}</span></p>
+                          <p>TP3 (3R): <span class="font-bold text-color-green-accent">$${formatPrice(ob.suggestedTakeProfit3)}</span></p>
+                      </div>
                   `;
-              }).join('');
-          } else {
-              obInfoHtml = '<p class="text-center text-text-secondary text-sm">No valid order blocks found for this coin with current criteria.</p>';
-          }
+              }
+
+              return `
+                  <p class="text-center text-lm-text-secondary text-sm">
+                      OB ${index + 1}: <span class="${obTypeClass}">${obIcon}${ob.obType || 'N/A'}</span> | Price Level: <span class="text-lm-text-primary font-bold">$${obPriceDisplay}</span>${obZoneInfo}
+                  </p>
+                  ${tradeSetupModalHtml}
+              `;
+          }).join('');
       } else {
-          obInfoHtml = '<p class="text-center text-text-secondary text-sm">No order blocks found for this coin with current criteria.</p>';
+          obInfoHtml = '<p class="text-center text-lm-text-secondary text-sm">No valid order blocks found for this coin with current criteria.</p>';
       }
       modalOBInfo.innerHTML = obInfoHtml;
 
-      let tvInterval = '240';
-      if (timeframe === '1h') {
-          tvInterval = '60';
-      } else if (timeframe === '1d') {
-          tvInterval = 'D';
+      // Clear previous chart if any
+      lightweightChartContainer.innerHTML = '';
+      if (window.currentChart) {
+          window.currentChart.remove();
+          window.currentChart = null;
       }
 
-      document.getElementById('tradingview_chart').innerHTML = '';
+      // Initialize Lightweight Charts
+      const chartOptions = {
+          layout: {
+              textColor: document.documentElement.classList.contains('dark') ? 'var(--color-text-light)' : 'var(--lm-text-primary)',
+              background: { color: document.documentElement.classList.contains('dark') ? 'var(--color-dark-bg-primary)' : 'var(--lm-bg-secondary)' },
+          },
+          grid: {
+              vertLines: { color: document.documentElement.classList.contains('dark') ? 'var(--color-border-dark)' : 'var(--lm-border)' },
+              horzLines: { color: document.documentElement.classList.contains('dark') ? 'var(--color-border-dark)' : 'var(--lm-border)' },
+          },
+          timeScale: {
+              borderColor: document.documentElement.classList.contains('dark') ? 'var(--color-border-dark)' : 'var(--lm-border)',
+              timeVisible: true,
+              secondsVisible: false,
+          },
+          priceScale: {
+              borderColor: document.documentElement.classList.contains('dark') ? 'var(--color-border-dark)' : 'var(--lm-border)',
+          },
+          crosshair: {
+            mode: LightweightCharts.CrosshairMode.Normal,
+          },
+          localization: {
+            locale: 'en-US',
+            priceFormatter: price => formatPrice(price),
+          }
+      };
 
-      new TradingView.widget(
-        {
-          "width": "100%",
-          "height": "100%",
-          "symbol": `BINANCE:${symbol}`,
-          "interval": tvInterval,
-          "timezone": "Etc/UTC",
-          "theme": document.documentElement.classList.contains('dark') ? "dark" : "light",
-          "style": "1",
-          "locale": "en",
-          "toolbar_bg": document.documentElement.classList.contains('dark') ? "#2d3748" : "#f1f3f6",
-          "enable_publishing": false,
-          "allow_symbol_change": true,
-          "container_id": "tradingview_chart"
-        }
-      );
+      const chart = LightweightCharts.createChart(lightweightChartContainer, chartOptions);
+      window.currentChart = chart; // Store chart instance globally for theme changes
 
-      tradingViewLink.href = `https://www.tradingview.com/chart/?symbol=BINANCE:${symbol}.P&interval=${tvInterval}`;
+      const candlestickSeries = chart.addCandlestickSeries({
+          upColor: 'var(--color-green-accent)',
+          downColor: 'var(--color-red-accent)',
+          borderVisible: false,
+          wickColor: 'var(--color-text-secondary)',
+          wickUpColor: 'var(--color-green-accent)',
+          wickDownColor: 'var(--color-red-accent)',
+      });
+
+      // Generate mock data for the chart
+      const mockData = generateMockCandleData(100, currentPrice); // 100 days of data
+      candlestickSeries.setData(mockData);
+
+      // Add horizontal lines for OB price levels and trade setups
+      displayableOrderBlocks.forEach(ob => {
+          if (ob.obPrice) {
+              const obPriceLine = chart.addLineSeries({
+                  color: ob.obType === 'Buying (Bullish)' ? 'var(--color-green-accent)' : 'var(--color-red-accent)',
+                  lineWidth: 2,
+                  lineStyle: LightweightCharts.LineStyle.Dotted,
+                  axisLabelVisible: true,
+                  title: `${ob.obType.split(' ')[0]} OB`,
+              });
+              obPriceLine.setData([{ time: mockData[0].time, value: ob.obPrice }, { time: mockData[mockData.length - 1].time, value: ob.obPrice }]);
+          }
+
+          // Draw OB zone as a shaded area (if zone exists)
+          if (ob.obZoneStart && ob.obZoneEnd) {
+              // Lightweight Charts doesn't have a direct "rectangle" drawing for price zones.
+              // A workaround is to use bands or custom series. For simplicity, we'll draw two lines for the zone.
+              const obZoneStartLine = chart.addLineSeries({
+                  color: ob.obType === 'Buying (Bullish)' ? 'var(--color-green-accent)' : 'var(--color-red-accent)',
+                  lineWidth: 1,
+                  lineStyle: LightweightCharts.LineStyle.Solid,
+                  axisLabelVisible: false,
+              });
+              obZoneStartLine.setData([{ time: mockData[0].time, value: ob.obZoneStart }, { time: mockData[mockData.length - 1].time, value: ob.obZoneStart }]);
+
+              const obZoneEndLine = chart.addLineSeries({
+                  color: ob.obType === 'Buying (Bullish)' ? 'var(--color-green-accent)' : 'var(--color-red-accent)',
+                  lineWidth: 1,
+                  lineStyle: LightweightCharts.LineStyle.Solid,
+                  axisLabelVisible: false,
+              });
+              obZoneEndLine.setData([{ time: mockData[0].time, value: ob.obZoneEnd }, { time: mockData[mockData.length - 1].time, value: ob.obZoneEnd }]);
+          }
+
+          // Plot Trade Setup Lines
+          if (ob.suggestedEntryPrice) {
+              const entryLine = chart.addLineSeries({ color: 'var(--color-accent-blue)', lineWidth: 1, lineStyle: LightweightCharts.LineStyle.Solid, axisLabelVisible: true, title: 'Entry' });
+              entryLine.setData([{ time: mockData[0].time, value: ob.suggestedEntryPrice }, { time: mockData[mockData.length - 1].time, value: ob.suggestedEntryPrice }]);
+
+              const stopLossLine = chart.addLineSeries({ color: 'var(--color-red-accent)', lineWidth: 1, lineStyle: LightweightCharts.LineStyle.Solid, axisLabelVisible: true, title: 'SL' });
+              stopLossLine.setData([{ time: mockData[0].time, value: ob.suggestedStopLoss }, { time: mockData[mockData.length - 1].time, value: ob.suggestedStopLoss }]);
+
+              const tp1Line = chart.addLineSeries({ color: 'var(--color-green-accent)', lineWidth: 1, lineStyle: LightweightCharts.LineStyle.Solid, axisLabelVisible: true, title: 'TP1' });
+              tp1Line.setData([{ time: mockData[0].time, value: ob.suggestedTakeProfit1 }, { time: mockData[mockData.length - 1].time, value: ob.suggestedTakeProfit1 }]);
+
+              const tp2Line = chart.addLineSeries({ color: 'var(--color-green-accent)', lineWidth: 1, lineStyle: LightweightCharts.LineStyle.Solid, axisLabelVisible: true, title: 'TP2' });
+              tp2Line.setData([{ time: mockData[0].time, value: ob.suggestedTakeProfit2 }, { time: mockData[mockData.length - 1].time, value: ob.suggestedTakeProfit2 }]);
+
+              const tp3Line = chart.addLineSeries({ color: 'var(--color-green-accent)', lineWidth: 1, lineStyle: LightweightCharts.LineStyle.Solid, axisLabelVisible: true, title: 'TP3' });
+              tp3Line.setData([{ time: mockData[0].time, value: ob.suggestedTakeProfit3 }, { time: mockData[mockData.length - 1].time, value: ob.suggestedTakeProfit3 }]);
+          }
+      });
+
+      // Fit content to screen
+      chart.timeScale().fitContent();
 
       openModal(chartModal);
     }
 
     function closeChartModal() {
       closeModal(chartModal);
-      document.getElementById('tradingview_chart').innerHTML = '';
+      if (window.currentChart) {
+          window.currentChart.remove(); // Dispose the chart instance
+          window.currentChart = null;
+      }
     }
+
+    // --- Onboarding Modal Functions ---
+    function showOnboardingModal() {
+        currentOnboardingStep = 0;
+        updateOnboardingContent();
+        openModal(onboardingModal);
+    }
+
+    function updateOnboardingContent() {
+        onboardingContent.innerHTML = onboardingSteps[currentOnboardingStep].content;
+
+        onboardingPrevButton.classList.toggle('hidden', currentOnboardingStep === 0);
+        onboardingNextButton.classList.toggle('hidden', currentOnboardingStep === onboardingSteps.length - 1);
+        onboardingFinishButton.classList.toggle('hidden', currentOnboardingStep < onboardingSteps.length - 1);
+    }
+
+    function nextOnboardingStep() {
+        if (currentOnboardingStep < onboardingSteps.length - 1) {
+            currentOnboardingStep++;
+            updateOnboardingContent();
+        }
+    }
+
+    function prevOnboardingStep() {
+        if (currentOnboardingStep > 0) {
+            currentOnboardingStep--;
+            updateOnboardingContent();
+        }
+    }
+
+    function finishOnboarding() {
+        localStorage.setItem('hasSeenOnboarding', 'true');
+        closeModal(onboardingModal);
+    }
+
 
     // --- Initial Setup Calls ---
     // Apply theme on load
-    const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    applyTheme(savedTheme);
+    // For this theme, we force it to be dark
+    applyTheme('dark');
 
     // Restore persisted states
     priceDeviationInput.value = maxPriceDeviationPercent;
+    priceDeviationValueSpan.textContent = `${maxPriceDeviationPercent}%`; // Update display
     setTimeframe(currentTimeframe);
     setFilter(currentFilter);
     setSensitivity(currentSensitivity);
+    updateSensitivityTooltips(); // Initialize tooltips
+
 
     // This is the CRITICAL part for initial visibility
-    // Ensure authSection is visible by default in HTML, and JS toggles display property
     if (localStorage.getItem('jwtToken')) {
         showScannerSection();
     } else {
@@ -1831,6 +2307,9 @@
     showAllButton.addEventListener('click', () => setFilter('All'));
     showBuyingButton.addEventListener('click', () => setFilter('Buying (Bullish)'));
     showSellingButton.addEventListener('click', () => setFilter('Selling (Bearish)'));
+    // NEW Timeframe Button Listeners
+    timeframe15mButton.addEventListener('click', () => setTimeframe('15m'));
+    timeframe30mButton.addEventListener('click', () => setTimeframe('30m'));
     timeframe1hButton.addEventListener('click', () => setTimeframe('1h'));
     timeframe4hButton.addEventListener('click', () => setTimeframe('4h'));
     timeframe1dButton.addEventListener('click', () => setTimeframe('1d'));
@@ -1841,15 +2320,17 @@
       });
     });
 
-    priceDeviationInput.addEventListener('change', (event) => {
+    priceDeviationInput.addEventListener('input', (event) => { // Use 'input' for real-time update
         const newValue = parseFloat(event.target.value);
         if (!isNaN(newValue) && newValue >= 0 && newValue <= 100) {
             maxPriceDeviationPercent = newValue;
             localStorage.setItem('maxPriceDeviationPercent', newValue);
-            filterResults();
+            priceDeviationValueSpan.textContent = `${newValue}%`; // Update the displayed value
+            filterResults(); // Re-filter results as deviation changes
         } else {
             showToast("Please enter a valid percentage between 0 and 100.", 'error');
-            event.target.value = maxPriceDeviationPercent;
+            event.target.value = maxPriceDeviationPercent; // Revert to last valid
+            priceDeviationValueSpan.textContent = `${maxPriceDeviationPercent}%`;
         }
     });
 
@@ -1860,18 +2341,25 @@
     adminPanelButton.addEventListener('click', showAdminPanel);
 
     // Premium Welcome Modal Event Listeners
-    closePremiumWelcomeModalButton.addEventListener('click', () => closeModal(premiumWelcomeModal));
-    closePremiumWelcomeModalX.addEventListener('click', () => closeModal(premiumWelcomeModal));
+    closePremiumWelcomeModalButton.addEventListener('click', () => {
+        if (dontShowPremiumAgainCheckbox.checked) {
+            localStorage.setItem('hasSeenPremiumWelcome', 'true');
+        }
+        closeModal(premiumWelcomeModal);
+    });
+    closePremiumWelcomeModalX.addEventListener('click', () => {
+        if (dontShowPremiumAgainCheckbox.checked) {
+            localStorage.setItem('hasSeenPremiumWelcome', 'true');
+        }
+        closeModal(premiumWelcomeModal);
+    });
 
-    // Theme Toggle Event Listener
-    themeToggle.addEventListener('click', toggleTheme);
+    // Onboarding Modal Event Listeners
+    closeOnboardingModalButton.addEventListener('click', finishOnboarding);
+    onboardingPrevButton.addEventListener('click', prevOnboardingStep);
+    onboardingNextButton.addEventListener('click', nextOnboardingStep);
+    onboardingFinishButton.addEventListener('click', finishOnboarding);
 
-
-    // Load TradingView widget script dynamically
-    const script = document.createElement('script');
-    script.src = 'https://s3.tradingview.com/tv.js';
-    script.async = true;
-    document.head.appendChild(script);
 
     // Ripple effect for buttons (already present, ensured it works with new styling)
     document.querySelectorAll('.scan-button, .action-button, .fab-button').forEach(button => {
@@ -1979,12 +2467,14 @@
                 closeModal(adminPanelModal);
             } else if (premiumWelcomeModal.classList.contains('show')) {
                 closeModal(premiumWelcomeModal);
+            } else if (onboardingModal.classList.contains('show')) {
+                closeModal(onboardingModal);
             }
         }
     });
 
     // Close modals on background click
-    [chartModal, paymentModal, adminPanelModal, premiumWelcomeModal].forEach(modal => {
+    [chartModal, paymentModal, adminPanelModal, premiumWelcomeModal, onboardingModal].forEach(modal => {
         modal.addEventListener('click', (event) => {
             if (event.target === modal) {
                 closeModal(modal);

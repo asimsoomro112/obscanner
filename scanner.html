@@ -220,28 +220,169 @@
         .revoke-premium-btn:hover:not(:disabled) { background-color: var(--color-red-accent); border-color: var(--color-red-accent); }
         .activate-trial-btn:hover:not(:disabled) { background-color: var(--color-accent-blue-dark); border-color: var(--color-accent-blue-dark); }
 
-        /* Coin Cards */
-        .coin-card {
-            background-color: var(--lm-bg-secondary);
-            border-left: 5px solid;
-            border-radius: 0.75rem;
-            box-shadow: var(--shadow-lg);
-            padding: 1.5rem;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease-in-out, background-color 0.5s ease;
-            cursor: pointer;
+        /* --- NEW GLASSMORPHISM CARD STYLES --- */
+        /* Renamed .container to .glass-container to avoid conflicts */
+        .glass-container {
             position: relative;
-            overflow: hidden;
-            color: var(--lm-text-primary);
-            border: 1px solid var(--lm-border); /* Added subtle border */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px; /* For 3D transform effect */
+            height: 100%; /* Ensure container takes full height in grid cell */
+            width: 100%; /* Ensure container takes full width in grid cell */
         }
-        .coin-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); /* Deeper shadow on hover */
-            border-color: var(--color-accent-blue-light); /* Highlight border on hover */
+
+        /* Renamed .glass to .glass-card */
+        .glass-card {
+            position: relative;
+            width: 100%; /* Make it responsive */
+            max-width: 250px; /* Max width for larger screens */
+            height: 400px; /* Increased height to accommodate more info, was 350px */
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Subtle white gradient */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column; /* Stack content vertically */
+            justify-content: space-between; /* Space out content */
+            align-items: center;
+            transition: 0.5s;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            padding: 1rem; /* Add padding */
+            color: var(--color-text-light); /* Use theme text color */
+            text-align: center;
+            overflow: hidden; /* Hide overflow for content */
         }
-        .buying-ob-border { border-left-color: var(--color-green-accent); }
-        .selling-ob-border { border-left-color: var(--color-red-accent); }
-        .no-ob-border { border-left-color: var(--lm-text-secondary); }
+
+        .glass-container:hover .glass-card {
+            transform: translateY(-10px) scale(1.02); /* Lift and slightly enlarge on hover */
+            box-shadow: 0 25px 35px rgba(0, 0, 0, 0.35);
+        }
+
+        .glass-card::before {
+            content: attr(data-text);
+            position: absolute;
+            top: 0; /* Position at the top */
+            width: 100%;
+            padding: 8px 0; /* Add padding */
+            background: rgba(255, 255, 255, 0.08); /* Slightly more opaque background for header */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--color-text-light); /* Use theme text color */
+            font-weight: 600;
+            font-size: 1.1em;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15); /* Separator line */
+            z-index: 1; /* Ensure it's above content */
+        }
+
+        .glass-card .content {
+            flex-grow: 1; /* Allow content to take available space */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start; /* Align content to top within its space */
+            align-items: center;
+            padding-top: 50px; /* Offset for the ::before header */
+            width: 100%;
+            text-align: left; /* Align text left within content */
+            overflow-y: auto; /* Add scrollbar if content overflows */
+            scrollbar-width: thin; /* For Firefox */
+            scrollbar-color: var(--color-accent-blue) transparent; /* For Firefox */
+        }
+
+        /* Custom scrollbar for Webkit browsers */
+        .glass-card .content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .glass-card .content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .glass-card .content::-webkit-scrollbar-thumb {
+            background-color: var(--color-accent-blue);
+            border-radius: 10px;
+            border: 2px solid transparent;
+        }
+
+
+        .glass-card .content h2 {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: var(--color-accent-blue); /* Use accent color for main heading */
+            margin-bottom: 0.5rem;
+        }
+
+        .glass-card .content p {
+            font-size: 0.9em;
+            color: var(--color-text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .glass-card .content .ob-details {
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+            text-align: left;
+        }
+
+        .glass-card .content .ob-details p {
+            font-size: 0.8em;
+            margin-bottom: 0.1rem;
+        }
+
+        .glass-card .content .ob-details .price-level {
+            font-weight: 700;
+            color: var(--color-text-light);
+        }
+
+        .glass-card .content .ob-details .ob-type {
+            font-weight: 600;
+        }
+
+        /* Specific border colors for the glass cards */
+        .glass-card.buying-ob-border { border-color: var(--color-green-accent); }
+        .glass-card.selling-ob-border { border-color: var(--color-red-accent); }
+        .glass-card.no-ob-border { border-color: var(--color-border-dark); } /* Use a subtle border for no OB */
+
+        /* Adjust results container grid to center items */
+        #resultsContainer {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Flexible columns */
+            gap: 24px; /* Space between cards */
+            justify-items: center; /* Center cards within their grid cells */
+            align-items: stretch; /* Stretch cards to fill height */
+        }
+
+        /* Ensure images/SVGs within glass cards are styled */
+        .glass-card svg {
+            font-size: 2.5em; /* Keep original SVG size */
+            fill: var(--color-accent-blue); /* Use accent color for SVGs */
+            margin-bottom: 10px; /* Space below SVG */
+        }
+
+        /* Adjust skeleton card to new dimensions */
+        .skeleton-card {
+            height: 400px; /* Match glass-card height, was 350px */
+            background-color: rgba(255, 255, 255, 0.05); /* Subtle transparent background */
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .skeleton-card .skeleton-line {
+            background-color: rgba(255, 255, 255, 0.15); /* More subtle skeleton lines */
+        }
+
 
         /* Spinner */
         .spinner {
@@ -376,31 +517,6 @@
             opacity: 1;
         }
 
-
-        /* Skeleton Loading */
-        .skeleton-card {
-            background-color: var(--lm-bg-alt);
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            box-shadow: var(--shadow-md);
-            animation: pulse 1.5s infinite ease-in-out;
-            transition: background-color 0.5s ease;
-        }
-        .skeleton-card .skeleton-line {
-            height: 1em;
-            background-color: var(--lm-border);
-            border-radius: 0.25rem;
-            margin-bottom: 0.5em;
-            transition: background-color 0.5s ease;
-        }
-        .skeleton-card .skeleton-line.short { width: 60%; }
-        .skeleton-card .skeleton-line.medium { width: 85%; }
-        .skeleton-card .skeleton-line.long { width: 100%; }
-        @keyframes pulse {
-            0% { opacity: 0.8; }
-            50% { opacity: 0.5; }
-            100% { opacity: 0.8; }
-        }
 
         /* Modals */
         .modal {
@@ -728,6 +844,18 @@
                 right: 10px;
                 left: 10px;
                 max-width: calc(100% - 20px);
+            }
+            /* Responsive adjustments for glass cards */
+            .glass-card {
+                max-width: 90%; /* Allow cards to take more width on small screens */
+                height: 350px; /* Slightly smaller height on mobile, was 300px */
+            }
+            .glass-card .content {
+                padding-top: 40px;
+            }
+            .glass-card::before {
+                font-size: 1em;
+                padding: 6px 0;
             }
         }
     </style>
@@ -1184,7 +1312,110 @@
         }
     ];
 
-    // --- Theme Management ---
+    // Skeleton card HTML
+    const skeletonCardHTML = `
+        <div class="glass-container" data-aos="fade-up">
+            <div class="skeleton-card">
+                <div class="skeleton-line long"></div>
+                <div class="skeleton-line medium"></div>
+                <div class="skeleton-line short"></div>
+                <div class="mt-4 pt-4 border-t border-lm-border">
+                    <div class="skeleton-line medium"></div>
+                    <div class="skeleton-line short"></div>
+                    <div class="skeleton-line long"></div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // --- Helper Functions (Independent or Low-Dependency) ---
+
+    // Toast Notification System
+    function showToast(message, type = 'info', duration = 3000) {
+        const toastContainer = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.classList.add('toast', type);
+        toast.innerHTML = `
+            ${type === 'success' ? '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>' : ''}
+            ${type === 'error' ? '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>' : ''}
+            ${type === 'info' ? '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>' : ''}
+            <span>${message}</span>
+        `;
+        toastContainer.appendChild(toast);
+
+        setTimeout(() => {
+            toast.remove();
+        }, duration);
+    }
+
+    // Modal Management (Unified Functions)
+    function openModal(modalElement) {
+        modalElement.classList.remove('hidden');
+        // Force reflow to ensure transition plays
+        void modalElement.offsetWidth;
+        modalElement.classList.add('show');
+    }
+
+    function closeModal(modalElement) {
+        modalElement.classList.remove('show');
+        modalElement.addEventListener('transitionend', function handler() {
+            modalElement.classList.add('hidden');
+            modalElement.removeEventListener('transitionend', handler);
+        }, { once: true }); // Use once: true to ensure it only runs once
+    }
+
+    function formatPrice(price) {
+        if (price === null || price === undefined) return 'N/A';
+        // Use toFixed to ensure consistent decimal places for display,
+        // but parseFloat to remove trailing zeros if not needed for precision.
+        // For crypto, often more decimals are needed.
+        return parseFloat(price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 });
+    }
+
+    function formatPercentage(value) {
+        if (value === null || value === undefined) return 'N/A';
+        return `${(value * 100).toFixed(2)}%`;
+    }
+
+    // Mock function to generate candlestick data for Lightweight Charts
+    // In a real application, this would fetch from a data provider
+    function generateMockCandleData(numDays, currentPrice) {
+        const data = [];
+        let lastClose = currentPrice * 0.95 + (Math.random() * currentPrice * 0.1); // Start price
+        let lastTime = Date.now() / 1000 - numDays * 24 * 60 * 60; // Start 'numDays' ago
+
+        for (let i = 0; i < numDays; i++) {
+            const open = lastClose;
+            const high = open * (1 + Math.random() * 0.02);
+            const low = open * (1 - Math.random() * 0.02);
+            const close = open + (Math.random() - 0.5) * open * 0.03;
+
+            data.push({
+                time: lastTime + i * 24 * 60 * 60, // Daily candles
+                open: open,
+                high: high,
+                low: low,
+                close: close
+            });
+            lastClose = close;
+        }
+
+        // Ensure the current price is somewhat near the end of the data
+        const latestCandle = data[data.length - 1];
+        if (latestCandle) {
+            latestCandle.close = currentPrice;
+            latestCandle.high = Math.max(latestCandle.high, currentPrice);
+            latestCandle.low = Math.min(latestCandle.low, currentPrice);
+            latestCandle.open = latestCandle.open; // Keep open relative
+        }
+
+        return data;
+    }
+
+
+    // --- Core Logic Functions (Higher-Dependency) ---
+
+    // Theme Management
     function applyTheme(theme) {
         // For this theme, we want it to always be 'dark' visually
         // So we ensure the 'dark' class is always present
@@ -1223,42 +1454,450 @@
         showToast("This theme is optimized for dark mode.", 'info');
     }
 
-    // --- Toast Notification System ---
-    function showToast(message, type = 'info', duration = 3000) {
-        const toastContainer = document.getElementById('toast-container');
-        const toast = document.createElement('div');
-        toast.classList.add('toast', type);
-        toast.innerHTML = `
-            ${type === 'success' ? '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>' : ''}
-            ${type === 'error' ? '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>' : ''}
-            ${type === 'info' ? '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>' : ''}
-            <span>${message}</span>
-        `;
-        toastContainer.appendChild(toast);
+    // Function to update sensitivity tooltips
+    function updateSensitivityTooltips() {
+        sensitivityButtons.forEach(button => {
+            const sensitivityType = button.dataset.sensitivity;
+            const preset = sensitivityPresets[sensitivityType];
+            const tooltipId = `tooltip-${sensitivityType}`;
+            const tooltipElement = document.getElementById(tooltipId);
+            if (tooltipElement && preset) {
+                tooltipElement.innerHTML = `
+                    <b>${sensitivityType.replace('-', ' ').toUpperCase()}</b><br>
+                    ${preset.description}<br>
+                    Min Body Ratio: ${preset.minBodyRatio}<br>
+                    Min Price Change: ${preset.minPriceChange}<br>
+                    Volume Factor: ${preset.volumeFactor}<br>
+                    Require BOS: ${preset.requireBOS ? 'Yes' : 'No'}<br>
+                    Require C3 Close Past C2: ${preset.requireC3ClosePastC2 ? 'Yes' : 'No'}<br>
+                    Require FVG: ${preset.requireFVG ? 'Yes' : 'No'}<br>
+                    Min FVG Depth Ratio: ${preset.minFvgDepthRatio}
+                `;
+            }
+        });
+    }
 
-        setTimeout(() => {
-            toast.remove();
-        }, duration);
+    function displayResults(resultsToDisplay, actualTimeframeUsed) {
+        resultsContainer.innerHTML = '';
+
+        // Filter based on the main filter (All, Buying, Selling)
+        let filteredByMainType = [];
+        if (currentFilter === 'All') {
+            filteredByMainType = resultsToDisplay;
+        } else {
+            // If filtering by Buying/Selling, we need to check if ANY of the coin's order blocks match
+            filteredByMainType = resultsToDisplay.filter(coin =>
+                coin.orderBlocks.some(ob => ob.obType === currentFilter)
+            );
+        }
+
+        // Further filter by price deviation for each individual order block
+        let finalFilteredResults = [];
+        filteredByMainType.forEach(coin => {
+            const filteredOrderBlocks = coin.orderBlocks.filter(ob => {
+                // 'None' type order blocks or those without price are always shown (e.g., if no OBs detected)
+                if (ob.obType === 'None' || ob.obPrice === null || ob.obPrice === undefined) {
+                    return true;
+                }
+                const priceDiff = Math.abs(ob.obPrice - coin.currentPrice);
+                const percentageDiff = (priceDiff / coin.currentPrice) * 100;
+                return percentageDiff <= maxPriceDeviationPercent;
+            });
+
+            // Only add the coin to final results if it has at least one order block after deviation filtering
+            if (filteredOrderBlocks.length > 0) {
+                // Create a new coin object with only the filtered order blocks
+                finalFilteredResults.push({ ...coin, orderBlocks: filteredOrderBlocks });
+            }
+        });
+
+
+        if (finalFilteredResults.length === 0) {
+            resultsContainer.innerHTML = `
+                <p class="text-center text-lm-text-secondary col-span-full py-8">
+                    No order block data available for current filters.
+                    <br>Try adjusting sensitivity, price deviation, or timeframe, then click "Initiate Scan" again.
+                </p>
+            `;
+            return;
+        }
+
+        finalFilteredResults.forEach((coin, index) => {
+            // Determine the main card border color based on if any Buying/Selling OBs are present
+            let cardBorderClass = 'no-ob-border';
+            let obTypeIcon = '';
+            let obTypeText = ''; // For the data-text attribute
+            if (coin.orderBlocks.some(ob => ob.obType === 'Buying (Bullish)')) {
+                cardBorderClass = 'buying-ob-border';
+                obTypeIcon = '<i class="fas fa-arrow-alt-circle-up text-color-green-accent mr-1"></i>';
+                obTypeText = 'Buying OB';
+            } else if (coin.orderBlocks.some(ob => ob.obType === 'Selling (Bearish)')) {
+                cardBorderClass = 'selling-ob-border';
+                obTypeIcon = '<i class="fas fa-arrow-alt-circle-down text-color-red-accent mr-1"></i>';
+                obTypeText = 'Selling OB';
+            } else {
+                obTypeText = 'No OB Detected';
+            }
+
+            const currentPriceDisplay = formatPrice(coin.currentPrice);
+            const priceChange24h = coin.priceChange24h ? formatPercentage(coin.priceChange24h) : 'N/A';
+            const priceChangeClass = coin.priceChange24h > 0 ? 'text-color-green-accent' : coin.priceChange24h < 0 ? 'text-color-red-accent' : 'text-lm-text-secondary';
+
+
+            let orderBlocksHtml = '';
+            // Sort order blocks by price to display them consistently (e.g., lowest price first)
+            const sortedOrderBlocks = [...coin.orderBlocks].sort((a, b) => {
+                if (a.obPrice === null) return 1; // 'None' or null prices go to end
+                if (b.obPrice === null) return -1;
+                return a.obPrice - b.obPrice;
+            });
+
+
+            sortedOrderBlocks.forEach((ob, obIndex) => {
+                const obPriceDisplay = formatPrice(ob.obPrice);
+                const obZoneInfo = (ob.obType !== 'None' && ob.obZoneStart !== null && ob.obZoneEnd !== null) ?
+                                   ` | Zone: $${formatPrice(ob.obZoneStart)} - $${formatPrice(ob.obZoneEnd)}` : '';
+                const obTypeClass = ob.obType === 'Buying (Bullish)' ? 'text-color-green-accent' :
+                                    ob.obType === 'Selling (Bearish)' ? 'text-color-red-accent' :
+                                    'text-lm-text-secondary';
+                const obIcon = ob.obType === 'Buying (Bullish)' ? '<i class="fas fa-arrow-alt-circle-up mr-1"></i>' :
+                               ob.obType === 'Selling (Bearish)' ? '<i class="fas fa-arrow-alt-circle-down mr-1"></i>' : '';
+
+                let tradeSetupHtml = '';
+                if (ob.suggestedEntryPrice !== null && ob.suggestedEntryPrice !== undefined) {
+                    tradeSetupHtml = `
+                        <div class="mt-2 text-xs text-lm-text-secondary border-t border-lm-border pt-2">
+                            <p>Entry: <span class="font-bold text-lm-text-primary">$${formatPrice(ob.suggestedEntryPrice)}</span></p>
+                            <p>Stop Loss: <span class="font-bold text-color-red-accent">$${formatPrice(ob.suggestedStopLoss)}</span> (Risk: $${formatPrice(ob.riskAmount)})</p>
+                            ${ob.suggestedTakeProfits && ob.suggestedTakeProfits.TP1 !== null && ob.suggestedTakeProfits.TP1 !== undefined ? `<p>TP1 (1R): <span class="font-bold text-color-green-accent">$${formatPrice(ob.suggestedTakeProfits.TP1)}</span></p>` : ''}
+                            ${ob.suggestedTakeProfits && ob.suggestedTakeProfits.TP2 !== null && ob.suggestedTakeProfits.TP2 !== undefined ? `<p>TP2 (2R): <span class="font-bold text-color-green-accent">$${formatPrice(ob.suggestedTakeProfits.TP2)}</span></p>` : ''}
+                            ${ob.suggestedTakeProfits && ob.suggestedTakeProfits.TP3 !== null && ob.suggestedTakeProfits.TP3 !== undefined ? `<p>TP3 (3R): <span class="font-bold text-color-green-accent">$${formatPrice(ob.suggestedTakeProfits.TP3)}</span></p>` : ''}
+                            ${ob.suggestedTakeProfits && ob.suggestedTakeProfits.TP4 !== null && ob.suggestedTakeProfits.TP4 !== undefined ? `<p>TP4 (4R): <span class="font-bold text-color-green-accent">$${formatPrice(ob.suggestedTakeProfits.TP4)}</span></p>` : ''}
+                            ${ob.suggestedTakeProfits && ob.suggestedTakeProfits.TP5 !== null && ob.suggestedTakeProfits.TP5 !== undefined ? `<p>TP5 (5R): <span class="font-bold text-color-green-accent">$${formatPrice(ob.suggestedTakeProfits.TP5)}</span></p>` : ''}
+                        </div>
+                    `;
+                }
+
+
+                orderBlocksHtml += `
+                    <div class="mt-3 pt-3 ${obIndex > 0 ? 'border-t border-lm-border' : ''}">
+                        <p class="text-md font-semibold mb-1">
+                            Order Block ${obIndex + 1}: <span class="${obTypeClass}">${obIcon}${ob.obType || 'N/A'}</span>
+                        </p>
+                        <p class="text-lm-text-secondary text-sm mb-1">
+                            Price Level: <span class="text-lm-text-primary font-bold">$${obPriceDisplay}</span>${obZoneInfo}
+                        </p>
+                        <p class="text-lm-text-secondary text-xs">${ob.details || 'No additional details.'}</p>
+                        ${tradeSetupHtml}
+                    </div>
+                `;
+            });
+
+            resultsContainer.innerHTML += `
+                <div class="glass-container"
+                     data-aos="fade-up" data-aos-delay="${index * 100}">
+                    <div class="glass-card ${cardBorderClass}"
+                         data-symbol="${coin.id}"
+                         data-timeframe="${coin.timeframe}"
+                         data-coin-name="${coin.name}"
+                         data-current-price="${coin.currentPrice}"
+                         data-order-blocks='${JSON.stringify(coin.orderBlocks)}'
+                         data-text="${coin.name} (${coin.id}) - ${obTypeText}">
+                        <div class="content">
+                            <h2 class="text-2xl font-bold tracking-wide">${coin.name || 'N/A'} (${coin.id || 'N/A'})</h2>
+                            <p class="text-lg font-semibold">Vol: ${coin.volume || 'N/A'}</p>
+                            <p>Current Price: <span class="font-medium">$${currentPriceDisplay}</span></p>
+                            <p>24h Change: <span class="${priceChangeClass} font-medium">${priceChange24h}</span></p>
+                            <p>Scan Time: <span class="font-medium">${coin.timestamp || 'N/A'}</span></p>
+                            <p>Timeframe: <span class="font-medium">${(coin.timeframe || 'N/A').toUpperCase()}</span></p>
+                            <div class="ob-details">
+                                ${orderBlocksHtml}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('click', openChartModal);
+        });
+        // Update toast message to reflect actual timeframe used
+        showToast(`Scan complete! Found ${finalFilteredResults.length} coins for ${actualTimeframeUsed.toUpperCase()} timeframe with "${currentSensitivity}" sensitivity. Displaying results after price deviation filter.`, 'success');
+    }
+
+    function filterResults() {
+        let filtered = [];
+        if (currentFilter === 'All') {
+            filtered = allScanResults;
+        } else {
+            filtered = allScanResults.filter(coin =>
+                coin.orderBlocks.some(ob => ob.obType === currentFilter)
+            );
+        }
+        // When filtering, we don't change the 'actualTimeframeUsed' as it refers to the scan.
+        // So, we pass the original `currentTimeframe` for display consistency in the toast.
+        displayResults(filtered, allScanResults.length > 0 ? allScanResults[0].timeframe : currentTimeframe);
+    }
+
+    function setFilter(filterType) {
+        currentFilter = filterType;
+        localStorage.setItem('currentFilter', filterType);
+        document.querySelectorAll('.action-button[data-filter]').forEach(btn => {
+            if (btn.dataset.filter === filterType) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+        filterResults();
+    }
+
+    function setTimeframe(timeframe) {
+        currentTimeframe = timeframe;
+        localStorage.setItem('currentTimeframe', timeframe);
+        document.querySelectorAll('.action-button[data-timeframe]').forEach(btn => {
+            if (btn.dataset.timeframe === timeframe) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+        showToast(`Starting timeframe set to ${currentTimeframe.toUpperCase()}. Click Scan to update results.`, 'info');
+    }
+
+    function setSensitivity(sensitivityType) {
+      currentSensitivity = sensitivityType;
+      localStorage.setItem('currentSensitivity', sensitivityType);
+      sensitivityButtons.forEach(btn => {
+        if (btn.dataset.sensitivity === sensitivityType) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+      showToast(`Detection sensitivity set to "${sensitivityType}". Click Scan to update results.`, 'info');
+    }
+
+    function clearResults() {
+        allScanResults = [];
+        currentFilter = 'All';
+        localStorage.setItem('currentFilter', 'All');
+        setFilter('All');
+        resultsContainer.innerHTML = '<p class="text-center text-lm-text-secondary col-span-full py-8">Results cleared. Click "Initiate Scan" to begin analyzing market data.</p>';
+        showToast('Results cleared.', 'info');
+    }
+
+    // Chart Modal Functions
+    function openChartModal(event) {
+      const card = event.currentTarget;
+      const symbol = card.dataset.symbol;
+      const timeframe = card.dataset.timeframe;
+      const coinName = card.dataset.coinName;
+      const currentPrice = parseFloat(card.dataset.currentPrice);
+      const allOrderBlocks = JSON.parse(card.dataset.orderBlocks || '[]'); // Corrected data attribute name
+
+      modalTitle.textContent = `${coinName} (${symbol}) Chart - ${timeframe.toUpperCase()}`;
+
+      let obInfoHtml = '';
+      const displayableOrderBlocks = allOrderBlocks.filter(ob => ob.obType !== 'None' && ob.obPrice !== null && ob.obPrice !== undefined);
+
+      if (displayableOrderBlocks.length > 0) {
+          const sortedModalOrderBlocks = [...displayableOrderBlocks].sort((a, b) => {
+              return a.obPrice - b.obPrice;
+          });
+
+          obInfoHtml = sortedModalOrderBlocks.map((ob, index) => {
+              const obPriceDisplay = formatPrice(ob.obPrice);
+              const obZoneInfo = (ob.obZoneStart !== null && ob.obZoneEnd !== null) ?
+                                 ` | Zone: $${formatPrice(ob.obZoneStart)} - $${formatPrice(ob.obZoneEnd)}` : '';
+              const obTypeClass = ob.obType === 'Buying (Bullish)' ? 'text-color-green-accent' :
+                                  ob.obType === 'Selling (Bearish)' ? 'text-color-red-accent' : '';
+              const obIcon = ob.obType === 'Buying (Bullish)' ? '<i class="fas fa-arrow-alt-circle-up mr-1"></i>' :
+                             ob.obType === 'Selling (Bearish)' ? '<i class="fas fa-arrow-alt-circle-down mr-1"></i>' : '';
+
+              let tradeSetupModalHtml = '';
+              if (ob.suggestedEntryPrice !== null && ob.suggestedEntryPrice !== undefined) {
+                  tradeSetupModalHtml = `
+                      <div class="mt-2 text-xs text-lm-text-secondary border-t border-lm-border pt-2">
+                          <p>Entry: <span class="font-bold text-lm-text-primary">$${formatPrice(ob.suggestedEntryPrice)}</span></p>
+                          <p>Stop Loss: <span class="font-bold text-color-red-accent">$${formatPrice(ob.suggestedStopLoss)}</span> (Risk: $${formatPrice(ob.riskAmount)})</p>
+                          ${ob.suggestedTakeProfits && ob.suggestedTakeProfits.TP1 !== null && ob.suggestedTakeProfits.TP1 !== undefined ? `<p>TP1 (1R): <span class="font-bold text-color-green-accent">$${formatPrice(ob.suggestedTakeProfits.TP1)}</span></p>` : ''}
+                          ${ob.suggestedTakeProfits && ob.suggestedTakeProfits.TP2 !== null && ob.suggestedTakeProfits.TP2 !== undefined ? `<p>TP2 (2R): <span class="font-bold text-color-green-accent">$${formatPrice(ob.suggestedTakeProfits.TP2)}</span></p>` : ''}
+                          ${ob.suggestedTakeProfits && ob.suggestedTakeProfits.TP3 !== null && ob.suggestedTakeProfits.TP3 !== undefined ? `<p>TP3 (3R): <span class="font-bold text-color-green-accent">$${formatPrice(ob.suggestedTakeProfits.TP3)}</span></p>` : ''}
+                          ${ob.suggestedTakeProfits && ob.suggestedTakeProfits.TP4 !== null && ob.suggestedTakeProfits.TP4 !== undefined ? `<p>TP4 (4R): <span class="font-bold text-color-green-accent">$${formatPrice(ob.suggestedTakeProfits.TP4)}</span></p>` : ''}
+                          ${ob.suggestedTakeProfits && ob.suggestedTakeProfits.TP5 !== null && ob.suggestedTakeProfits.TP5 !== undefined ? `<p>TP5 (5R): <span class="font-bold text-color-green-accent">$${formatPrice(ob.suggestedTakeProfits.TP5)}</span></p>` : ''}
+                      </div>
+                  `;
+              }
+
+              return `
+                  <p class="text-center text-lm-text-secondary text-sm">
+                      OB ${index + 1}: <span class="${obTypeClass}">${obIcon}${ob.obType || 'N/A'}</span> | Price Level: <span class="text-lm-text-primary font-bold">$${obPriceDisplay}</span>${obZoneInfo}
+                  </p>
+                  ${tradeSetupModalHtml}
+              `;
+          }).join('');
+      } else {
+          obInfoHtml = '<p class="text-center text-lm-text-secondary text-sm">No valid order blocks found for this coin with current criteria.</p>';
+      }
+      modalOBInfo.innerHTML = obInfoHtml;
+
+      // Clear previous chart if any
+      lightweightChartContainer.innerHTML = '';
+      if (window.currentChart) {
+          window.currentChart.remove();
+          window.currentChart = null;
+      }
+
+      // Initialize Lightweight Charts
+      const chartOptions = {
+          layout: {
+              textColor: document.documentElement.classList.contains('dark') ? 'var(--color-text-light)' : 'var(--lm-text-primary)',
+              background: { color: document.documentElement.classList.contains('dark') ? 'var(--color-dark-bg-primary)' : 'var(--lm-bg-secondary)' },
+          },
+          grid: {
+              vertLines: { color: document.documentElement.classList.contains('dark') ? 'var(--color-border-dark)' : 'var(--lm-border)' },
+              horzLines: { color: document.documentElement.classList.contains('dark') ? 'var(--color-border-dark)' : 'var(--lm-border)' },
+          },
+          timeScale: {
+              borderColor: document.documentElement.classList.contains('dark') ? 'var(--color-border-dark)' : 'var(--lm-border)',
+              timeVisible: true,
+              secondsVisible: false,
+          },
+          priceScale: {
+              borderColor: document.documentElement.classList.contains('dark') ? 'var(--color-border-dark)' : 'var(--lm-border)',
+          },
+          crosshair: {
+            mode: LightweightCharts.CrosshairMode.Normal,
+          },
+          localization: {
+            locale: 'en-US',
+            priceFormatter: price => formatPrice(price),
+          }
+      };
+
+      const chart = LightweightCharts.createChart(lightweightChartContainer, chartOptions);
+      window.currentChart = chart; // Store chart instance globally for theme changes
+
+      const candlestickSeries = chart.addCandlestickSeries({
+          upColor: 'var(--color-green-accent)',
+          downColor: 'var(--color-red-accent)',
+          borderVisible: false,
+          wickColor: 'var(--color-text-secondary)',
+          wickUpColor: 'var(--color-green-accent)',
+          wickDownColor: 'var(--color-red-accent)',
+      });
+
+      // Generate mock data for the chart
+      const mockData = generateMockCandleData(100, currentPrice); // 100 days of data
+      candlestickSeries.setData(mockData);
+
+      // Add horizontal lines for OB price levels and trade setups
+      displayableOrderBlocks.forEach(ob => {
+          if (ob.obPrice) {
+              const obPriceLine = chart.addLineSeries({
+                  color: ob.obType === 'Buying (Bullish)' ? 'var(--color-green-accent)' : 'var(--color-red-accent)',
+                  lineWidth: 2,
+                  lineStyle: LightweightCharts.LineStyle.Dotted,
+                  axisLabelVisible: true,
+                  title: `${ob.obType.split(' ')[0]} OB`,
+              });
+              obPriceLine.setData([{ time: mockData[0].time, value: ob.obPrice }, { time: mockData[mockData.length - 1].time, value: ob.obPrice }]);
+          }
+
+          // Draw OB zone as a shaded area (if zone exists)
+          if (ob.obZoneStart && ob.obZoneEnd) {
+              // Lightweight Charts doesn't have a direct "rectangle" drawing for price zones.
+              // A workaround is to use bands or custom series. For simplicity, we'll draw two lines for the zone.
+              const obZoneStartLine = chart.addLineSeries({
+                  color: ob.obType === 'Buying (Bullish)' ? 'var(--color-green-accent)' : 'var(--color-red-accent)',
+                  lineWidth: 1,
+                  lineStyle: LightweightCharts.LineStyle.Solid,
+                  axisLabelVisible: false,
+              });
+              obZoneStartLine.setData([{ time: mockData[0].time, value: ob.obZoneStart }, { time: mockData[mockData.length - 1].time, value: ob.obZoneStart }]);
+
+              const obZoneEndLine = chart.addLineSeries({
+                  color: ob.obType === 'Buying (Bullish)' ? 'var(--color-green-accent)' : 'var(--color-red-accent)',
+                  lineWidth: 1,
+                  lineStyle: LightweightCharts.LineStyle.Solid,
+                  axisLabelVisible: false,
+              });
+              obZoneEndLine.setData([{ time: mockData[0].time, value: ob.obZoneEnd }, { time: mockData[mockData.length - 1].time, value: ob.obZoneEnd }]);
+          }
+
+          // Plot Trade Setup Lines
+          if (ob.suggestedEntryPrice) {
+              const entryLine = chart.addLineSeries({ color: 'var(--color-accent-blue)', lineWidth: 1, lineStyle: LightweightCharts.LineStyle.Solid, axisLabelVisible: true, title: 'Entry' });
+              entryLine.setData([{ time: mockData[0].time, value: ob.suggestedEntryPrice }, { time: mockData[mockData.length - 1].time, value: ob.suggestedEntryPrice }]);
+
+              const stopLossLine = chart.addLineSeries({ color: 'var(--color-red-accent)', lineWidth: 1, lineStyle: LightweightCharts.LineStyle.Solid, axisLabelVisible: true, title: 'SL' });
+              stopLossLine.setData([{ time: mockData[0].time, value: ob.suggestedStopLoss }, { time: mockData[mockData.length - 1].time, value: ob.suggestedStopLoss }]);
+
+              // Plot TP lines from the suggestedTakeProfits map
+              if (ob.suggestedTakeProfits) {
+                  for (let i = 1; i <= 5; i++) {
+                      const tpKey = `TP${i}`;
+                      const tpValue = ob.suggestedTakeProfits[tpKey];
+                      if (tpValue !== null && tpValue !== undefined) {
+                          const tpLine = chart.addLineSeries({ color: 'var(--color-green-accent)', lineWidth: 1, lineStyle: LightweightCharts.LineStyle.Solid, axisLabelVisible: true, title: tpKey });
+                          tpLine.setData([{ time: mockData[0].time, value: tpValue }, { time: mockData[mockData.length - 1].time, value: tpValue }]);
+                      }
+                  }
+              }
+          }
+      });
+
+      // Fit content to screen
+      chart.timeScale().fitContent();
+
+      openModal(chartModal);
+    }
+
+    function closeChartModal() {
+      closeModal(chartModal);
+      if (window.currentChart) {
+          window.currentChart.remove(); // Dispose the chart instance
+          window.currentChart = null;
+      }
+    }
+
+    // Onboarding Modal Functions
+    function showOnboardingModal() {
+        currentOnboardingStep = 0;
+        updateOnboardingContent();
+        openModal(onboardingModal);
+    }
+
+    function updateOnboardingContent() {
+        onboardingContent.innerHTML = onboardingSteps[currentOnboardingStep].content;
+
+        onboardingPrevButton.classList.toggle('hidden', currentOnboardingStep === 0);
+        onboardingNextButton.classList.toggle('hidden', currentOnboardingStep === onboardingSteps.length - 1);
+        onboardingFinishButton.classList.toggle('hidden', currentOnboardingStep < onboardingSteps.length - 1);
+    }
+
+    function nextOnboardingStep() {
+        if (currentOnboardingStep < onboardingSteps.length - 1) {
+            currentOnboardingStep++;
+            updateOnboardingContent();
+        }
+    }
+
+    function prevOnboardingStep() {
+        if (currentOnboardingStep > 0) {
+            currentOnboardingStep--;
+            updateOnboardingContent();
+        }
+    }
+
+    function finishOnboarding() {
+        localStorage.setItem('hasSeenOnboarding', 'true');
+        closeModal(onboardingModal);
     }
 
 
-    // --- Modal Management (Unified Functions) ---
-    function openModal(modalElement) {
-        modalElement.classList.remove('hidden');
-        // Force reflow to ensure transition plays
-        void modalElement.offsetWidth;
-        modalElement.classList.add('show');
-    }
-
-    function closeModal(modalElement) {
-        modalElement.classList.remove('show');
-        modalElement.addEventListener('transitionend', function handler() {
-            modalElement.classList.add('hidden');
-            modalElement.removeEventListener('transitionend', handler);
-        }, { once: true }); // Use once: true to ensure it only runs once
-    }
-
-    // --- Authentication Functions ---
+    // Authentication Functions
     function showAuthSection() {
         authSection.style.display = 'flex'; // Ensure it's displayed as flex
         scannerSection.style.display = 'none'; // Ensure scanner is hidden
@@ -1345,7 +1984,12 @@
             });
 
             if (!response.ok) {
-                const errorData = await response.json();
+                let errorData = {};
+                try {
+                    errorData = await response.json();
+                } catch (e) {
+                    errorData.message = `Non-JSON error response: ${response.status} ${response.statusText}`;
+                }
                 showToast(errorData.message || "Failed to fetch users. Please check your admin privileges.", 'error');
                 return;
             }
@@ -1653,7 +2297,7 @@
         showToast("You have been logged out.", 'info');
     }
 
-    // --- Payment Functions ---
+    // Payment Functions
     async function handleSubmitPaymentProof(event) {
         event.preventDefault();
         submitPaymentProofButton.disabled = true;
@@ -1704,258 +2348,32 @@
         }
     }
 
+    // Initial check for admin button visibility on FAB
+    function updateFabAdminButtonVisibility() {
+        const userRoles = localStorage.getItem('roles') ? JSON.parse(localStorage.getItem('roles')) : [];
+        const isLoggedIn = localStorage.getItem('jwtToken') !== null;
 
-    // --- Function Definitions (Order matters for dependencies) ---
-
-    // Skeleton card HTML
-    const skeletonCardHTML = `
-        <div class="skeleton-card" data-aos="fade-up">
-            <div class="skeleton-line long"></div>
-            <div class="skeleton-line medium"></div>
-            <div class="skeleton-line short"></div>
-            <div class="mt-4 pt-4 border-t border-lm-border">
-                <div class="skeleton-line medium"></div>
-                <div class="skeleton-line short"></div>
-                <div class="skeleton-line long"></div>
-            </div>
-        </div>
-    `;
-
-    function formatPrice(price) {
-        if (price === null || price === undefined) return 'N/A';
-        // Use toFixed to ensure consistent decimal places for display,
-        // but parseFloat to remove trailing zeros if not needed for precision.
-        // For crypto, often more decimals are needed.
-        return parseFloat(price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 });
-    }
-
-    function formatPercentage(value) {
-        if (value === null || value === undefined) return 'N/A';
-        return `${(value * 100).toFixed(2)}%`;
-    }
-
-    function displayResults(resultsToDisplay) {
-        resultsContainer.innerHTML = '';
-
-        // Filter based on the main filter (All, Buying, Selling)
-        let filteredByMainType = [];
-        if (currentFilter === 'All') {
-            filteredByMainType = resultsToDisplay;
+        if (isLoggedIn) {
+            fabLogoutButton.style.display = 'flex';
+            fabPaymentButton.style.display = 'flex';
+            fabScanButton.style.display = 'flex';
+            fabClearButton.style.display = 'flex';
         } else {
-            // If filtering by Buying/Selling, we need to check if ANY of the coin's order blocks match
-            filteredByMainType = resultsToDisplay.filter(coin =>
-                coin.orderBlocks.some(ob => ob.obType === currentFilter)
-            );
+            fabLogoutButton.style.display = 'none';
+            fabPaymentButton.style.display = 'none';
+            fabScanButton.style.display = 'none';
+            fabClearButton.style.display = 'none';
         }
 
-        // Further filter by price deviation for each individual order block
-        let finalFilteredResults = [];
-        filteredByMainType.forEach(coin => {
-            const filteredOrderBlocks = coin.orderBlocks.filter(ob => {
-                // 'None' type order blocks or those without price are always shown (e.g., if no OBs detected)
-                if (ob.obType === 'None' || ob.obPrice === null || ob.obPrice === undefined) {
-                    return true;
-                }
-                const priceDiff = Math.abs(ob.obPrice - coin.currentPrice);
-                const percentageDiff = (priceDiff / coin.currentPrice) * 100;
-                return percentageDiff <= maxPriceDeviationPercent;
-            });
-
-            // Only add the coin to final results if it has at least one order block after deviation filtering
-            if (filteredOrderBlocks.length > 0) {
-                // Create a new coin object with only the filtered order blocks
-                finalFilteredResults.push({ ...coin, orderBlocks: filteredOrderBlocks });
-            }
-        });
-
-
-        if (finalFilteredResults.length === 0) {
-            resultsContainer.innerHTML = `
-                <p class="text-center text-lm-text-secondary col-span-full py-8">
-                    No order block data available for current filters.
-                    <br>Try adjusting sensitivity, price deviation, or timeframe, then click "Initiate Scan" again.
-                </p>
-            `;
-            return;
-        }
-
-        finalFilteredResults.forEach((coin, index) => {
-            // Determine the main card border color based on if any Buying/Selling OBs are present
-            let cardBorderClass = 'no-ob-border';
-            let obTypeIcon = '';
-            if (coin.orderBlocks.some(ob => ob.obType === 'Buying (Bullish)')) {
-                cardBorderClass = 'buying-ob-border';
-                obTypeIcon = '<i class="fas fa-arrow-alt-circle-up text-color-green-accent mr-1"></i>';
-            } else if (coin.orderBlocks.some(ob => ob.obType === 'Selling (Bearish)')) {
-                cardBorderClass = 'selling-ob-border';
-                obTypeIcon = '<i class="fas fa-arrow-alt-circle-down text-color-red-accent mr-1"></i>';
-            }
-
-            const currentPriceDisplay = formatPrice(coin.currentPrice);
-            const priceChange24h = coin.priceChange24h ? formatPercentage(coin.priceChange24h) : 'N/A';
-            const priceChangeClass = coin.priceChange24h > 0 ? 'text-color-green-accent' : coin.priceChange24h < 0 ? 'text-color-red-accent' : 'text-lm-text-secondary';
-
-
-            let orderBlocksHtml = '';
-            // Sort order blocks by price to display them consistently (e.g., lowest price first)
-            const sortedOrderBlocks = [...coin.orderBlocks].sort((a, b) => {
-                if (a.obPrice === null) return 1; // 'None' or null prices go to end
-                if (b.obPrice === null) return -1;
-                return a.obPrice - b.obPrice;
-            });
-
-
-            sortedOrderBlocks.forEach((ob, obIndex) => {
-                const obPriceDisplay = formatPrice(ob.obPrice);
-                const obZoneInfo = (ob.obType !== 'None' && ob.obZoneStart !== null && ob.obZoneEnd !== null) ?
-                                   ` | Zone: $${formatPrice(ob.obZoneStart)} - $${formatPrice(ob.obZoneEnd)}` : '';
-                const obTypeClass = ob.obType === 'Buying (Bullish)' ? 'text-color-green-accent' :
-                                    ob.obType === 'Selling (Bearish)' ? 'text-color-red-accent' :
-                                    'text-lm-text-secondary';
-                const obIcon = ob.obType === 'Buying (Bullish)' ? '<i class="fas fa-arrow-alt-circle-up mr-1"></i>' :
-                               ob.obType === 'Selling (Bearish)' ? '<i class="fas fa-arrow-alt-circle-down mr-1"></i>' : '';
-
-                let tradeSetupHtml = '';
-                if (ob.suggestedEntryPrice !== null && ob.suggestedEntryPrice !== undefined) {
-                    tradeSetupHtml = `
-                        <div class="mt-2 text-xs text-lm-text-secondary border-t border-lm-border pt-2">
-                            <p>Entry: <span class="font-bold text-lm-text-primary">$${formatPrice(ob.suggestedEntryPrice)}</span></p>
-                            <p>Stop Loss: <span class="font-bold text-color-red-accent">$${formatPrice(ob.suggestedStopLoss)}</span> (Risk: $${formatPrice(ob.riskAmount)})</p>
-                            <p>TP1 (1R): <span class="font-bold text-color-green-accent">$${formatPrice(ob.suggestedTakeProfit1)}</span></p>
-                            <p>TP2 (2R): <span class="font-bold text-color-green-accent">$${formatPrice(ob.suggestedTakeProfit2)}</span></p>
-                            <p>TP3 (3R): <span class="font-bold text-color-green-accent">$${formatPrice(ob.suggestedTakeProfit3)}</span></p>
-                        </div>
-                    `;
-                }
-
-
-                orderBlocksHtml += `
-                    <div class="mt-3 pt-3 ${obIndex > 0 ? 'border-t border-lm-border' : ''}">
-                        <p class="text-md font-semibold mb-1">
-                            Order Block ${obIndex + 1}: <span class="${obTypeClass}">${obIcon}${ob.obType || 'N/A'}</span>
-                        </p>
-                        <p class="text-lm-text-secondary text-sm mb-1">
-                            Price Level: <span class="text-lm-text-primary font-bold">$${obPriceDisplay}</span>${obZoneInfo}
-                        </p>
-                        <p class="text-lm-text-secondary text-xs">${ob.details || 'No additional details.'}</p>
-                        ${tradeSetupHtml}
-                    </div>
-                `;
-            });
-
-            resultsContainer.innerHTML += `
-                <div class="coin-card ${cardBorderClass}"
-                     data-symbol="${coin.id}"
-                     data-timeframe="${coin.timeframe}"
-                     data-coin-name="${coin.name}"
-                     data-current-price="${coin.currentPrice}"
-                     data-order-blocks='${JSON.stringify(coin.orderBlocks)}'
-                     data-aos="fade-up" data-aos-delay="${index * 100}">
-                    <div class="flex justify-between items-center mb-3">
-                        <h2 class="text-2xl font-bold text-color-accent-blue tracking-wide">${coin.name || 'N/A'} (${coin.id || 'N/A'})</h2>
-                        <span class="text-lg font-semibold text-lm-text-secondary">Vol: ${coin.volume || 'N/A'}</span>
-                    </div>
-                    <p class="text-lm-text-secondary mb-2">Current Price: <span class="text-lm-text-primary font-medium">$${currentPriceDisplay}</span></p>
-                    <p class="text-lm-text-secondary mb-2">24h Change: <span class="${priceChangeClass} font-medium">${priceChange24h}</span></p>
-                    <p class="text-lm-text-secondary mb-2">Scan Time: <span class="text-lm-text-primary font-medium">${coin.timestamp || 'N/A'}</span></p>
-                    <p class="text-lm-text-secondary mb-2">Timeframe: <span class="text-lm-text-primary font-medium">${(coin.timeframe || 'N/A').toUpperCase()}</span></p>
-                    <div class="mt-4 pt-4 border-t border-lm-border">
-                        ${orderBlocksHtml}
-                    </div>
-                </div>
-            `;
-        });
-        document.querySelectorAll('.coin-card').forEach(card => {
-            card.addEventListener('click', openChartModal);
-        });
-    }
-
-    function filterResults() {
-        let filtered = [];
-        if (currentFilter === 'All') {
-            filtered = allScanResults;
+        if (isLoggedIn && userRoles.includes('ROLE_ADMIN')) {
+            adminPanelButton.classList.remove('hidden');
+            fabAdminButton.style.display = 'flex';
         } else {
-            filtered = allScanResults.filter(coin =>
-                coin.orderBlocks.some(ob => ob.obType === currentFilter)
-            );
-        }
-        displayResults(filtered);
-        showToast(`Displaying ${resultsContainer.children.length} coins (filtered by: ${currentFilter}, max deviation: ${maxPriceDeviationPercent}%).`, 'info');
-        if (currentFilter === 'All') {
-            showToast(`Scan complete! Found ${allScanResults.length} total coins for ${currentTimeframe.toUpperCase()} timeframe with "${currentSensitivity}" sensitivity. Displaying ${resultsContainer.children.length} results after price deviation filter.`, 'success');
+            adminPanelButton.classList.add('hidden');
+            fabAdminButton.style.display = 'none';
         }
     }
 
-    function setFilter(filterType) {
-        currentFilter = filterType;
-        localStorage.setItem('currentFilter', filterType);
-        document.querySelectorAll('.action-button[data-filter]').forEach(btn => {
-            if (btn.dataset.filter === filterType) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
-        filterResults();
-    }
-
-    function setTimeframe(timeframe) {
-        currentTimeframe = timeframe;
-        localStorage.setItem('currentTimeframe', timeframe);
-        document.querySelectorAll('.action-button[data-timeframe]').forEach(btn => {
-            if (btn.dataset.timeframe === timeframe) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
-        showToast(`Timeframe set to ${currentTimeframe.toUpperCase()}. Click Scan to update results.`, 'info');
-    }
-
-    function setSensitivity(sensitivityType) {
-      currentSensitivity = sensitivityType;
-      localStorage.setItem('currentSensitivity', sensitivityType);
-      sensitivityButtons.forEach(btn => {
-        if (btn.dataset.sensitivity === sensitivityType) {
-          btn.classList.add('active');
-        } else {
-          btn.classList.remove('active');
-        }
-      });
-      showToast(`Detection sensitivity set to "${sensitivityType}". Click Scan to update results.`, 'info');
-    }
-
-    // Function to update sensitivity tooltips
-    function updateSensitivityTooltips() {
-        sensitivityButtons.forEach(button => {
-            const sensitivityType = button.dataset.sensitivity;
-            const preset = sensitivityPresets[sensitivityType];
-            const tooltipId = `tooltip-${sensitivityType}`;
-            const tooltipElement = document.getElementById(tooltipId);
-            if (tooltipElement && preset) {
-                tooltipElement.innerHTML = `
-                    <b>${sensitivityType.replace('-', ' ').toUpperCase()}</b><br>
-                    ${preset.description}<br>
-                    Min Body Ratio: ${preset.minBodyRatio}<br>
-                    Min Price Change: ${preset.minPriceChange}<br>
-                    Volume Factor: ${preset.volumeFactor}<br>
-                    Require BOS: ${preset.requireBOS ? 'Yes' : 'No'}<br>
-                    Require C3 Close Past C2: ${preset.requireC3ClosePastC2 ? 'Yes' : 'No'}<br>
-                    Require FVG: ${preset.requireFVG ? 'Yes' : 'No'}<br>
-                    Min FVG Depth Ratio: ${preset.minFvgDepthRatio}
-                `;
-            }
-        });
-    }
-
-    function clearResults() {
-        allScanResults = [];
-        currentFilter = 'All';
-        localStorage.setItem('currentFilter', 'All');
-        setFilter('All');
-        resultsContainer.innerHTML = '<p class="text-center text-lm-text-secondary col-span-full py-8">Results cleared. Click "Initiate Scan" to begin analyzing market data.</p>';
-        showToast('Results cleared.', 'info');
-    }
 
     async function fetchOrderBlocks() {
         const token = localStorage.getItem('jwtToken');
@@ -1975,7 +2393,6 @@
 
         spinner.classList.remove('hidden');
         buttonText.textContent = 'Scanning...';
-        showToast(`Fetching real-time data and scanning for ${currentTimeframe.toUpperCase()} order blocks...`, 'info', 5000);
         resultsContainer.innerHTML = skeletonCardHTML.repeat(6);
 
         const selectedPreset = sensitivityPresets[currentSensitivity];
@@ -1994,288 +2411,71 @@
 
         const { minBodyRatio, minPriceChange, volumeFactor, requireBOS, requireC3ClosePastC2, requireFVG, minFvgDepthRatio } = selectedPreset;
 
+        // Define the sequence of timeframes to try
+        // The user's selected timeframe will be the first in the sequence
+        const scanTimeframes = [currentTimeframe, '4h', '1h', '30m', '15m'].filter((value, index, self) => {
+            // Ensure uniqueness and prioritize the selected timeframe if it's already in the sequence
+            return self.indexOf(value) === index;
+        });
 
-        try {
-            // Note: requireUnmitigated is no longer sent from frontend,
-            // as it's enforced on the backend.
-            const response = await fetch(`${API_BASE_URL}/scan-order-blocks?interval=${currentTimeframe}&minBodyRatio=${minBodyRatio}&minPriceChange=${minPriceChange}&volumeFactor=${volumeFactor}&requireBOS=${requireBOS}&requireC3ClosePastC2=${requireC3ClosePastC2}&requireFVG=${requireFVG}&minFvgDepthRatio=${minFvgDepthRatio}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+        let foundResults = false;
+        let actualTimeframeUsed = '';
 
-            if (!response.ok) {
-                let errorDetail = `Status: ${response.status} ${response.statusText || 'Unknown Error'}`;
-                try {
-                    const errorBody = await response.json();
-                    errorDetail = errorBody.message || JSON.stringify(errorBody);
-                } catch (bodyError) {
-                    errorDetail += `. Could not read response body: ${bodyError.message}.`;
+        for (const tf of scanTimeframes) {
+            showToast(`Attempting scan for ${tf.toUpperCase()} timeframe...`, 'info', 3000);
+            try {
+                const response = await fetch(`${API_BASE_URL}/scan-order-blocks?interval=${tf}&minBodyRatio=${minBodyRatio}&minPriceChange=${minPriceChange}&volumeFactor=${volumeFactor}&requireBOS=${requireBOS}&requireC3ClosePastC2=${requireC3ClosePastC2}&requireFVG=${requireFVG}&minFvgDepthRatio=${minFvgDepthRatio}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    let errorDetail = `Status: ${response.status} ${response.statusText || 'Unknown Error'}`;
+                    try {
+                        const errorBody = await response.json();
+                        errorDetail = errorBody.message || JSON.stringify(errorBody);
+                    } catch (bodyError) {
+                        errorDetail += `. Could not read response body: ${bodyError.message}.`;
+                    }
+                    // Do not throw error immediately, try next timeframe
+                    console.error(`Scan failed for ${tf}: ${errorDetail}`);
+                    continue; // Try the next timeframe in the sequence
                 }
-                throw new Error(`Scan failed: ${errorDetail}`);
+
+                const data = await response.json();
+                if (data && data.length > 0) {
+                    allScanResults = data;
+                    actualTimeframeUsed = tf;
+                    foundResults = true;
+                    break; // Stop scanning if results are found
+                } else {
+                    showToast(`No order blocks found for ${tf.toUpperCase()}. Trying next timeframe...`, 'info', 2000);
+                }
+
+            } catch (err) {
+                console.error(`Network error during scan for ${tf}: ${err.message}`);
+                showToast(`Network error for ${tf}: ${err.message}. Trying next timeframe...`, 'error', 2000);
+                // Continue to the next timeframe if there's a network error for the current one
             }
+        }
 
-            const data = await response.json();
-            allScanResults = data;
-            filterResults();
-            showToast(`Scan complete! Found ${data.length} total coins for ${currentTimeframe.toUpperCase()} timeframe with "${currentSensitivity}" sensitivity. Displaying ${resultsContainer.children.length} results after price deviation filter.`, 'success');
-
-        } catch (err) {
-            showToast(`Scan Error: ${err.message}. Please check your network connection or try adjusting parameters.`, 'error');
-            console.error("Frontend fetch error:", err);
+        if (foundResults) {
+            filterResults(actualTimeframeUsed); // Pass the actual timeframe used for the toast
+        } else {
             allScanResults = [];
-            resultsContainer.innerHTML = '<p class="text-center text-color-red-accent col-span-full py-8">Failed to load scan results. Please check your connection or try again later.</p>';
-        } finally {
-            scanButton.disabled = false;
-            clearButton.disabled = false;
-            document.querySelectorAll('.action-button[data-filter], .action-button[data-timeframe], .sensitivity-button').forEach(btn => btn.disabled = false);
-            priceDeviationInput.disabled = false;
-            fabScanButton.disabled = false;
-            fabClearButton.disabled = false;
-            spinner.classList.add('hidden');
-            buttonText.textContent = 'Initiate Scan';
-        }
-    }
-
-    // --- Chart Modal Functions ---
-
-    // Mock function to generate candlestick data for Lightweight Charts
-    // In a real application, this would fetch from a data provider
-    function generateMockCandleData(numDays, currentPrice, obPrice, obZoneStart, obZoneEnd) {
-        const data = [];
-        let lastClose = currentPrice * 0.95 + (Math.random() * currentPrice * 0.1); // Start price
-        let lastTime = Date.now() / 1000 - numDays * 24 * 60 * 60; // Start 'numDays' ago
-
-        for (let i = 0; i < numDays; i++) {
-            const open = lastClose;
-            const high = open * (1 + Math.random() * 0.02);
-            const low = open * (1 - Math.random() * 0.02);
-            const close = open + (Math.random() - 0.5) * open * 0.03;
-
-            data.push({
-                time: lastTime + i * 24 * 60 * 60, // Daily candles
-                open: open,
-                high: high,
-                low: low,
-                close: close
-            });
-            lastClose = close;
+            resultsContainer.innerHTML = '<p class="text-center text-color-red-accent col-span-full py-8">No order block data found across all tested timeframes. Please try adjusting parameters or scanning again later.</p>';
+            showToast('No order block data found across all tested timeframes.', 'error');
         }
 
-        // Ensure the current price is somewhat near the end of the data
-        const latestCandle = data[data.length - 1];
-        if (latestCandle) {
-            latestCandle.close = currentPrice;
-            latestCandle.high = Math.max(latestCandle.high, currentPrice);
-            latestCandle.low = Math.min(latestCandle.low, currentPrice);
-            latestCandle.open = latestCandle.open; // Keep open relative
-        }
-
-        return data;
-    }
-
-
-    function openChartModal(event) {
-      const card = event.currentTarget;
-      const symbol = card.dataset.symbol;
-      const timeframe = card.dataset.timeframe;
-      const coinName = card.dataset.coin-name;
-      const currentPrice = parseFloat(card.dataset.current-price);
-      const allOrderBlocks = JSON.parse(card.dataset.order-blocks || '[]');
-
-      modalTitle.textContent = `${coinName} (${symbol}) Chart - ${timeframe.toUpperCase()}`;
-
-      let obInfoHtml = '';
-      const displayableOrderBlocks = allOrderBlocks.filter(ob => ob.obType !== 'None' && ob.obPrice !== null && ob.obPrice !== undefined);
-
-      if (displayableOrderBlocks.length > 0) {
-          const sortedModalOrderBlocks = [...displayableOrderBlocks].sort((a, b) => {
-              return a.obPrice - b.obPrice;
-          });
-
-          obInfoHtml = sortedModalOrderBlocks.map((ob, index) => {
-              const obPriceDisplay = formatPrice(ob.obPrice);
-              const obZoneInfo = (ob.obZoneStart !== null && ob.obZoneEnd !== null) ?
-                                 ` | Zone: $${formatPrice(ob.obZoneStart)} - $${formatPrice(ob.obZoneEnd)}` : '';
-              const obTypeClass = ob.obType === 'Buying (Bullish)' ? 'text-color-green-accent' :
-                                  ob.obType === 'Selling (Bearish)' ? 'text-color-red-accent' : '';
-              const obIcon = ob.obType === 'Buying (Bullish)' ? '<i class="fas fa-arrow-alt-circle-up mr-1"></i>' :
-                             ob.obType === 'Selling (Bearish)' ? '<i class="fas fa-arrow-alt-circle-down mr-1"></i>' : '';
-
-              let tradeSetupModalHtml = '';
-              if (ob.suggestedEntryPrice !== null && ob.suggestedEntryPrice !== undefined) {
-                  tradeSetupModalHtml = `
-                      <div class="mt-2 text-xs text-lm-text-secondary border-t border-lm-border pt-2">
-                          <p>Entry: <span class="font-bold text-lm-text-primary">$${formatPrice(ob.suggestedEntryPrice)}</span></p>
-                          <p>Stop Loss: <span class="font-bold text-color-red-accent">$${formatPrice(ob.suggestedStopLoss)}</span> (Risk: $${formatPrice(ob.riskAmount)})</p>
-                          <p>TP1 (1R): <span class="font-bold text-color-green-accent">$${formatPrice(ob.suggestedTakeProfit1)}</span></p>
-                          <p>TP2 (2R): <span class="font-bold text-color-green-accent">$${formatPrice(ob.suggestedTakeProfit2)}</span></p>
-                          <p>TP3 (3R): <span class="font-bold text-color-green-accent">$${formatPrice(ob.suggestedTakeProfit3)}</span></p>
-                      </div>
-                  `;
-              }
-
-              return `
-                  <p class="text-center text-lm-text-secondary text-sm">
-                      OB ${index + 1}: <span class="${obTypeClass}">${obIcon}${ob.obType || 'N/A'}</span> | Price Level: <span class="text-lm-text-primary font-bold">$${obPriceDisplay}</span>${obZoneInfo}
-                  </p>
-                  ${tradeSetupModalHtml}
-              `;
-          }).join('');
-      } else {
-          obInfoHtml = '<p class="text-center text-lm-text-secondary text-sm">No valid order blocks found for this coin with current criteria.</p>';
-      }
-      modalOBInfo.innerHTML = obInfoHtml;
-
-      // Clear previous chart if any
-      lightweightChartContainer.innerHTML = '';
-      if (window.currentChart) {
-          window.currentChart.remove();
-          window.currentChart = null;
-      }
-
-      // Initialize Lightweight Charts
-      const chartOptions = {
-          layout: {
-              textColor: document.documentElement.classList.contains('dark') ? 'var(--color-text-light)' : 'var(--lm-text-primary)',
-              background: { color: document.documentElement.classList.contains('dark') ? 'var(--color-dark-bg-primary)' : 'var(--lm-bg-secondary)' },
-          },
-          grid: {
-              vertLines: { color: document.documentElement.classList.contains('dark') ? 'var(--color-border-dark)' : 'var(--lm-border)' },
-              horzLines: { color: document.documentElement.classList.contains('dark') ? 'var(--color-border-dark)' : 'var(--lm-border)' },
-          },
-          timeScale: {
-              borderColor: document.documentElement.classList.contains('dark') ? 'var(--color-border-dark)' : 'var(--lm-border)',
-              timeVisible: true,
-              secondsVisible: false,
-          },
-          priceScale: {
-              borderColor: document.documentElement.classList.contains('dark') ? 'var(--color-border-dark)' : 'var(--lm-border)',
-          },
-          crosshair: {
-            mode: LightweightCharts.CrosshairMode.Normal,
-          },
-          localization: {
-            locale: 'en-US',
-            priceFormatter: price => formatPrice(price),
-          }
-      };
-
-      const chart = LightweightCharts.createChart(lightweightChartContainer, chartOptions);
-      window.currentChart = chart; // Store chart instance globally for theme changes
-
-      const candlestickSeries = chart.addCandlestickSeries({
-          upColor: 'var(--color-green-accent)',
-          downColor: 'var(--color-red-accent)',
-          borderVisible: false,
-          wickColor: 'var(--color-text-secondary)',
-          wickUpColor: 'var(--color-green-accent)',
-          wickDownColor: 'var(--color-red-accent)',
-      });
-
-      // Generate mock data for the chart
-      const mockData = generateMockCandleData(100, currentPrice); // 100 days of data
-      candlestickSeries.setData(mockData);
-
-      // Add horizontal lines for OB price levels and trade setups
-      displayableOrderBlocks.forEach(ob => {
-          if (ob.obPrice) {
-              const obPriceLine = chart.addLineSeries({
-                  color: ob.obType === 'Buying (Bullish)' ? 'var(--color-green-accent)' : 'var(--color-red-accent)',
-                  lineWidth: 2,
-                  lineStyle: LightweightCharts.LineStyle.Dotted,
-                  axisLabelVisible: true,
-                  title: `${ob.obType.split(' ')[0]} OB`,
-              });
-              obPriceLine.setData([{ time: mockData[0].time, value: ob.obPrice }, { time: mockData[mockData.length - 1].time, value: ob.obPrice }]);
-          }
-
-          // Draw OB zone as a shaded area (if zone exists)
-          if (ob.obZoneStart && ob.obZoneEnd) {
-              // Lightweight Charts doesn't have a direct "rectangle" drawing for price zones.
-              // A workaround is to use bands or custom series. For simplicity, we'll draw two lines for the zone.
-              const obZoneStartLine = chart.addLineSeries({
-                  color: ob.obType === 'Buying (Bullish)' ? 'var(--color-green-accent)' : 'var(--color-red-accent)',
-                  lineWidth: 1,
-                  lineStyle: LightweightCharts.LineStyle.Solid,
-                  axisLabelVisible: false,
-              });
-              obZoneStartLine.setData([{ time: mockData[0].time, value: ob.obZoneStart }, { time: mockData[mockData.length - 1].time, value: ob.obZoneStart }]);
-
-              const obZoneEndLine = chart.addLineSeries({
-                  color: ob.obType === 'Buying (Bullish)' ? 'var(--color-green-accent)' : 'var(--color-red-accent)',
-                  lineWidth: 1,
-                  lineStyle: LightweightCharts.LineStyle.Solid,
-                  axisLabelVisible: false,
-              });
-              obZoneEndLine.setData([{ time: mockData[0].time, value: ob.obZoneEnd }, { time: mockData[mockData.length - 1].time, value: ob.obZoneEnd }]);
-          }
-
-          // Plot Trade Setup Lines
-          if (ob.suggestedEntryPrice) {
-              const entryLine = chart.addLineSeries({ color: 'var(--color-accent-blue)', lineWidth: 1, lineStyle: LightweightCharts.LineStyle.Solid, axisLabelVisible: true, title: 'Entry' });
-              entryLine.setData([{ time: mockData[0].time, value: ob.suggestedEntryPrice }, { time: mockData[mockData.length - 1].time, value: ob.suggestedEntryPrice }]);
-
-              const stopLossLine = chart.addLineSeries({ color: 'var(--color-red-accent)', lineWidth: 1, lineStyle: LightweightCharts.LineStyle.Solid, axisLabelVisible: true, title: 'SL' });
-              stopLossLine.setData([{ time: mockData[0].time, value: ob.suggestedStopLoss }, { time: mockData[mockData.length - 1].time, value: ob.suggestedStopLoss }]);
-
-              const tp1Line = chart.addLineSeries({ color: 'var(--color-green-accent)', lineWidth: 1, lineStyle: LightweightCharts.LineStyle.Solid, axisLabelVisible: true, title: 'TP1' });
-              tp1Line.setData([{ time: mockData[0].time, value: ob.suggestedTakeProfit1 }, { time: mockData[mockData.length - 1].time, value: ob.suggestedTakeProfit1 }]);
-
-              const tp2Line = chart.addLineSeries({ color: 'var(--color-green-accent)', lineWidth: 1, lineStyle: LightweightCharts.LineStyle.Solid, axisLabelVisible: true, title: 'TP2' });
-              tp2Line.setData([{ time: mockData[0].time, value: ob.suggestedTakeProfit2 }, { time: mockData[mockData.length - 1].time, value: ob.suggestedTakeProfit2 }]);
-
-              const tp3Line = chart.addLineSeries({ color: 'var(--color-green-accent)', lineWidth: 1, lineStyle: LightweightCharts.LineStyle.Solid, axisLabelVisible: true, title: 'TP3' });
-              tp3Line.setData([{ time: mockData[0].time, value: ob.suggestedTakeProfit3 }, { time: mockData[mockData.length - 1].time, value: ob.suggestedTakeProfit3 }]);
-          }
-      });
-
-      // Fit content to screen
-      chart.timeScale().fitContent();
-
-      openModal(chartModal);
-    }
-
-    function closeChartModal() {
-      closeModal(chartModal);
-      if (window.currentChart) {
-          window.currentChart.remove(); // Dispose the chart instance
-          window.currentChart = null;
-      }
-    }
-
-    // --- Onboarding Modal Functions ---
-    function showOnboardingModal() {
-        currentOnboardingStep = 0;
-        updateOnboardingContent();
-        openModal(onboardingModal);
-    }
-
-    function updateOnboardingContent() {
-        onboardingContent.innerHTML = onboardingSteps[currentOnboardingStep].content;
-
-        onboardingPrevButton.classList.toggle('hidden', currentOnboardingStep === 0);
-        onboardingNextButton.classList.toggle('hidden', currentOnboardingStep === onboardingSteps.length - 1);
-        onboardingFinishButton.classList.toggle('hidden', currentOnboardingStep < onboardingSteps.length - 1);
-    }
-
-    function nextOnboardingStep() {
-        if (currentOnboardingStep < onboardingSteps.length - 1) {
-            currentOnboardingStep++;
-            updateOnboardingContent();
-        }
-    }
-
-    function prevOnboardingStep() {
-        if (currentOnboardingStep > 0) {
-            currentOnboardingStep--;
-            updateOnboardingContent();
-        }
-    }
-
-    function finishOnboarding() {
-        localStorage.setItem('hasSeenOnboarding', 'true');
-        closeModal(onboardingModal);
+        scanButton.disabled = false;
+        clearButton.disabled = false;
+        document.querySelectorAll('.action-button[data-filter], .action-button[data-timeframe], .sensitivity-button').forEach(btn => btn.disabled = false);
+        priceDeviationInput.disabled = false;
+        fabScanButton.disabled = false;
+        fabClearButton.disabled = false;
+        spinner.classList.add('hidden');
+        buttonText.textContent = 'Initiate Scan';
     }
 
 
@@ -2429,33 +2629,6 @@
         e.stopPropagation();
     });
 
-    // Initial check for admin button visibility on FAB
-    function updateFabAdminButtonVisibility() {
-        const userRoles = localStorage.getItem('roles') ? JSON.parse(localStorage.getItem('roles')) : [];
-        const isLoggedIn = localStorage.getItem('jwtToken') !== null;
-
-        if (isLoggedIn) {
-            fabLogoutButton.style.display = 'flex';
-            fabPaymentButton.style.display = 'flex';
-            fabScanButton.style.display = 'flex';
-            fabClearButton.style.display = 'flex';
-        } else {
-            fabLogoutButton.style.display = 'none';
-            fabPaymentButton.style.display = 'none';
-            fabScanButton.style.display = 'none';
-            fabClearButton.style.display = 'none';
-        }
-
-        if (isLoggedIn && userRoles.includes('ROLE_ADMIN')) {
-            adminPanelButton.classList.remove('hidden');
-            fabAdminButton.style.display = 'flex';
-        } else {
-            adminPanelButton.classList.add('hidden');
-            fabAdminButton.style.display = 'none';
-        }
-    }
-    updateFabAdminButtonVisibility();
-
     // Close modals on Escape key press
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
@@ -2494,6 +2667,9 @@
     if (logoutButton) {
         logoutButton.addEventListener('click', handleLogout);
     }
+
+    // Initial check for admin button visibility on FAB (called after all functions are defined)
+    updateFabAdminButtonVisibility();
 
 </script>
 </body>
